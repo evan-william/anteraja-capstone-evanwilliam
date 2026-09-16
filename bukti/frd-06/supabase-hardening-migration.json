@@ -1,0 +1,12 @@
+{
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true}"
+      }
+    ]
+  },
+  "jsonrpc": "2.0",
+  "id": 2
+}

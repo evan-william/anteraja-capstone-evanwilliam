@@ -1,23 +1,19 @@
 import { expect, test } from '@playwright/test';
 
 /**
- * Happy path: daftar -> buat kategori -> tambah transaksi -> transaksi muncul di daftar.
- *
- * Butuh project Supabase yang sudah dimigrasi, dengan "Confirm email" dimatikan
- * (Authentication > Providers > Email) supaya sesi langsung terbentuk setelah daftar.
+ * Happy path dasar: akun demo terverifikasi masuk -> buat kategori
+ * -> tambah transaksi -> transaksi muncul di daftar.
+ * Registrasi email dikonfirmasi secara terpisah karena layanan email cloud memiliki rate limit.
  */
-test('daftar, buat kategori, lalu catat transaksi', async ({ page }) => {
+test('masuk, buat kategori, lalu catat transaksi', async ({ page }) => {
   const stamp = Date.now();
-  const email = `peserta+${stamp}@contoh.test`;
   const namaKategori = `Jajan ${stamp}`;
 
-  await page.goto('/daftar');
-  await page.getByLabel('Nama').fill('Peserta Training');
-  await page.getByLabel('Email').fill(email);
-  await page.getByLabel('Password').fill('rahasia12345');
-  await page.getByRole('button', { name: 'Daftar' }).click();
-
-  await expect(page).toHaveURL(/\/transaksi$/);
+  await page.goto('/masuk');
+  await page.getByLabel('Email').fill('demo@contoh.test');
+  await page.getByLabel('Password').fill('demo12345');
+  await page.getByRole('button', { name: 'Masuk' }).click();
+  await expect(page).toHaveURL(/\/transaksi$/, { timeout: 15_000 });
 
   await page.getByRole('link', { name: 'Kategori' }).click();
   await expect(page).toHaveURL(/\/kategori$/);

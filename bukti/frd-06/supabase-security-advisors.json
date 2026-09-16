@@ -1,0 +1,12 @@
+{
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"result\":{\"lints\":[{\"name\":\"authenticated_security_definer_function_executable\",\"title\":\"Signed-In Users Can Execute SECURITY DEFINER Function\",\"level\":\"WARN\",\"facing\":\"EXTERNAL\",\"categories\":[\"SECURITY\"],\"description\":\"Detects `SECURITY DEFINER` functions that are callable by signed-in users. Revoke `EXECUTE`, switch the function to `SECURITY INVOKER`, or move it out of your exposed API schema if signed-in users should not call it.\",\"remediation\":\"https://supabase.com/docs/guides/database/database-linter?lint=0029_authenticated_security_definer_function_executable\",\"count\":2,\"findings\":[{\"detail\":\"Function `public.cancel_bank_import(p_import_id uuid)` can be executed by the `authenticated` role as a `SECURITY DEFINER` function via `/rest/v1/rpc/cancel_bank_import`. Revoke `EXECUTE` or switch it to `SECURITY INVOKER` if that is not intentional.\",\"metadata\":{\"schema\":\"public\",\"name\":\"cancel_bank_import\",\"language\":\"plpgsql\",\"arguments\":\"p_import_id uuid\",\"security_definer\":true},\"observed_at\":\"2026-09-16T17:30:54.004Z\"},{\"detail\":\"Function `public.save_bank_import(p_file_name text, p_bank text, p_rows jsonb, p_rules jsonb)` can be executed by the `authenticated` role as a `SECURITY DEFINER` function via `/rest/v1/rpc/save_bank_import`. Revoke `EXECUTE` or switch it to `SECURITY INVOKER` if that is not intentional.\",\"metadata\":{\"schema\":\"public\",\"name\":\"save_bank_import\",\"language\":\"plpgsql\",\"arguments\":\"p_file_name text, p_bank text, p_rows jsonb, p_rules jsonb\",\"security_definer\":true},\"observed_at\":\"2026-09-16T17:30:54.004Z\"}]},{\"name\":\"auth_leaked_password_protection\",\"title\":\"Leaked Password Protection Disabled\",\"level\":\"WARN\",\"facing\":\"EXTERNAL\",\"categories\":[\"SECURITY\"],\"description\":\"Leaked password protection is currently disabled.\",\"remediation\":\"https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection\",\"count\":1,\"findings\":[{\"detail\":\"Supabase Auth prevents the use of compromised passwords by checking against HaveIBeenPwned.org. Enable this feature to enhance security.\",\"metadata\":{\"entity\":\"Auth\",\"type\":\"auth\"}}]}]}}"
+      }
+    ]
+  },
+  "jsonrpc": "2.0",
+  "id": 2
+}

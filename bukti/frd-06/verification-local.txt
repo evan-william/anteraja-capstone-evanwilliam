@@ -1,4 +1,4 @@
-FRD-06 local verification — 2026-09-16
+FRD-06 final verification — 2026-09-17
 
 Unit tests
 - Command: node node_modules/vitest/vitest.mjs run
@@ -22,6 +22,18 @@ Production build
 - Next.js: 16.3.5 (Turbopack)
 - Import routes compiled: /import, /api/v1/imports,
   /api/v1/imports/preview, /api/v1/imports/[id]/cancel
+
+Playwright E2E (Supabase cloud)
+- Command: node node_modules/@playwright/test/cli.js test
+- Result: PASS
+- Tests: 2 passed
+- Includes login/CRUD, Bank A, Bank B, manual reconciliation, save, history,
+  and cancellation against project rfkcbmacwlknowskdwbf.
+
+Supabase MCP
+- Result: PASS via official @supabase/mcp-server-supabase
+- Evidence: tool listing, before import, after import, and after cancellation
+- Cancellation proof: imported row inactive; matched/manual Grab Food remains active.
 
 Note: npm scripts fail in this Windows path because an ancestor directory contains
 an ampersand. The same local binaries were invoked directly, with identical flags.

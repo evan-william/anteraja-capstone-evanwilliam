@@ -4,13 +4,13 @@ Codex global configuration
 - chrome-devtools: enabled, stdio, official chrome-devtools-mcp@latest
 - context7: enabled, stdio, official @upstash/context7-mcp@latest
 - supabase: enabled, official https://mcp.supabase.com/mcp endpoint
-- Supabase OAuth: pending live CLI authentication
+- Supabase CLI OAuth: authenticated; official stdio MCP connected to the project
 
 Antigravity workspace configuration
 - File: .agents/mcp_config.json (local and ignored by Git)
 - context7: stdio through cmd /c npx (avoids the incompatible localhost OAuth callback)
 - chrome-devtools: stdio through cmd /c npx
-- supabase: official remote endpoint; authentication remains in the Antigravity client
+- supabase: official endpoint; Antigravity completes authentication in its own client session
 - JSON syntax validation: PASS
 
 VS Code-compatible fallback
@@ -20,6 +20,8 @@ VS Code-compatible fallback
 Functional evidence
 - Context7 resolve-library-id and query-docs results are saved as JSON.
 - Chrome DevTools connected to Chrome and ran the 50,000-row benchmark.
+- Supabase MCP listed tools and verified database state before import, after import,
+  and after cancellation against project rfkcbmacwlknowskdwbf.
 - No OAuth token, API key, .env file, or account credential is committed.
 
 Context7 OAuth note
