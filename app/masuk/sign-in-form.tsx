@@ -1,0 +1,72 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
+import { useState, type FormEvent } from 'react';
+
+import { Alert } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { createClient } from '@/lib/supabase/client';
+import { firstIssueMessage, signInSchema } from '@/lib/validation';
+
+export function SignInForm() {
+  const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
+  const [isPending, setIsPending] = useState(false);
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setError(null);
+
+    const formData = new FormData(event.currentTarget);
+    const parsed = signInSchema.safeParse({
+      email: formData.get('email'),
+      password: formData.get('password'),
+    });
+
+    if (!parsed.success) {
+      setError(firstIssueMessage(parsed.error));
+      return;
+    }
+
+    setIsPending(true);
+    const supabase = createClient();
+    const { error: signInError } = await supabase.auth.signInWithPassword(parsed.data);
+    setIsPending(false);
+
+    if (signInError) {
+      setError('Email atau password salah.');
+      return;
+    }
+
+    router.push('/transaksi');
+    router.refresh();
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      {error ? <Alert variant="destructive">{error}</Alert> : null}
+
+      <div className="space-y-2">
+        <Label htmlFor="email">Email</Label>
+        <Input id="email" name="email" type="email" autoComplete="email" required />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="password">Password</Label>
+        <Input
+          id="password"
+          name="password"
+          type="password"
+          autoComplete="current-password"
+          required
+        />
+      </div>
+
+      <Button type="submit" className="w-full" disabled={isPending}>
+        {isPending ? 'Memproses…' : 'Masuk'}
+      </Button>
+    </form>
+  );
+}
