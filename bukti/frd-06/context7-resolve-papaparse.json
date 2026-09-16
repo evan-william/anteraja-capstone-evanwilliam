@@ -1,0 +1,12 @@
+{
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "Available Libraries:\n\n- Title: PapaParse\n- Context7-compatible library ID: /mholt/papaparse\n- Description: Papa Parse is the fastest in-browser CSV parser for JavaScript, offering reliable RFC 4180 compliance, stream processing, auto-delimiter detection, and worker thread support for reactive web pages.\n- Code Snippets: 99\n- Source Reputation: High\n- Benchmark Score: 84.14"
+      }
+    ]
+  },
+  "jsonrpc": "2.0",
+  "id": 2
+}

@@ -66,6 +66,7 @@ Buka http://localhost:3000. Belum login → diarahkan ke `/masuk`.
 | Daftar | `/daftar` |
 | Transaksi | `/transaksi` |
 | Kategori | `/kategori` |
+| Import mutasi & rekonsiliasi | `/import` |
 
 ### 7. Jalankan test
 

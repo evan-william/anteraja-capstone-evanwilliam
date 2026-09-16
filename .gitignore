@@ -38,6 +38,10 @@ yarn-error.log*
 .env.*
 !.env.example
 
+# local MCP client configuration (may contain account/project metadata)
+/.vscode/mcp.json
+/.mcp.json
+
 # vercel
 .vercel
 

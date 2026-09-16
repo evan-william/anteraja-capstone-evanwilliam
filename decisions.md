@@ -1,0 +1,28 @@
+# Keputusan - FRD-06 Import & Rekonsiliasi Mutasi Bank
+
+> Ditulis sebelum implementasi. Keputusan baru ditambahkan pada bagian kedua sebelum kode dilanjutkan.
+
+| No | Kondisi yang tidak dijawab FRD | Keputusan | Alasan | Bukti |
+|---|---|---|---|---|
+| 1 | Cara mengenali Bank A dan Bank B | Bank A dikenali dari header `Tanggal;Keterangan;Debet/Kredit;Nominal;Saldo`; Bank B dari `date,description,amount,balance`. File dengan format ambigu atau tidak dikenal ditolak. | Nama file dapat diubah pengguna, jadi deteksi harus berdasarkan isi. | `bukti/frd-06/verification-local.txt` |
+| 2 | Baris metadata, saldo awal, saldo akhir, dan baris kosong Bank A | Baris tersebut diabaikan dan tidak dihitung sebagai transaksi maupun Error. | Baris itu bukan aktivitas finansial baru. | `bukti/frd-06/verification-local.txt` |
+| 3 | Bank A memiliki nominal pecahan seperti `1.249.999,50`, sedangkan PRD mewajibkan rupiah utuh | Baris dengan pecahan bukan nol berstatus Error dan tidak dapat disimpan. Nilai tidak dibulatkan. | Pembulatan diam-diam melanggar akurasi uang. | `bukti/frd-06/verification-local.txt` |
+| 4 | Tanggal Bank B `2026-8-16` tidak zero-padded | Tanggal tahun-bulan-hari dengan satu atau dua digit bulan/hari diterima jika tanggal kalender valid, lalu dinormalisasi menjadi `YYYY-MM-DD`. | Nilainya tidak ambigu dan ada di file wajib. | `bukti/frd-06/verification-local.txt` |
+| 5 | Deskripsi kosong | Tetap valid dan disimpan sebagai `null`; UI menampilkan `(kosong)`. | `transactions.description` memang opsional. | `bukti/frd-06/verification-local.txt` |
+| 6 | Kriteria transaksi Cocok tidak dirinci | Cocok hanya jika tanggal, nominal, jenis kategori (income/expense), dan deskripsi yang dinormalisasi sama persis. Pencocokan satu-ke-satu memakai transaksi tertua lebih dulu. | Menghindari false positive dan mencegah dua baris memakai transaksi yang sama. | `bukti/frd-06/verification-local.txt` |
+| 7 | Dua baris mutasi dapat identik dan file yang sama dapat diimpor ulang | Fingerprint menyertakan bank, tanggal, arah, nominal, deskripsi normal, dan nomor kemunculan duplikat. Impor ulang menautkan transaksi yang sudah ada sebagai Cocok, bukan membuat duplikat. | File contoh sengaja memuat duplikat Netflix dan Grab Food. | `bukti/frd-06/verification-local.txt` |
+| 8 | Aturan kategori dapat saling cocok | Aturan berlaku case-insensitive untuk user dan jenis transaksi yang sama. Keyword terpanjang menang; jika sama panjang, aturan tertua menang. Aturan dengan kategori terarsip tidak dipakai. | Hasil otomatis harus deterministik dan spesifik. | `bukti/frd-06/verification-local.txt` |
+| 9 | Apakah Error menggagalkan seluruh import | Baris Error tetap tampil, tetapi diabaikan saat simpan. Semua baris Baru wajib memiliki kategori; baris Cocok tidak membutuhkan pilihan kategori. | Pengguna tetap dapat menyimpan baris valid tanpa menyembunyikan masalah data. | `bukti/frd-06/verification-local.txt` |
+| 10 | Batas ukuran dan cara mencegah halaman freeze | Maksimal 10 MB dan 50.000 baris transaksi. Parsing browser memakai Papa Parse 5.7.0 dengan Web Worker. Preview dipaginasi 100 baris. | Membatasi memori serta DOM sambil memenuhi uji 50.000 baris. | `bukti/frd-06/context7-papaparse-documentation.json`, `bukti/frd-06/performance-50000.json` |
+| 11 | Kegagalan di tengah proses simpan | Simpan dilakukan oleh satu fungsi database atomik; semua validasi kepemilikan kategori dan transaksi Cocok dilakukan kembali di database. | Tidak boleh ada import setengah jadi. | `supabase/migrations/20260916000100_create_bank_imports.sql` |
+| 12 | Arti Batalkan import | Transaksi yang dibuat import di-soft-delete, baris Cocok hanya dilepas tautannya, aturan kategori tetap ada, dan import ditandai `cancelled_at`. Operasi kedua idempotent. | Transaksi manual dan preferensi pengguna tidak boleh ikut hilang. | `bukti/frd-06/verification-local.txt`, `supabase/migrations/20260916000100_create_bank_imports.sql` |
+| 13 | Siapa yang boleh membaca dan mengubah data import | Semua tabel baru memakai RLS per `user_id`, grant hanya untuk `authenticated`, dan kolom filter/FK diindeks. | Data finansial wajib terisolasi di database, bukan hanya UI. | `supabase/migrations/20260916000100_create_bank_imports.sql` |
+| 14 | Karakter aneh pada awal file Bank A | Parser menghapus BOM asli maupun teks literal `\\xef\\xbb\\xbf` hanya di awal file. | File contoh memuat prefix literal tersebut dan tetap wajib berhasil diimpor. | `bukti/frd-06/verification-local.txt` |
+
+## Ditemukan saat mengerjakan
+
+| No | Kondisi | Keputusan | Bukti |
+|---|---|---|---|
+| 15 | File Bank A memakai `DD/MM/YYYY`, sedangkan Bank B memakai `YYYY-M-D`. | Parser tanggal dibedakan per format bank lalu keduanya dinormalisasi ke `YYYY-MM-DD` dan divalidasi sebagai tanggal kalender. | `bukti/frd-06/verification-local.txt` |
+| 16 | Keterangan Bank A memuat titik koma di tengah petik (`"patungan; makan"`) tetapi petik dimulai setelah teks sehingga baris bukan CSV RFC yang sempurna. | Setelah Papa Parse, kolom ekstra hanya diperbaiki untuk Bank A dengan mempertahankan kolom tanggal dan tiga kolom terakhir, lalu fragmen tengah digabung kembali sebagai keterangan. | `bukti/frd-06/verification-local.txt`, `bukti/frd-06/context7-papaparse-documentation.json` |
+| 17 | Client tidak perlu hak tulis langsung ke tabel metadata import. | Tabel hanya memberi SELECT ke user terautentikasi. Mutasi dilakukan lewat dua fungsi `security definer` dengan `search_path` kosong, validasi `auth.uid()`, kepemilikan kategori/transaksi, dan execute hanya untuk role `authenticated`. | `supabase/migrations/20260916000100_create_bank_imports.sql` |
