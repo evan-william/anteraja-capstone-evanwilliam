@@ -1,0 +1,27 @@
+FRD-06 local verification — 2026-09-16
+
+Unit tests
+- Command: node node_modules/vitest/vitest.mjs run
+- Result: PASS
+- Test files: 4 passed
+- Tests: 33 passed
+- Includes both supplied bank CSVs, duplicate matching, empty descriptions,
+  non-padded dates, fractional rupiah, and deterministic category rules.
+
+TypeScript
+- Command: node node_modules/typescript/bin/tsc --noEmit --incremental false
+- Result: PASS (no diagnostics)
+
+ESLint
+- Command: node node_modules/eslint/bin/eslint.js .
+- Result: PASS (no diagnostics)
+
+Production build
+- Command: node node_modules/next/dist/bin/next build
+- Result: PASS
+- Next.js: 16.3.5 (Turbopack)
+- Import routes compiled: /import, /api/v1/imports,
+  /api/v1/imports/preview, /api/v1/imports/[id]/cancel
+
+Note: npm scripts fail in this Windows path because an ancestor directory contains
+an ampersand. The same local binaries were invoked directly, with identical flags.

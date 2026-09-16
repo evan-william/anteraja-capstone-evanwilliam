@@ -1,0 +1,18 @@
+{
+  "testedAt": "2026-09-16T15:51:30+07:00",
+  "tool": "Chrome DevTools MCP",
+  "browser": "HeadlessChrome/152.0.0.0",
+  "parser": "Papa Parse 5.7.0",
+  "worker": true,
+  "requestedRows": 50000,
+  "parsedRows": 50000,
+  "parseErrors": 0,
+  "durationMs": 209,
+  "maxHeartbeatGapMs": 57,
+  "responsiveThresholdMs": 250,
+  "uiResponsive": true,
+  "artifacts": [
+    "performance-harness.html",
+    "performance-50000.png"
+  ]
+}

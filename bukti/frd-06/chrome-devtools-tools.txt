@@ -1,0 +1,21 @@
+Chrome DevTools MCP verification — 2026-09-16
+
+Official package: chrome-devtools-mcp@latest
+Transport configured: stdio via cmd /c npx on Windows
+Browser connection: PASS (about:blank and local harness listed)
+
+Tools used successfully:
+- list_pages
+- new_page
+- take_snapshot
+- click
+- take_screenshot
+
+Performance result:
+- 50,000 rows parsed using Papa Parse Web Worker
+- 0 parse errors
+- 209 ms parsing duration
+- 57 ms maximum main-thread heartbeat gap
+- UI responsive under the documented 250 ms harness threshold
+
+See performance-50000.json and performance-50000.png for machine-readable and visual evidence.

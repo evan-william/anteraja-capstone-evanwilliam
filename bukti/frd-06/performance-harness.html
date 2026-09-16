@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <title>FRD-06 — Uji 50.000 Baris</title>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.7.0/papaparse.min.js"></script>
+    <style>
+      body { max-width: 760px; margin: 48px auto; font: 16px system-ui; }
+      button { padding: 10px 16px; }
+      pre { padding: 16px; background: #f4f4f4; white-space: pre-wrap; }
+    </style>
+  </head>
+  <body>
+    <h1>Uji parsing 50.000 baris</h1>
+    <p>Harness bukti FRD-06. Parser: Papa Parse 5.7.0, mode Web Worker.</p>
+    <button id="run" type="button">Jalankan uji</button>
+    <pre id="result">Belum dijalankan.</pre>
+    <script>
+      const output = document.querySelector('#result');
+      document.querySelector('#run').addEventListener('click', () => {
+        const lines = ['date,description,amount,balance'];
+        for (let index = 0; index < 50000; index += 1) {
+          lines.push(`2026-08-16,Transaksi ${index + 1},-${index + 1},10000000`);
+        }
+        const csv = lines.join('\n');
+        let lastHeartbeat = performance.now();
+        let maxHeartbeatGapMs = 0;
+        const heartbeat = setInterval(() => {
+          const now = performance.now();
+          maxHeartbeatGapMs = Math.max(maxHeartbeatGapMs, now - lastHeartbeat);
+          lastHeartbeat = now;
+        }, 16);
+        const startedAt = performance.now();
+        output.textContent = 'Parsing…';
+        Papa.parse(csv, {
+          header: true,
+          worker: true,
+          skipEmptyLines: 'greedy',
+          complete(results) {
+            const finishedAt = performance.now();
+            setTimeout(() => {
+              clearInterval(heartbeat);
+              output.textContent = JSON.stringify({
+                parser: 'Papa Parse 5.7.0',
+                worker: true,
+                requestedRows: 50000,
+                parsedRows: results.data.length,
+                parseErrors: results.errors.length,
+                durationMs: Math.round(finishedAt - startedAt),
+                maxHeartbeatGapMs: Math.round(maxHeartbeatGapMs),
+                uiResponsive: maxHeartbeatGapMs < 250
+              }, null, 2);
+            }, 32);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

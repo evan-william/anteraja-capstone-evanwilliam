@@ -14,6 +14,9 @@ export function SiteHeader({ userName }: { userName: string }) {
           <Link href="/kategori" className="hover:text-primary">
             Kategori
           </Link>
+          <Link href="/import" className="hover:text-primary">
+            Import
+          </Link>
         </nav>
 
         <div className="flex items-center gap-3">
