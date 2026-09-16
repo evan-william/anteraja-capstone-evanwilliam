@@ -1,0 +1,29 @@
+MCP installation status — 2026-09-16
+
+Codex global configuration
+- chrome-devtools: enabled, stdio, official chrome-devtools-mcp@latest
+- context7: enabled, stdio, official @upstash/context7-mcp@latest
+- supabase: enabled, official https://mcp.supabase.com/mcp endpoint
+- Supabase OAuth: pending live CLI authentication
+
+Antigravity workspace configuration
+- File: .agents/mcp_config.json (local and ignored by Git)
+- context7: stdio through cmd /c npx (avoids the incompatible localhost OAuth callback)
+- chrome-devtools: stdio through cmd /c npx
+- supabase: official remote endpoint; authentication remains in the Antigravity client
+- JSON syntax validation: PASS
+
+VS Code-compatible fallback
+- File: .vscode/mcp.json (local and ignored by Git)
+- Contains the same three servers using VS Code's servers schema
+
+Functional evidence
+- Context7 resolve-library-id and query-docs results are saved as JSON.
+- Chrome DevTools connected to Chrome and ran the 50,000-row benchmark.
+- No OAuth token, API key, .env file, or account credential is committed.
+
+Context7 OAuth note
+The Codex remote OAuth attempt failed because the provider rejected the localhost
+redirect_uri. The supported official stdio server is now used instead, so Context7
+does not depend on that callback. The server also works without an API key at the
+public rate limit.

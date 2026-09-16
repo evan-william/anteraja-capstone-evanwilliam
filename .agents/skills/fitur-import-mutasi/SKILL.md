@@ -25,7 +25,11 @@ Gunakan skill ini hanya untuk FRD-06. Baca `docs/frd/FRD-06-import-rekonsiliasi.
 - Bank A memakai delimiter titik koma setelah empat baris metadata; Bank B memakai header CSV standar.
 - Jangan gunakan `dynamicTyping` untuk uang. Parse nominal dari string menjadi integer secara eksplisit.
 - Hapus BOM asli atau prefix literal `\\xef\\xbb\\xbf` hanya pada awal file.
-- Terapkan seluruh aturan normalisasi, pecahan rupiah, duplikat, dan tanggal dari `decisions.md`.
+- Bank A memakai tanggal `DD/MM/YYYY`, kode `DB`/`CR`, dan nominal Indonesia. Abaikan metadata, saldo awal/akhir, serta baris kosong. Pecahan bukan nol menjadi Error dan tidak pernah dibulatkan.
+- File contoh Bank A memiliki titik koma dalam keterangan berpetik yang bukan RFC-CSV sempurna. Perbaiki hanya dengan mempertahankan tanggal dan tiga kolom terakhir, lalu gabungkan fragmen tengah sebagai keterangan.
+- Bank B memakai tanggal `YYYY-M-D`; terima satu atau dua digit bulan/hari jika kalender valid lalu normalisasi ke `YYYY-MM-DD`. Deskripsi kosong tetap valid dan menjadi `null`.
+- Baris Error tetap terlihat tetapi tidak disimpan; Error tidak menggagalkan baris valid. Semua baris Baru wajib berkategori.
+- Terapkan normalisasi spasi/case, fingerprint occurrence index, dan seluruh keputusan lain dari `decisions.md`.
 
 ## Pencocokan
 
@@ -42,6 +46,7 @@ Gunakan skill ini hanya untuk FRD-06. Baca `docs/frd/FRD-06-import-rekonsiliasi.
 - Foreign key selalu diindeks bila belum tercakup indeks komposit yang sesuai.
 - Simpan dan batalkan melalui fungsi database atomik `security definer` yang mengunci `search_path`, memvalidasi `auth.uid()` serta seluruh foreign key milik user, dan hanya memberi execute ke `authenticated`; jangan memberi client hak tulis tabel atau memakai secret/service-role di browser.
 - Batalkan idempotent dan tidak boleh menghapus transaksi manual.
+- Aturan kategori dipertahankan ketika import dibatalkan; hanya transaksi dengan `created_transaction_id` dari import tersebut yang di-soft-delete.
 
 ## UI dan API
 
