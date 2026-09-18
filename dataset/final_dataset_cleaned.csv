@@ -1,0 +1,36 @@
+AWB,Kecamatan,Jalan,Jarak_m,Bagian,Latitude,Longitude,Scan_Time,Status,SLA_Status,Exception_Reason
+ANT-100000,Pontianak Utara,Jalan Khatulistiwa,6570,Ujung 1,-0.01774287001357279,109.3425198933207,2026-09-15 08:00:00,Out for Delivery,Sesuai Jadwal,-
+ANT-100001,,Jalan Gusti Situt Mahmud,2360,Ujung 1,-0.015441794327654206,109.36188114119201,2026-09-15 08:30:00,Out for Delivery,Sesuai Jadwal,-
+ANT-100002,,Jalan 28 Oktober,4010,Ujung 1,-0.014763565799473306,109.36318359862172,2026-09-15 09:00:00,Out for Delivery,Sesuai Jadwal,-
+ANT-100003,,Jalan Selat Panjang,1550,Ujung 1,-0.015609708956073273,109.3635547796754,2026-09-15 09:30:00,Out for Delivery,Sesuai Jadwal,-
+ANT-100004,Pontianak Timur,Jalan Sultan Hamid II,1110,Ujung 1,-0.025122444406702422,109.36238083960534,2026-09-15 10:00:00,Delivered,Sesuai Jadwal,-
+ANT-100005,,Jalan Perintis Kemerdekaan,1290,Ujung 1,-0.034211064969198256,109.35672797579515,2026-09-15 10:30:00,In Transit,Berisiko,Alamat tidak ditemukan / Patokan kurang jelas
+ANT-100006,,Jalan Sultan Hamid I,"451,29",,-0.0347382618507083,109.35593358056708,2026-09-15 11:00:00,Out for Delivery,Sesuai Jadwal,-
+ANT-100007,Pontianak Selatan,Jalan Sultan Hamid I,"571,02",Ujung 1,-0.03926804285428874,109.34825275109982,2026-09-15 11:30:00,Out for Delivery,Sesuai Jadwal,-
+ANT-100008,,Jalan Imam Bonjol,"692,71",Ujung 1,-0.03982141209461255,109.3483358967458,2026-09-15 12:00:00,Delivered,Sesuai Jadwal,-
+ANT-100009,,Jalan Tanjung Pura,1490,Ujung 1,-0.03930485457525405,109.34789514870536,2026-09-15 12:30:00,Out for Delivery,Sesuai Jadwal,-
+ANT-100010,,Jalan Pahlawan,"334,31",,-0.04085695563122601,109.34621555897681,2026-09-15 13:00:00,Out for Delivery,Sesuai Jadwal,-
+ANT-100011,,Jalan Veteran,"696,07",Ujung 1,-0.04156415354468538,109.34520210859095,2026-09-15 13:30:00,Out for Delivery,Sesuai Jadwal,-
+ANT-100012,,Jalan Jenderal Ahmad Yani,2380,Ujung 1,-0.050833355591593965,109.34576658598121,2026-09-15 14:00:00,Out for Delivery,Sesuai Jadwal,-
+ANT-100013,,Jalan Slt. Abdurrahman (Pontianak Kota),,,,,2026-09-15 14:30:00,In Transit,Berisiko,Penerima tidak di tempat
+ANT-100014,,Jalan Sultan Syahrir (Pontianak Kota),,,,,2026-09-15 15:00:00,Out for Delivery,Sesuai Jadwal,-
+ANT-100015,,Jalan Prof. M. Yamin (Pontianak Kota),,,,,2026-09-15 15:30:00,Failed Delivery,Perlu Tindakan,Alamat tidak ditemukan / Patokan kurang jelas
+ANT-100016,Pontianak Kota,Jalan Tanjung Pura,"233,81",,-0.026010177209982787,109.34222541142125,2026-09-15 16:00:00,Delivered,Sesuai Jadwal,-
+ANT-100017,,Jalan Rahadi Usman,"665,48",Ujung 1,-0.023694067154752894,109.34033575462,2026-09-15 16:30:00,Delivered,Sesuai Jadwal,-
+ANT-100018,,Jalan Pak Kasih,"608,48",Ujung 1,-0.019820080654171703,109.33548095925464,2026-09-15 17:00:00,Delivered,Sesuai Jadwal,-
+ANT-100019,,Jalan H. Rais A. Rachman (Pontianak Barat),,,,,2026-09-15 17:30:00,Failed Delivery,Perlu Tindakan,Penerima tidak di tempat
+ANT-100020,,Jalan Puskesmas Pal III (Pontianak Barat),,,,,2026-09-15 18:00:00,Out for Delivery,Sesuai Jadwal,-
+ANT-100021,,Jalan Pal 4 (Pontianak Barat),,,,,2026-09-15 18:30:00,Out for Delivery,Sesuai Jadwal,-
+ANT-100022,,Jalan Kh. A. Dahlan,1050,Ujung 1,-0.03426214909421885,109.33191272888237,2026-09-15 19:00:00,Out for Delivery,Sesuai Jadwal,-
+ANT-100023,,Jalan Khw. Hasyim,970,Ujung 1,-0.025839479275846528,109.32678948796087,2026-09-15 19:30:00,Out for Delivery,Sesuai Jadwal,-
+ANT-100024,,Jalan Slt. Abdurrahman,1240,Ujung 1,-0.03573689253222368,109.33253879421667,2026-09-15 20:00:00,Out for Delivery,Sesuai Jadwal,-
+ANT-100025,,Jalan Sutan Syahrir,"791,69",Ujung 1,-0.04358073474585853,109.32363497012018,2026-09-15 20:30:00,Out for Delivery,Sesuai Jadwal,-
+ANT-100026,,Jalan Prof. M. Yamin,2370,Ujung 1,-0.04964912039676356,109.31759221025494,2026-09-15 21:00:00,Failed Delivery,Perlu Tindakan,Alamat tidak ditemukan / Patokan kurang jelas
+ANT-100027,Pontianak Barat,Jalan Hasanuddin,"699,47",Ujung 1,-0.018194689902354944,109.33126704554132,2026-09-15 21:30:00,Out for Delivery,Sesuai Jadwal,-
+ANT-100028,,Jalan H. Rais A. Rachman,2060,Ujung 1,-0.019596166524025908,109.32374520833677,2026-09-15 22:00:00,Out for Delivery,Sesuai Jadwal,-
+ANT-100029,,Jalan Husein Hamzah,3840,Ujung 1,-0.02333861148956706,109.30478159545949,2026-09-15 22:30:00,Delivered,Sesuai Jadwal,-
+ANT-100030,,Jalan Komodor Yos Sudarso,5380,Ujung 1,-0.015947951733283283,109.33069671541601,2026-09-15 23:00:00,Out for Delivery,Sesuai Jadwal,-
+ANT-100031,,Jalan Pembangunan Nipah Kuning,"272,46",,-0.005545193139276653,109.28703731531981,2026-09-15 23:30:00,In Transit,Berisiko,Penerima tidak di tempat
+ANT-100032,Pontianak Tenggara,Jalan Jenderal Ahmad Yani,2590,Ujung 1,-0.05219770018779763,109.3467861562218,2026-09-16 00:00:00,Failed Delivery,Perlu Tindakan,Penerima tidak di tempat
+ANT-100033,,Jalan Imam Bonjol,"884,53",Ujung 1,-0.04581886787419029,109.35383546424453,2026-09-16 00:30:00,Out for Delivery,Sesuai Jadwal,-
+ANT-100034,,Jalan Adi Sucipto,1500,Ujung 1,-0.05036731141470937,109.35798934931607,2026-09-16 01:00:00,In Transit,Berisiko,Penerima tidak di tempat
