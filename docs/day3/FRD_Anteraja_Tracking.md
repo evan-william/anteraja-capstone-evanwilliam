@@ -67,6 +67,47 @@ graph TD
     E -->|10. Push Notification| F[Satria App / Kurir]
 ```
 
+
+
+### 1.5 Sequence Diagram (Seq) - Alur Resolusi Patokan Alamat
+Diagram sekuensial ini memetakan interaksi teknis antar-layanan (FE, BE, DB, Cache) sesuai skema *System Design* saat pengguna melakukan pembaruan alamat.
+
+```mermaid
+sequenceDiagram
+    actor User as Penerima/Seller
+    participant FE as Frontend (Widget)
+    participant API as Backend (Node.js API)
+    participant Cache as Redis Cache
+    participant DB as PostgreSQL
+    participant Core as Core Logistics
+    
+    User->>FE: Buka halaman & Input AWB
+    FE->>API: GET /api/v1/tracking/{awb}
+    API->>Cache: Cek Cache AWB
+    alt Cache Hit
+        Cache-->>API: Return Data Pelacakan
+    else Cache Miss
+        API->>DB: Query Data Pelacakan
+        DB-->>API: Return Data
+        API->>Cache: Simpan ke Cache
+    end
+    API-->>FE: Response (Status: Perlu Tindakan)
+    FE-->>User: Tampilkan Form Resolusi Mandiri
+    
+    User->>FE: Isi Patokan Alamat & Submit
+    FE->>API: POST /api/v1/tracking/{awb}/resolution
+    API->>DB: Insert RESOLUSI_ALAMAT (status: pending_sync)
+    API->>Cache: Update/Invalidate Cache AWB
+    API-->>FE: 200 OK (Berhasil)
+    FE-->>User: Notifikasi Patokan Disimpan
+    
+    par Asynchronous Synchronization
+        API->>Core: Push Payload Alamat Baru (Queue)
+        Core-->>API: ACK (Diterima oleh Satria App)
+        API->>DB: Update RESOLUSI_ALAMAT (status: synced)
+    end
+```
+
 ### 1.4 Logical Record Structure (LRS)
 Berikut adalah rancangan entitas data relasional (LRS) yang mendukung pelacakan dan resolusi kendala:
 

@@ -305,3 +305,28 @@ Bagian ini ditambahkan untuk memenuhi standar ringkasan 8 parameter dan evaluasi
 | **File segede apa?** | Sangat kecil. Tidak ada unggahan file media, hanya menampung *payload* teks JSON (koordinat lat/long dan catatan patokan < 500 KB). |
 | **Pakai sistem lain apa? Kalau mati?** | Tergantung pada *Core Logistics System Anteraja* dan API Notifikasi (WA/FCM). Jika sistem mati, fallback menggunakan portal CS statis manual. |
 | **Kalau aplikasi mati 1 jam, separah apa?** | Mengganggu operasional CS karena tiket WISMO akan menumpuk. Harus ada notifikasi pemeliharaan sistem, usahakan tidak *downtime* saat musim Harbolnas. |
+
+
+---
+
+## 11. INFORMATION ARCHITECTURE (IA)
+*Bagian ini ditambahkan untuk memetakan arsitektur informasi aplikasi sesuai skema alur pengembangan produk (Plan).*
+
+```mermaid
+mindmap
+  root((Anteraja Tracking))
+    Laman Pencarian
+      Input Nomor AWB
+      Tombol Lacak
+    Hasil Pelacakan
+      Unified Timeline
+      SLA Risk Indicator Banner
+      Detail Pengiriman
+    Resolusi Mandiri
+      Form Patokan Alamat
+      Tabel Detail Tambahan
+      Tombol Konfirmasi
+    Eskalasi Lanjutan
+      Tombol Bantuan CS
+      Nomor Tiket Otomatis
+```
