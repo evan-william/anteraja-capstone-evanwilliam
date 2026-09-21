@@ -3,7 +3,8 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { updateSession } from '@/lib/supabase/proxy';
 
 /** Halaman yang boleh dibuka tanpa login. */
-const PUBLIC_ROUTES = ['/masuk', '/daftar', '/ui-preview'];
+const PUBLIC_ROUTES = ['/masuk', '/daftar', '/ui-preview', '/lacak'];
+const AUTH_ROUTES = ['/masuk', '/daftar'];
 
 export async function proxy(request: NextRequest) {
   const { response, user } = await updateSession(request);
@@ -24,9 +25,13 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  if (user && isPublic) {
+  const isAuthRoute = AUTH_ROUTES.some(
+    (route) => pathname === route || pathname.startsWith(`${route}/`),
+  );
+
+  if (user && isAuthRoute) {
     const url = request.nextUrl.clone();
-    url.pathname = '/transaksi';
+    url.pathname = '/pengiriman';
     url.search = '';
     return NextResponse.redirect(url);
   }

@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 
 import { ImportManager } from '@/components/import/import-manager';
 import { SiteHeader } from '@/components/ui/site-header';
+import { PageHeader } from '@/components/ui/page-header';
 import { getCurrentUser } from '@/lib/auth';
 import type { ImportCategory, ImportHistory } from '@/lib/import/types';
 import { createClient } from '@/lib/supabase/server';
@@ -20,12 +21,8 @@ export default async function ImportPage() {
   return (
     <>
       <SiteHeader userName={user.name || user.email} />
-      <main className="mx-auto w-full max-w-6xl space-y-6 px-4 py-8">
-        <div>
-          <p className="eyebrow">Operasional keuangan</p>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight">Rekonsiliasi settlement</h1>
-          <p className="mt-2 max-w-2xl text-sm text-muted-foreground">Cocokkan mutasi rekening dengan pencatatan settlement pengiriman. Semua baris ditinjau sebelum disimpan.</p>
-        </div>
+      <main className="app-main">
+        <PageHeader eyebrow="Mutasi dan settlement" title="Rekonsiliasi bank" description="Cocokkan mutasi rekening dengan settlement pengiriman. Tidak ada data yang disimpan sebelum kamu meninjau hasilnya." />
         {categoriesResult.error || historyResult.error ? (
           <AlertLoadError />
         ) : (
@@ -40,5 +37,5 @@ export default async function ImportPage() {
 }
 
 function AlertLoadError() {
-  return <p className="text-sm text-destructive">Gagal memuat data impor. Pastikan migrasi database sudah diterapkan.</p>;
+  return <p className="text-sm text-destructive">Data rekonsiliasi belum dapat dimuat. Pastikan migrasi database sudah diterapkan, lalu muat ulang.</p>;
 }

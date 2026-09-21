@@ -38,7 +38,7 @@ export function CategoryList({ categories, onChanged, onError }: CategoryListPro
   }
 
   if (categories.length === 0) {
-    return <p className="py-4 text-sm text-muted-foreground">Belum ada kategori di sini.</p>;
+    return <p className="py-4 text-sm text-muted-foreground">Belum ada kategori. Tambahkan melalui formulir.</p>;
   }
 
   return (
@@ -48,7 +48,7 @@ export function CategoryList({ categories, onChanged, onError }: CategoryListPro
         const isPending = pendingId === category.id;
 
         return (
-          <li key={category.id} className="flex items-center justify-between gap-3 py-3">
+          <li key={category.id} className="flex items-center justify-between gap-3 py-3.5">
             {isEditing ? (
               <Input
                 value={draftName}
@@ -58,7 +58,7 @@ export function CategoryList({ categories, onChanged, onError }: CategoryListPro
                 aria-label={`Ubah nama ${category.name}`}
               />
             ) : (
-              <span className={category.is_archived ? 'text-muted-foreground' : undefined}>
+              <span className={category.is_archived ? 'text-sm text-muted-foreground' : 'text-sm font-medium'}>
                 {category.name}
                 {category.is_archived ? ' (diarsipkan)' : ''}
               </span>

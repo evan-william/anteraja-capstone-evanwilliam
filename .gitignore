@@ -17,6 +17,8 @@
 
 # next.js
 /.next/
+/.next-verify/
+/.next-dev-verify/
 /out/
 /build
 .next

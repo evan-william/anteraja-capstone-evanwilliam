@@ -1,4 +1,6 @@
-# PRD — Anteraja Finance
+# PRD — Anteraja Finance (Modul Pendukung)
+
+> Posisi terbaru: Finance/Rekonsiliasi mendukung produk utama Anteraja Tracking & Operations. Scope di bawah tetap berlaku untuk jejak resi → settlement → mutasi bank.
 
 ## Ringkasan
 

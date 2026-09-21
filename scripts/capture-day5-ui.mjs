@@ -16,12 +16,14 @@ const screens = [
 ];
 
 for (const [screen, name] of screens) {
-  await page.goto(`http://127.0.0.1:3105/ui-preview?screen=${screen}`, { waitUntil: 'networkidle' });
+  await page.goto(`http://127.0.0.1:3100/ui-preview?screen=${screen}`, { waitUntil: 'networkidle' });
+  await page.waitForTimeout(800);
   await page.screenshot({ path: join(output, name), type: 'webp', quality: 88, fullPage: true });
 }
 
 await page.setViewportSize({ width: 390, height: 844 });
-await page.goto('http://127.0.0.1:3105/ui-preview?screen=preview', { waitUntil: 'networkidle' });
+await page.goto('http://127.0.0.1:3100/ui-preview?screen=preview', { waitUntil: 'networkidle' });
+await page.waitForTimeout(800);
 await page.screenshot({ path: join(output, '06-preview-mobile.webp'), type: 'webp', quality: 88, fullPage: true });
 
 await browser.close();

@@ -1,5 +1,7 @@
--- Anteraja Finance — complete schema snapshot
--- Fresh Supabase project only. Do not run after supabase db push.
+-- BASELINE SNAPSHOT ONLY — Anteraja Finance / FRD-06.
+-- The current Tracking & Operations schema lives in supabase/migrations/.
+-- Deploy every migration in timestamp order; do not use this baseline as a
+-- replacement and do not run it after `supabase db push`.
 
 -- ============================================================================
 -- Source: supabase/migrations/20260101000000_create_users.sql

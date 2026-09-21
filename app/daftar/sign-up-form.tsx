@@ -49,7 +49,7 @@ export function SignUpForm() {
 
     // Kalau konfirmasi email masih aktif di project Supabase, session belum terbentuk.
     if (!data.session) {
-      setNotice('Akun dibuat. Cek email kamu untuk konfirmasi, lalu masuk.');
+      setNotice('Akun dibuat. Buka email konfirmasi sebelum masuk.');
       return;
     }
 
@@ -86,7 +86,7 @@ export function SignUpForm() {
       </div>
 
       <Button type="submit" className="w-full" disabled={isPending}>
-        {isPending ? 'Memproses…' : 'Daftar'}
+        {isPending ? 'Membuat akun…' : 'Buat akun'}
       </Button>
     </form>
   );

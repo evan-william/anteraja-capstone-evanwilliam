@@ -1,15 +1,15 @@
-# Database Anteraja Finance
+# Database Anteraja Tracking & Operations
 
-Folder ini adalah paket serah-terima database PostgreSQL/Supabase untuk FRD-06 dan konteks shipment settlement.
+Database PostgreSQL/Supabase menghubungkan perjalanan kiriman, tindakan penerima, tiket CS, notifikasi, settlement, dan rekonsiliasi bank.
 
-| File | Fungsi |
+| File | Kegunaan |
 |---|---|
-| `00_full_schema.sql` | Snapshot skema lengkap untuk project Supabase baru |
-| `01_seed_anteraja.sql` | Data contoh shipment dan settlement; dijalankan setelah `supabase/seed.sql` |
-| `02_verify_schema.sql` | Pemeriksaan tabel, PK/FK, index, RLS, trigger, dan function |
-| `03_smoke_test.sql` | Assertion read-only; gagal bila komponen wajib belum terpasang |
-| `04_relations.sql` | Query untuk melihat seluruh relasi PK/FK di PostgreSQL |
-| `ERD.md` | Diagram dan penjelasan kardinalitas |
-| `DATABASE_RUN.md` | Panduan setup untuk mentor |
+| `DATABASE_RUN.md` | Panduan setup dan pengujian |
+| `ERD.md` | Diagram relasi dan aturan integritas |
+| `01_seed_anteraja.sql` | Dua skenario tambahan opsional setelah seed utama |
+| `02_verify_schema.sql` | Inventaris tabel, RLS, policy, dan RPC |
+| `03_smoke_test.sql` | Assertion kelengkapan skema |
+| `04_relations.sql` | Daftar PK/FK aktual dari PostgreSQL |
+| `00_full_schema.sql` | Snapshot baseline Finance; bukan sumber deployment terbaru |
 
-Sumber deployment utama tetap `supabase/migrations/`. Jangan menjalankan migration dan `00_full_schema.sql` pada database yang sama.
+Sumber deployment yang berlaku adalah seluruh file `supabase/migrations/` sesuai urutan timestamp. `supabase/seed.sql` adalah seed utama dan sudah memuat skenario tracking serta settlement.

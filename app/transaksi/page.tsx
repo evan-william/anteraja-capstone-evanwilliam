@@ -5,6 +5,7 @@ import {
   type TransactionWithCategory,
 } from '@/components/transaksi/transaction-manager';
 import { SiteHeader } from '@/components/ui/site-header';
+import { PageHeader } from '@/components/ui/page-header';
 import { getCurrentUser } from '@/lib/auth';
 import { createClient } from '@/lib/supabase/server';
 
@@ -41,17 +42,11 @@ export default async function TransaksiPage() {
   return (
     <>
       <SiteHeader userName={user.name || user.email} />
-      <main className="mx-auto w-full max-w-4xl space-y-6 px-4 py-8">
-        <div>
-          <p className="eyebrow">Anteraja Finance</p>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight">Arus dana</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Catat pemasukan settlement dan biaya operasional pengiriman.
-          </p>
-        </div>
+      <main className="app-main max-w-5xl">
+        <PageHeader eyebrow="Keuangan operasional" title="Arus dana" description="Catat settlement masuk dan biaya pengiriman. Data terbaru ditampilkan lebih dahulu." />
 
         {failed ? (
-          <p className="text-sm text-destructive">Gagal memuat data. Coba muat ulang halaman.</p>
+          <p className="text-sm text-destructive">Data transaksi belum dapat dimuat. Periksa koneksi lalu muat ulang halaman.</p>
         ) : (
           <TransactionManager
             transactions={(transactionsResult.data ?? []) as TransactionWithCategory[]}

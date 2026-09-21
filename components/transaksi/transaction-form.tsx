@@ -90,10 +90,10 @@ export function TransactionForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-5">
       {error ? <Alert variant="destructive">{error}</Alert> : null}
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4">
         <div className="space-y-2">
           <Label htmlFor="transaction-category">Kategori</Label>
           <Select
@@ -146,7 +146,7 @@ export function TransactionForm({
 
       <div className="flex gap-2">
         <Button type="submit" disabled={isPending}>
-          {isPending ? 'Menyimpan…' : initial ? 'Simpan perubahan' : 'Tambah transaksi'}
+          {isPending ? 'Menyimpan…' : initial ? 'Simpan perubahan' : 'Simpan transaksi'}
         </Button>
         {onCancel ? (
           <Button type="button" variant="ghost" onClick={onCancel}>

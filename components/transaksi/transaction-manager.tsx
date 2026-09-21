@@ -71,10 +71,11 @@ export function TransactionManager({ transactions, categories }: TransactionMana
   }
 
   return (
-    <div className="space-y-6">
-      <Card ref={formRef} className="scroll-mt-4">
+    <div className="page-enter reveal-1 grid items-start gap-5 lg:grid-cols-[340px_minmax(0,1fr)]">
+      <Card ref={formRef} className="scroll-mt-24 lg:sticky lg:top-24">
         <CardHeader>
-          <CardTitle>{editing ? 'Ubah transaksi' : 'Tambah transaksi'}</CardTitle>
+          <CardTitle>{editing ? 'Ubah transaksi' : 'Transaksi baru'}</CardTitle>
+          <p className="text-sm leading-5 text-muted-foreground">Catat settlement masuk atau biaya operasional.</p>
         </CardHeader>
         <CardContent>
           <TransactionForm
@@ -97,21 +98,18 @@ export function TransactionManager({ transactions, categories }: TransactionMana
         </CardContent>
       </Card>
 
-      {error ? <Alert variant="destructive">{error}</Alert> : null}
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Daftar transaksi</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <TransactionList
-            groups={groups}
-            pendingId={pendingId}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-          />
-        </CardContent>
-      </Card>
+      <div className="space-y-4">
+        {error ? <Alert variant="destructive">{error}</Alert> : null}
+        <Card>
+          <CardHeader className="flex-row items-center justify-between space-y-0">
+            <div><CardTitle>Aktivitas terbaru</CardTitle><p className="mt-1 text-xs text-muted-foreground">Maksimal 100 transaksi</p></div>
+            <span className="text-sm font-semibold tabular">{transactions.length}</span>
+          </CardHeader>
+          <CardContent>
+            <TransactionList groups={groups} pendingId={pendingId} onEdit={handleEdit} onDelete={handleDelete} />
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

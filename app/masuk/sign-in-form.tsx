@@ -65,7 +65,7 @@ export function SignInForm() {
       </div>
 
       <Button type="submit" className="w-full" disabled={isPending}>
-        {isPending ? 'Memproses…' : 'Masuk'}
+        {isPending ? 'Memeriksa akun…' : 'Masuk'}
       </Button>
     </form>
   );

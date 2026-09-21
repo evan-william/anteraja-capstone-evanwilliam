@@ -79,7 +79,7 @@ export function CategoryForm({ onCreated }: CategoryFormProps) {
         </div>
 
         <Button type="submit" disabled={isPending}>
-          {isPending ? 'Menyimpan…' : 'Tambah'}
+          {isPending ? 'Menyimpan…' : 'Tambah kategori'}
         </Button>
       </div>
     </form>

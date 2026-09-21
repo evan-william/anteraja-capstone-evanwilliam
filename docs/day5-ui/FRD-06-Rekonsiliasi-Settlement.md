@@ -1,4 +1,6 @@
-# FRD-06 — Rekonsiliasi Mutasi dan Settlement Pengiriman
+# FRD-06 — Rekonsiliasi Mutasi dan Settlement Pengiriman (Modul Pendukung)
+
+> Kontrak ini tetap berlaku. Tracking/resolution utama dijelaskan pada `FRD-Anteraja-Tracking-Platform.md`.
 
 ## 1. Tujuan
 

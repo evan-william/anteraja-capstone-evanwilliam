@@ -31,14 +31,14 @@ function DayHeader({ date, net }: { date: string; net: number }) {
   const isPositive = net >= 0;
 
   return (
-    <div className="sticky top-0 z-10 flex items-baseline justify-between gap-3 border-b bg-background/95 py-2 backdrop-blur">
+    <div className="sticky top-[105px] z-10 flex items-baseline justify-between gap-3 border-b bg-white/95 py-2 backdrop-blur">
       <div className="flex items-baseline gap-2">
         <h3 className="text-sm font-semibold">{label}</h3>
         <span className="text-xs text-muted-foreground">{subLabel}</span>
       </div>
       <span
         className={cn(
-          'shrink-0 rounded-full bg-muted px-2 py-0.5 text-xs font-medium tabular-nums',
+          'shrink-0 text-xs font-semibold tabular-nums',
           isPositive ? 'text-primary' : 'text-foreground',
         )}
       >
@@ -74,16 +74,16 @@ function TransactionRow({
   return (
     <li
       className={cn(
-        'group flex items-center gap-3 rounded-lg border bg-card p-3 transition-colors',
-        isConfirming ? 'border-destructive/40 bg-destructive/5' : 'hover:bg-accent/50',
+        'group relative flex items-center gap-3 border-b px-1 py-3.5 last:border-0',
+        isConfirming ? 'bg-destructive/5' : 'hover:bg-[#fbfaf9]',
       )}
     >
       <span
         aria-hidden="true"
-        className="flex size-10 shrink-0 items-center justify-center rounded-lg"
-        style={{ backgroundColor: `${hue}1a`, color: hue }}
+        className="flex size-8 shrink-0 items-center justify-center"
+        style={{ color: hue }}
       >
-        <Icon className="size-5" />
+        <Icon className="size-[18px]" />
       </span>
 
       <div className="min-w-0 flex-1">
@@ -97,9 +97,7 @@ function TransactionRow({
               <span aria-hidden="true">·</span>
             </>
           ) : null}
-          <span className="rounded-sm bg-muted px-1.5 py-0.5 font-medium">
-            {isIncome ? 'Pemasukan' : 'Pengeluaran'}
-          </span>
+          <span>{isIncome ? 'Pemasukan' : 'Pengeluaran'}</span>
         </div>
       </div>
 
@@ -116,7 +114,7 @@ function TransactionRow({
 
         {isConfirming ? (
           <div className="flex items-center gap-1">
-            <span className="hidden text-xs text-muted-foreground sm:inline">Hapus?</span>
+            <span className="hidden text-xs text-muted-foreground sm:inline">Hapus transaksi?</span>
             <Button type="button" size="sm" variant="ghost" onClick={onCancelDelete}>
               Batal
             </Button>
@@ -127,7 +125,7 @@ function TransactionRow({
               disabled={isPending}
               onClick={onConfirmDelete}
             >
-              {isPending ? 'Menghapus…' : 'Hapus'}
+              {isPending ? 'Menghapus…' : 'Hapus transaksi'}
             </Button>
           </div>
         ) : (
@@ -161,13 +159,13 @@ function TransactionRow({
 
 function EmptyState() {
   return (
-    <div className="flex flex-col items-center justify-center rounded-lg border border-dashed px-6 py-14 text-center">
-      <span className="flex size-12 items-center justify-center rounded-lg bg-muted text-muted-foreground">
+    <div className="flex flex-col items-center justify-center px-6 py-14 text-center">
+      <span className="flex size-12 items-center justify-center text-muted-foreground">
         <WalletCards className="size-6" aria-hidden="true" />
       </span>
       <h3 className="mt-4 text-sm font-semibold">Belum ada transaksi</h3>
       <p className="mt-1 max-w-sm text-sm text-muted-foreground">
-        Catatan pemasukan dan pengeluaranmu akan muncul di sini. Mulai lewat form di atas.
+        Catat transaksi pertama melalui formulir. Transaksi akan muncul berdasarkan tanggal.
       </p>
     </div>
   );
@@ -190,7 +188,7 @@ export function TransactionList({
       {groups.map((group) => (
         <section key={group.date} className="space-y-2">
           <DayHeader date={group.date} net={group.net} />
-          <ul className="space-y-2">
+          <ul>
             {group.items.map((transaction) => (
               <TransactionRow
                 key={transaction.id}

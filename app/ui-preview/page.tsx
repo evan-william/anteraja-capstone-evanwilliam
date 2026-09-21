@@ -8,7 +8,6 @@ import {
   CircleAlert,
   FileSpreadsheet,
   History,
-  PackageCheck,
   RotateCcw,
   Search,
   Settings2,
@@ -16,6 +15,7 @@ import {
   Upload,
   WalletCards,
 } from 'lucide-react';
+import Image from 'next/image';
 
 type Screen = 'dashboard' | 'upload' | 'preview' | 'history' | 'shipment';
 
@@ -34,7 +34,7 @@ export default async function UiPreviewPage({ searchParams }: { searchParams: Pr
   const query = await searchParams;
   const screen = (['dashboard', 'upload', 'preview', 'history', 'shipment'].includes(query.screen ?? '') ? query.screen : 'dashboard') as Screen;
   return (
-    <div className="min-h-screen bg-[#f7f4f3] text-[#241d1d]">
+    <div className="min-h-screen bg-background text-foreground">
       <PreviewHeader screen={screen} />
       <main className="mx-auto max-w-[1180px] px-5 py-8 lg:px-8">
         {screen === 'dashboard' ? <Dashboard /> : null}
@@ -55,15 +55,12 @@ function PreviewHeader({ screen }: { screen: Screen }) {
     { id: 'history', label: 'Riwayat' },
   ];
   return (
-    <header className="border-b border-[#e7dedb] bg-white">
+    <header className="sticky top-0 z-40 border-b bg-white/90 backdrop-blur-xl">
       <div className="mx-auto flex min-h-[68px] max-w-[1180px] items-center justify-between gap-5 px-5 lg:px-8">
         <div className="flex items-center gap-8">
-          <div className="flex items-center gap-2.5">
-            <span className="grid size-10 place-items-center rounded-xl bg-[#d92d3f] text-white"><PackageCheck className="size-5" /></span>
-            <span className="leading-none"><strong className="block text-[15px]">Anteraja</strong><span className="text-[11px] text-[#7c6f6d]">Finance</span></span>
-          </div>
+          <div className="flex items-center gap-2.5"><Image src="/brand/anteraja-mark.png" alt="" width={40} height={40} className="size-9 scale-[1.65] object-contain" /><span className="leading-none"><span className="block text-[20px] font-bold tracking-[-.045em] text-primary">anteraja</span><span className="mt-1 block text-[10px] font-semibold uppercase tracking-[.15em] text-muted-foreground">Finance operations</span></span></div>
           <nav className="hidden items-center gap-1 md:flex">
-            {items.map((item) => <span key={item.id} className={`rounded-lg px-3 py-2 text-sm font-medium ${screen === item.id ? 'bg-[#fae9eb] text-[#b51f31]' : 'text-[#6d6260]'}`}>{item.label}</span>)}
+            {items.map((item) => <span key={item.id} className={`rounded-lg px-3 py-2 text-sm font-semibold ${screen === item.id ? 'bg-accent text-accent-foreground' : 'text-muted-foreground'}`}>{item.label}</span>)}
           </nav>
         </div>
         <div className="flex items-center gap-3"><span className="hidden text-right sm:block"><strong className="block text-xs">Evan William</strong><span className="text-[11px] text-[#827674]">Finance Operations</span></span><span className="grid size-9 place-items-center rounded-full bg-[#2f2928] text-xs font-bold text-white">EW</span></div>
@@ -73,10 +70,10 @@ function PreviewHeader({ screen }: { screen: Screen }) {
 }
 
 function PageIntro({ eyebrow, title, copy, action }: { eyebrow: string; title: string; copy: string; action?: React.ReactNode }) {
-  return <div className="mb-7 flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div><p className="text-[11px] font-bold uppercase tracking-[.16em] text-[#c62437]">{eyebrow}</p><h1 className="mt-2 text-[30px] font-semibold tracking-[-.03em]">{title}</h1><p className="mt-2 max-w-2xl text-sm leading-6 text-[#716563]">{copy}</p></div>{action}</div>;
+  return <div className="page-enter mb-7 flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div><p className="eyebrow">{eyebrow}</p><h1 className="page-title">{title}</h1><p className="page-copy">{copy}</p></div>{action}</div>;
 }
 
-function PrimaryButton({ children }: { children: React.ReactNode }) { return <button className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-[#d92d3f] px-4 text-sm font-semibold text-white shadow-sm">{children}</button>; }
+function PrimaryButton({ children }: { children: React.ReactNode }) { return <button className="inline-flex h-9 items-center justify-center gap-2 rounded-lg bg-primary px-4 text-sm font-semibold text-white shadow-[0_4px_14px_rgba(233,0,127,.18)] transition-transform duration-150 active:scale-[.97]">{children}</button>; }
 function SecondaryButton({ children }: { children: React.ReactNode }) { return <button className="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-[#d9cecb] bg-white px-4 text-sm font-semibold text-[#352d2c]">{children}</button>; }
 
 function Dashboard() {

@@ -1,4 +1,5 @@
 export type CategoryType = 'expense' | 'income';
+export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 export type Database = {
   public: {
@@ -157,13 +158,47 @@ export type Database = {
         Row: {
           id: string; user_id: string; tracking_number: string;
           service_type: 'regular' | 'next_day' | 'same_day' | 'economy' | 'cargo';
-          delivery_status: 'created' | 'picked_up' | 'in_transit' | 'delivered' | 'returned' | 'cancelled';
+          delivery_status: 'created' | 'picked_up' | 'in_transit' | 'out_for_delivery' | 'failed_delivery' | 'delivered' | 'returned' | 'cancelled';
           recipient_name: string | null; delivered_at: string | null;
+          sender_name: string | null; recipient_phone: string | null;
+          origin_city: string | null; destination_city: string | null;
+          destination_district: string | null; destination_street: string | null;
+          destination_landmark: string | null; estimated_delivery_at: string | null;
+          last_scan_at: string | null; risk_status: 'on_track' | 'at_risk' | 'action_required' | 'resolved';
+          exception_code: string | null; exception_reason: string | null;
+          current_location: string | null; current_lat: number | null; current_lng: number | null;
+          access_code_hash: string | null;
           created_at: string; updated_at: string;
         };
-        Insert: { id?: string; user_id: string; tracking_number: string; service_type?: string; delivery_status?: string; recipient_name?: string | null; delivered_at?: string | null };
-        Update: { service_type?: string; delivery_status?: string; recipient_name?: string | null; delivered_at?: string | null };
+        Insert: { id?: string; user_id: string; tracking_number: string; service_type?: string; delivery_status?: string; recipient_name?: string | null; delivered_at?: string | null; sender_name?: string | null; recipient_phone?: string | null; origin_city?: string | null; destination_city?: string | null; destination_district?: string | null; destination_street?: string | null; destination_landmark?: string | null; estimated_delivery_at?: string | null; last_scan_at?: string | null; risk_status?: string; exception_code?: string | null; exception_reason?: string | null; current_location?: string | null; current_lat?: number | null; current_lng?: number | null; access_code_hash?: string | null };
+        Update: { service_type?: string; delivery_status?: string; recipient_name?: string | null; delivered_at?: string | null; sender_name?: string | null; recipient_phone?: string | null; origin_city?: string | null; destination_city?: string | null; destination_district?: string | null; destination_street?: string | null; destination_landmark?: string | null; estimated_delivery_at?: string | null; last_scan_at?: string | null; risk_status?: string; exception_code?: string | null; exception_reason?: string | null; current_location?: string | null; current_lat?: number | null; current_lng?: number | null; access_code_hash?: string | null };
         Relationships: [];
+      };
+      shipment_events: {
+        Row: { id: string; user_id: string; shipment_id: string; event_code: string; status_label: string; description: string; location: string | null; latitude: number | null; longitude: number | null; occurred_at: string; created_at: string };
+        Insert: { id?: string; user_id: string; shipment_id: string; event_code: string; status_label: string; description: string; location?: string | null; latitude?: number | null; longitude?: number | null; occurred_at: string };
+        Update: never;
+        Relationships: [];
+      };
+      shipment_resolutions: {
+        Row: { id: string; user_id: string; shipment_id: string; resolution_type: 'update_address' | 'reschedule' | 'safe_drop'; payload: Json; status: 'pending_sync' | 'synced' | 'failed' | 'cancelled'; submitted_at: string; synced_at: string | null };
+        Insert: never; Update: never; Relationships: [];
+      };
+      support_tickets: {
+        Row: { id: string; user_id: string; shipment_id: string; ticket_number: string; customer_note: string | null; context_snapshot: Json; status: 'open' | 'in_progress' | 'resolved' | 'closed'; response_due_at: string; created_at: string; updated_at: string };
+        Insert: never; Update: { status?: 'open' | 'in_progress' | 'resolved' | 'closed' }; Relationships: [];
+      };
+      notification_preferences: {
+        Row: { id: string; user_id: string; shipment_id: string; whatsapp_enabled: boolean; email_enabled: boolean; push_enabled: boolean; meaningful_changes_only: boolean; destination_masked: string | null; created_at: string; updated_at: string };
+        Insert: never; Update: never; Relationships: [];
+      };
+      integration_outbox: {
+        Row: { id: string; user_id: string; shipment_id: string | null; destination: string; event_type: string; payload: Json; status: 'pending' | 'processing' | 'sent' | 'failed'; attempts: number; available_at: string; processed_at: string | null; last_error: string | null; created_at: string };
+        Insert: never; Update: never; Relationships: [];
+      };
+      tracking_rate_limits: {
+        Row: { client_key: string; window_started_at: string; request_count: number };
+        Insert: never; Update: never; Relationships: [];
       };
       settlements: {
         Row: {
@@ -205,6 +240,11 @@ export type Database = {
         Args: { p_import_row_id: string; p_settlement_id: string };
         Returns: { import_row_id: string; settlement_id: string; net_amount: number; status: 'reconciled' };
       };
+      consume_tracking_rate_limit: { Args: { p_client_key: string }; Returns: boolean };
+      get_public_tracking: { Args: { p_awb: string; p_access_code: string }; Returns: Json };
+      submit_tracking_resolution: { Args: { p_awb: string; p_access_code: string; p_resolution_type: string; p_payload: Json }; Returns: Json };
+      create_tracking_ticket: { Args: { p_awb: string; p_access_code: string; p_note: string }; Returns: Json };
+      set_tracking_notifications: { Args: { p_awb: string; p_access_code: string; p_whatsapp: boolean; p_email: boolean; p_push: boolean }; Returns: Json };
     };
     Enums: Record<string, never>;
     CompositeTypes: Record<string, never>;

@@ -6,14 +6,14 @@
 |---|---|
 | TypeScript `tsc --noEmit` | Lulus |
 | ESLint pada file aplikasi, komponen, library, dan test | Lulus |
-| Vitest | 33/33 test lulus |
-| Next.js production build | Lulus; route `/ui-preview` terdeteksi |
-| Desktop 1440 × 1000 | Enam layar dirender tanpa tabrakan konten |
-| Mobile 390 × 844 | Hierarki tetap terbaca; tabel dapat digulir horizontal |
+| Vitest | 37/37 test lulus, termasuk empat aturan risiko tracking |
+| Next.js production build | Lulus; seluruh route tracking, seller, Finance, dan API terdeteksi |
+| Tracking desktop 1440 × 1000 | Hero, form, konten, dan kartu dirender tanpa tabrakan |
+| Tracking mobile 390 × 844 | Header, hero, form, dan konten tersusun responsif |
 | Format desain | Enam file `.webp` |
 | Kredensial | `.env.example` hanya berisi placeholder |
-| Sintaks PostgreSQL | Seluruh file `database/*.sql` lulus parser PostgreSQL `pglast` |
-| Integritas shipment | Composite FK, generated amount, trigger total, RLS, dan RPC linkage terdokumentasi |
+| SQL database | Migration, seed, verify, smoke test, dan relation query tersedia; penerapan remote mengikuti `DATABASE_RUN.md` |
+| Integritas shipment | Composite FK, global AWB, risk trigger, access code, RLS, RPC atomik, dan outbox terdokumentasi |
 
 ## Bukti repositori
 
@@ -28,4 +28,6 @@ npm install
 npm run dev
 ```
 
-Buka `http://localhost:3000/ui-preview?screen=dashboard`. Ganti nilai `screen` dengan `upload`, `preview`, `history`, atau `shipment` untuk melihat layar lain.
+Buka `http://localhost:3000/lacak`, lalu gunakan `ANT-100015` dan kode `260926`. Masuk sebagai seller melalui `/masuk` menggunakan `demo@contoh.test` / `demo12345`.
+
+Catatan: production build diverifikasi memakai output sementara `.next-verify` karena folder `.next` lokal sedang dipakai preview. Folder sementara sudah dihapus setelah pemeriksaan.

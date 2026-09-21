@@ -11,10 +11,10 @@ function Alert({ className, variant = 'default', ...props }: AlertProps) {
     <div
       role="alert"
       className={cn(
-        'rounded-md border px-4 py-3 text-sm',
+        'rounded-lg border px-4 py-3 text-sm leading-5',
         variant === 'destructive'
           ? 'border-destructive/40 bg-destructive/10 text-destructive'
-          : 'border-border bg-muted text-foreground',
+          : 'border-primary/20 bg-accent/55 text-foreground',
         className,
       )}
       {...props}

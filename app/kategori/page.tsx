@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 
 import { CategoryManager } from '@/components/kategori/category-manager';
 import { SiteHeader } from '@/components/ui/site-header';
+import { PageHeader } from '@/components/ui/page-header';
 import { getCurrentUser } from '@/lib/auth';
 import { createClient } from '@/lib/supabase/server';
 
@@ -22,11 +23,11 @@ export default async function KategoriPage() {
   return (
     <>
       <SiteHeader userName={user.name || user.email} />
-      <main className="mx-auto w-full max-w-4xl space-y-6 px-4 py-8">
-        <div><p className="eyebrow">Aturan pencatatan</p><h1 className="mt-2 text-3xl font-semibold">Kelola kategori</h1><p className="mt-2 text-sm text-muted-foreground">Pisahkan COD, ongkir, retur, dan biaya layanan agar laporan settlement mudah diperiksa.</p></div>
+      <main className="app-main max-w-5xl">
+        <PageHeader eyebrow="Aturan pencatatan" title="Kelola kategori" description="Pisahkan COD, ongkir, retur, dan biaya layanan agar setiap settlement mudah ditelusuri." />
 
         {error ? (
-          <p className="text-sm text-destructive">Gagal memuat kategori. Coba muat ulang halaman.</p>
+          <p className="text-sm text-destructive">Kategori belum dapat dimuat. Periksa koneksi lalu muat ulang halaman.</p>
         ) : (
           <CategoryManager categories={data ?? []} />
         )}

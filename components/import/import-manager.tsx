@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { Check, FileSpreadsheet, RotateCcw, Upload } from 'lucide-react';
 
 import { Alert } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
@@ -157,70 +158,73 @@ export function ImportManager({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="page-enter reveal-1 space-y-5">
       {error ? <Alert variant="destructive">{error}</Alert> : null}
       {message ? <Alert>{message}</Alert> : null}
 
-      <Card>
+      <Card className="overflow-hidden">
         <CardHeader>
-          <CardTitle>1. Unggah mutasi rekening settlement</CardTitle>
+          <div className="flex items-center gap-3">
+            <span className="grid size-8 place-items-center rounded-full bg-primary text-xs font-bold text-white">1</span>
+            <div><CardTitle>Unggah mutasi bank</CardTitle><p className="mt-1 text-xs text-muted-foreground">Langkah 1 dari 3</p></div>
+          </div>
           <CardDescription>
-            CSV Bank A atau Bank B, maksimal 10 MB dan 50.000 baris. Format bank dikenali otomatis dari isi file.
+            Pilih CSV Bank A atau Bank B. Format dikenali dari isi file, bukan nama file.
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-3">
-          <Input
-            aria-label="File mutasi bank"
-            type="file"
-            accept=".csv,text/csv"
-            disabled={busy}
-            onChange={(event) => void handleFile(event.target.files?.[0])}
-          />
-          {busy ? <p className="text-sm text-muted-foreground">Memproses file…</p> : null}
+        <CardContent>
+          <label className="group flex cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-input bg-[#fbfaf9] px-6 py-10 text-center transition-colors hover:border-primary/60 hover:bg-accent/25">
+            <span className="grid size-11 place-items-center text-primary"><FileSpreadsheet className="size-7" /></span>
+            <span className="mt-3 text-sm font-semibold">Pilih file mutasi CSV</span>
+            <span className="mt-1 text-xs leading-5 text-muted-foreground">Maksimum 10 MB atau 50.000 baris</span>
+            <Input className="sr-only" aria-label="File mutasi bank" type="file" accept=".csv,text/csv" disabled={busy} onChange={(event) => void handleFile(event.target.files?.[0])} />
+          </label>
+          {busy ? <p className="mt-3 text-sm text-muted-foreground" role="status">Membaca dan memeriksa baris mutasi…</p> : null}
         </CardContent>
       </Card>
 
       {rows.length > 0 ? (
-        <Card>
+        <Card className="overflow-hidden">
           <CardHeader>
-            <CardTitle>2. Periksa kecocokan settlement</CardTitle>
+            <div className="flex items-center gap-3">
+              <span className="grid size-8 place-items-center rounded-full bg-primary text-xs font-bold text-white">2</span>
+              <div><CardTitle>Tinjau hasil pencocokan</CardTitle><p className="mt-1 text-xs text-muted-foreground">Langkah 2 dari 3</p></div>
+            </div>
             <CardDescription>
               {fileName} · {bank === 'bank_a' ? 'Bank A' : 'Bank B'} · {rows.length} baris
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid gap-2 text-sm sm:grid-cols-3">
-              <div className="rounded-md border p-3"><strong>{counts.new}</strong> Baru</div>
-              <div className="rounded-md border p-3"><strong>{counts.matched}</strong> Cocok</div>
-              <div className="rounded-md border p-3"><strong>{counts.error}</strong> Error</div>
+            <div className="grid divide-y rounded-lg border text-sm sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+              <div className="p-4"><strong className="block text-xl tabular">{counts.new}</strong><span className="status status-warning mt-1">Baru</span></div>
+              <div className="p-4"><strong className="block text-xl tabular">{counts.matched}</strong><span className="status status-success mt-1">Cocok</span></div>
+              <div className="p-4"><strong className="block text-xl tabular">{counts.error}</strong><span className="status status-danger mt-1">Error</span></div>
             </div>
 
-            <div className="overflow-x-auto rounded-md border">
-              <table className="w-full min-w-[900px] text-left text-sm">
-                <thead className="bg-muted">
+            <div className="overflow-x-auto rounded-lg border">
+              <table className="data-table min-w-[900px]">
+                <thead>
                   <tr>
-                    <th className="p-3">Baris</th><th className="p-3">Tanggal</th>
-                    <th className="p-3">Keterangan</th><th className="p-3">Nominal</th>
-                    <th className="p-3">Status</th><th className="p-3">Kategori / aturan</th>
+                    <th>Baris</th><th>Tanggal</th><th>Keterangan</th><th>Nominal</th><th>Status</th><th>Kategori dan aturan</th>
                   </tr>
                 </thead>
                 <tbody>
                   {visibleRows.map((row) => (
-                    <tr key={row.fingerprint} className="border-t align-top">
-                      <td className="p-3">{row.row_number}</td>
-                      <td className="p-3 whitespace-nowrap">{row.transaction_date ?? '—'}</td>
-                      <td className="max-w-64 p-3 break-words">{row.description || '(kosong)'}</td>
-                      <td className="p-3 whitespace-nowrap">{row.amount ? rupiah.format(row.amount) : '—'}</td>
-                      <td className="p-3">
-                        <span className="font-medium">{row.status === 'new' ? 'Baru' : row.status === 'matched' ? 'Cocok' : 'Error'}</span>
+                    <tr key={row.fingerprint}>
+                      <td className="tabular">{row.row_number}</td>
+                      <td className="whitespace-nowrap">{row.transaction_date ?? '—'}</td>
+                      <td className="max-w-64 break-words font-medium">{row.description || '(tanpa keterangan)'}</td>
+                      <td className="whitespace-nowrap font-semibold tabular">{row.amount ? rupiah.format(row.amount) : '—'}</td>
+                      <td>
+                        <span className={`status ${row.status === 'new' ? 'status-warning' : row.status === 'matched' ? 'status-success' : 'status-danger'}`}>{row.status === 'new' ? 'Baru' : row.status === 'matched' ? 'Cocok' : 'Error'}</span>
                         {row.error_message ? <p className="mt-1 text-xs text-destructive">{row.error_message}</p> : null}
                       </td>
-                      <td className="p-3">
+                      <td>
                         {row.status === 'new' && row.type ? (
                           <div className="space-y-2">
                             <select
                               aria-label={`Kategori baris ${row.row_number}`}
-                              className="h-9 w-full rounded-md border bg-background px-2"
+                              className="h-9 w-full rounded-lg border border-input bg-white px-2 text-sm focus-visible:border-primary focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/10"
                               value={row.category_id ?? ''}
                               onChange={(event) => chooseCategory(row.row_number, event.target.value)}
                             >
@@ -236,7 +240,7 @@ export function ImportManager({
                                 checked={Boolean(ruleRows[row.row_number])}
                                 onChange={(event) => setRuleRows((current) => ({ ...current, [row.row_number]: event.target.checked }))}
                               />
-                              Simpan sebagai aturan kata kunci
+                              Pakai kategori ini untuk kata kunci serupa
                             </label>
                             {ruleRows[row.row_number] ? (
                               <Input
@@ -247,7 +251,7 @@ export function ImportManager({
                               />
                             ) : null}
                           </div>
-                        ) : row.status === 'matched' ? 'Transaksi lama' : 'Diabaikan saat simpan'}
+                        ) : row.status === 'matched' ? 'Sudah ada di transaksi' : 'Tidak ikut disimpan'}
                       </td>
                     </tr>
                   ))}
@@ -261,31 +265,30 @@ export function ImportManager({
                 <span className="text-sm">Halaman {page} dari {totalPages}</span>
                 <Button type="button" variant="outline" size="sm" disabled={page === totalPages} onClick={() => setPage((value) => value + 1)}>Berikutnya</Button>
               </div>
-              <Button type="button" disabled={busy} onClick={() => void saveImport()}>{busy ? 'Menyimpan…' : 'Simpan hasil rekonsiliasi'}</Button>
+              <Button type="button" disabled={busy} onClick={() => void saveImport()}><Check />{busy ? 'Menyimpan…' : 'Simpan rekonsiliasi'}</Button>
             </div>
           </CardContent>
         </Card>
       ) : null}
 
-      <Card>
+      <Card className="overflow-hidden">
         <CardHeader>
-          <CardTitle>Riwayat rekonsiliasi</CardTitle>
-          <CardDescription>Pembatalan hanya menghapus transaksi baru dari proses tersebut; pencatatan lama yang dicocokkan tetap aman.</CardDescription>
+          <div className="flex items-center justify-between gap-4"><div><CardTitle>Riwayat rekonsiliasi</CardTitle><CardDescription className="mt-1">Setiap proses tetap tercatat untuk pemeriksaan.</CardDescription></div><Upload className="size-5 text-muted-foreground" /></div>
         </CardHeader>
         <CardContent>
-          {history.length === 0 ? <p className="text-sm text-muted-foreground">Belum ada impor.</p> : (
-            <div className="space-y-3">
+          {history.length === 0 ? <p className="py-8 text-center text-sm text-muted-foreground">Belum ada rekonsiliasi. Unggah mutasi pertama untuk mulai.</p> : (
+            <div className="divide-y">
               {history.map((item) => (
-                <div key={item.id} className="flex flex-col justify-between gap-3 rounded-md border p-3 sm:flex-row sm:items-center">
+                <div key={item.id} className="flex flex-col justify-between gap-3 py-4 first:pt-0 last:pb-0 sm:flex-row sm:items-center">
                   <div>
                     <p className="font-medium">{item.file_name}</p>
                     <p className="text-sm text-muted-foreground">
-                      {new Date(item.created_at).toLocaleString('id-ID')} · Baru {item.new_count}, Cocok {item.matched_count}, Error {item.error_count}
+                      {new Date(item.created_at).toLocaleString('id-ID')} · {item.new_count} baru · {item.matched_count} cocok · {item.error_count} error
                     </p>
                   </div>
                   {item.status === 'completed' ? (
-                    <Button type="button" variant="outline" size="sm" disabled={busy} onClick={() => void cancelImport(item.id)}>Batalkan</Button>
-                  ) : <span className="text-sm text-muted-foreground">Dibatalkan</span>}
+                    <Button type="button" variant="outline" size="sm" disabled={busy} onClick={() => void cancelImport(item.id)}><RotateCcw />Batalkan impor</Button>
+                  ) : <span className="status text-muted-foreground">Dibatalkan</span>}
                 </div>
               ))}
             </div>
