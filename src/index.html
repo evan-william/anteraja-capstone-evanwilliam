@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Prototype UI Anteraja Shipment Tracking Widget berdasarkan PRD dan FRD capstone." />
+    <title>Anteraja Tracking - Day 5 UI</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="site-header">
+        <a class="brand" href="?screen=search" aria-label="Beranda Anteraja Tracking">
+          <span class="brand-mark" aria-hidden="true">A</span>
+          <span class="brand-name">Anteraja</span>
+        </a>
+        <nav class="desktop-nav" aria-label="Navigasi utama">
+          <a class="nav-link active" href="?screen=search">Lacak Paket</a>
+          <a class="nav-link" href="?screen=seller">Portal Seller</a>
+          <a class="nav-link" href="#help">Pusat Bantuan</a>
+        </nav>
+        <div class="header-actions">
+          <span class="service-status"><span class="status-dot"></span>Sistem normal</span>
+          <button class="menu-button" type="button" aria-label="Buka menu" aria-expanded="false">Menu</button>
+        </div>
+      </header>
+
+      <nav class="mobile-nav" aria-label="Navigasi seluler" hidden>
+        <a href="?screen=search">Lacak Paket</a>
+        <a href="?screen=seller">Portal Seller</a>
+        <a href="#help">Pusat Bantuan</a>
+      </nav>
+
+      <main>
+        <section class="screen search-screen" data-screen="search">
+          <div class="search-layout">
+            <div class="search-copy">
+              <p class="eyebrow">Lacak pengiriman</p>
+              <h1>Status paket yang jelas, langkah berikutnya yang pasti.</h1>
+              <p class="lead">Masukkan nomor resi untuk melihat perjalanan paket, perkiraan tiba, dan tindakan yang diperlukan bila pengiriman terkendala.</p>
+              <form class="awb-form" id="awb-form">
+                <label for="awb">Nomor Resi</label>
+                <div class="input-action">
+                  <input id="awb" name="awb" type="text" value="ANT-100015" pattern="ANT-[0-9]{6}" aria-describedby="awb-help" />
+                  <button class="primary-button" type="submit">Lacak Paket</button>
+                </div>
+                <p id="awb-help" class="helper-text">Contoh format: ANT-100015</p>
+              </form>
+            </div>
+
+            <aside class="delivery-preview" aria-label="Contoh ringkasan pengiriman">
+              <div class="preview-topline">
+                <span class="status-badge success">Sesuai Jadwal</span>
+                <span class="awb-number">ANT-100112</span>
+              </div>
+              <div class="route-row">
+                <div>
+                  <span class="route-label">Dari</span>
+                  <strong>Jakarta</strong>
+                </div>
+                <div class="route-line" aria-hidden="true"><span></span></div>
+                <div class="route-end">
+                  <span class="route-label">Tujuan</span>
+                  <strong>Pontianak</strong>
+                </div>
+              </div>
+              <dl class="preview-details">
+                <div><dt>Status Terakhir</dt><dd>Dibawa Satria menuju alamatmu</dd></div>
+                <div><dt>Perkiraan Tiba</dt><dd>Hari ini, 13.00-16.00</dd></div>
+              </dl>
+              <div class="mini-timeline" aria-label="Kemajuan pengiriman">
+                <span class="complete"></span><span class="complete"></span><span class="current"></span><span></span>
+              </div>
+            </aside>
+          </div>
+          <div class="trust-row" role="list" aria-label="Keunggulan pelacakan">
+            <div role="listitem"><strong>Status mudah dipahami</strong><span>Istilah operasional diterjemahkan ke bahasa sehari-hari.</span></div>
+            <div role="listitem"><strong>Privasi terlindungi</strong><span>Informasi penerima disamarkan pada tampilan publik.</span></div>
+            <div role="listitem"><strong>Bantuan tanpa mengulang cerita</strong><span>Konteks paket otomatis diteruskan saat membuat tiket.</span></div>
+          </div>
+        </section>
+
+        <section class="screen tracking-screen" data-screen="tracking" hidden>
+          <div class="page-heading">
+            <div>
+              <a class="back-link" href="?screen=search">Kembali ke pencarian</a>
+              <p class="eyebrow">Detail pengiriman</p>
+              <h1>Paket sedang menuju alamatmu.</h1>
+              <p class="lead">Pembaruan terakhir hari ini, 10.24 WIB di Pontianak Selatan.</p>
+            </div>
+            <span class="status-badge success">Sesuai Jadwal</span>
+          </div>
+
+          <div class="shipment-strip">
+            <dl><dt>Nomor Resi</dt><dd class="mono">ANT-100112</dd></dl>
+            <dl><dt>Perkiraan Tiba</dt><dd>Hari ini, 13.00-16.00</dd></dl>
+            <dl><dt>Penerima</dt><dd>R***a A****i</dd></dl>
+            <button class="secondary-button" type="button">Bagikan Status</button>
+          </div>
+
+          <div class="tracking-grid">
+            <article class="timeline-panel">
+              <div class="section-heading"><div><p class="eyebrow">Perjalanan paket</p><h2>Riwayat Pengiriman</h2></div><span>Waktu setempat</span></div>
+              <ol class="timeline-list">
+                <li class="current"><span class="timeline-marker"></span><div><time>Hari ini, 10.24</time><h3>Dibawa Satria menuju alamatmu</h3><p>Paket keluar dari fasilitas Pontianak Selatan dan sedang dalam proses pengantaran.</p><span class="location">Pontianak Selatan</span></div></li>
+                <li><span class="timeline-marker"></span><div><time>Hari ini, 07.12</time><h3>Paket tiba di fasilitas tujuan</h3><p>Paket selesai disortir dan disiapkan untuk pengantaran terakhir.</p><span class="location">Hub Pontianak Selatan</span></div></li>
+                <li><span class="timeline-marker"></span><div><time>Kemarin, 22.41</time><h3>Paket dalam perjalanan antarfasilitas</h3><p>Pengiriman bergerak dari hub regional menuju kota tujuan.</p><span class="location">Hub Jakarta Timur</span></div></li>
+                <li><span class="timeline-marker"></span><div><time>19 Sep, 16.08</time><h3>Paket diterima Anteraja</h3><p>Informasi pengiriman telah diverifikasi.</p><span class="location">Jakarta Timur</span></div></li>
+              </ol>
+            </article>
+
+            <aside class="side-stack">
+              <section class="next-step-panel">
+                <p class="eyebrow">Langkah berikutnya</p>
+                <h2>Pastikan penerima dapat dihubungi.</h2>
+                <p>Satria mungkin menghubungi nomor penerima ketika sudah mendekati alamat tujuan.</p>
+                <dl class="compact-details"><div><dt>Tujuan</dt><dd>Jl. Prof. M. Yamin, Pontianak</dd></div><div><dt>Kontak</dt><dd>0812****7890</dd></div></dl>
+              </section>
+              <section class="help-panel" id="help">
+                <h2>Butuh bantuan?</h2>
+                <p>Kami akan menyertakan nomor resi dan status terakhir secara otomatis.</p>
+                <button class="text-button" type="button">Hubungi Customer Service <span aria-hidden="true">→</span></button>
+              </section>
+            </aside>
+          </div>
+        </section>
+
+        <section class="screen exception-screen" data-screen="exception" hidden>
+          <div class="alert-banner" role="alert">
+            <div><span class="status-badge danger">Perlu Tindakan</span><h1>Kurir belum menemukan alamat tujuan.</h1><p>Tambahkan patokan agar pengantaran dapat dilanjutkan tanpa menunggu proses bantuan manual.</p></div>
+            <span class="alert-time">Diperbarui 12 menit lalu</span>
+          </div>
+
+          <div class="exception-grid">
+            <article class="resolution-panel">
+              <div class="step-indicator"><span class="active">1</span><i></i><span>2</span><i></i><span>3</span></div>
+              <div class="section-heading"><div><p class="eyebrow">Konfirmasi lokasi</p><h2>Tambahkan patokan alamat</h2></div><span>1 dari 3</span></div>
+              <p class="section-copy">Informasi ini hanya diteruskan ke Satria yang menangani paket <strong>ANT-100015</strong>.</p>
+              <form class="resolution-form" id="resolution-form">
+                <div class="field-row">
+                  <div class="field"><label for="district">Kecamatan</label><select id="district" name="district"><option>Pontianak Selatan</option><option>Pontianak Kota</option><option>Pontianak Tenggara</option></select></div>
+                  <div class="field"><label for="street">Jalan</label><select id="street" name="street"><option>Jalan Prof. M. Yamin</option><option>Jalan Gajah Mada</option><option>Jalan Imam Bonjol</option></select></div>
+                </div>
+                <div class="field"><label for="landmark">Patokan Rumah</label><textarea id="landmark" name="landmark" maxlength="150" rows="4">Rumah pagar hitam, di sebelah warung makan. Masuk gang kedua sekitar 50 meter.</textarea><span class="field-meta"><span>Jangan menuliskan PIN atau data sensitif.</span><span class="char-count">83/150</span></span></div>
+                <div class="field"><label for="phone">Nomor Penerima</label><input id="phone" name="phone" type="tel" value="0812 3456 7890" /></div>
+                <label class="consent"><input type="checkbox" name="consent" checked /> <span>Saya memastikan informasi di atas benar dan dapat digunakan untuk pengantaran paket ini.</span></label>
+                <div class="form-actions"><a class="cancel-link" href="?screen=tracking">Batalkan</a><button class="primary-button" type="submit">Kirim Patokan</button></div>
+              </form>
+            </article>
+
+            <aside class="shipment-context">
+              <p class="eyebrow">Konteks paket</p>
+              <h2>ANT-100015</h2>
+              <div class="context-map" aria-label="Ilustrasi lokasi pengiriman"><span class="map-road road-one"></span><span class="map-road road-two"></span><span class="map-road road-three"></span><span class="map-pin">A</span></div>
+              <dl class="compact-details"><div><dt>Status</dt><dd>Pengantaran belum berhasil</dd></div><div><dt>Kendala</dt><dd>Patokan kurang jelas</dd></div><div><dt>SLA</dt><dd>Perlu tindakan sebelum 15.00 WIB</dd></div></dl>
+              <div class="privacy-note"><strong>Data tetap aman.</strong><span>Patokan hanya terlihat oleh petugas yang menangani pengiriman.</span></div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="screen seller-screen" data-screen="seller" hidden>
+          <div class="seller-heading">
+            <div><p class="eyebrow">Portal Seller</p><h1>Pengiriman yang perlu perhatian.</h1><p class="lead">Data diperbarui 21 September 2026, 10.30 WIB.</p></div>
+            <button class="primary-button" type="button">Ekspor Daftar Risiko</button>
+          </div>
+
+          <div class="metric-row" role="list" aria-label="Ringkasan pengiriman">
+            <dl role="listitem"><dt>Pengiriman Aktif</dt><dd>248</dd><span>Hari ini</span></dl>
+            <dl role="listitem"><dt>Sesuai Jadwal</dt><dd>221</dd><span>89,1% dari total</span></dl>
+            <dl role="listitem"><dt>Berisiko</dt><dd>19</dd><span>Perlu dipantau</span></dl>
+            <dl role="listitem" class="danger-metric"><dt>Perlu Tindakan</dt><dd>8</dd><span>Butuh respons seller</span></dl>
+          </div>
+
+          <div class="toolbar">
+            <div class="filter-tabs" role="tablist" aria-label="Filter status"><button class="active" type="button" role="tab">Semua <span>248</span></button><button type="button" role="tab">Sesuai Jadwal <span>221</span></button><button type="button" role="tab">Berisiko <span>19</span></button><button type="button" role="tab">Perlu Tindakan <span>8</span></button></div>
+            <label class="search-field"><span>Cari resi</span><input name="seller-search" type="search" placeholder="ANT-100015" /></label>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Nomor Resi</th><th>Penerima</th><th>Status Terakhir</th><th>Risiko SLA</th><th>Pembaruan</th><th><span class="sr-only">Tindakan</span></th></tr></thead>
+              <tbody>
+                <tr><td class="mono">ANT-100015</td><td>R***a A****i<br /><span>Pontianak Selatan</span></td><td>Alamat tidak ditemukan</td><td><span class="status-badge danger">Perlu Tindakan</span></td><td>12 menit lalu</td><td><button class="row-action" type="button">Tinjau</button></td></tr>
+                <tr><td class="mono">ANT-100084</td><td>D***i P******a<br /><span>Bandung Wetan</span></td><td>Diam di fasilitas selama 7 jam</td><td><span class="status-badge warning">Berisiko</span></td><td>41 menit lalu</td><td><button class="row-action" type="button">Tinjau</button></td></tr>
+                <tr><td class="mono">ANT-100112</td><td>S***i N******h<br /><span>Pontianak Kota</span></td><td>Dibawa Satria ke alamat</td><td><span class="status-badge success">Sesuai Jadwal</span></td><td>1 jam lalu</td><td><button class="row-action" type="button">Lihat</button></td></tr>
+                <tr><td class="mono">ANT-100143</td><td>A**i S******n<br /><span>Surabaya Timur</span></td><td>Penerima tidak berada di lokasi</td><td><span class="status-badge danger">Perlu Tindakan</span></td><td>2 jam lalu</td><td><button class="row-action" type="button">Tinjau</button></td></tr>
+                <tr><td class="mono">ANT-100157</td><td>M***a K******i<br /><span>Jakarta Selatan</span></td><td>Dalam perjalanan antarfasilitas</td><td><span class="status-badge warning">Berisiko</span></td><td>3 jam lalu</td><td><button class="row-action" type="button">Lihat</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="table-footer"><span>Menampilkan 5 dari 248 pengiriman</span><div><button type="button" disabled>Sebelumnya</button><button type="button">Berikutnya</button></div></div>
+        </section>
+      </main>
+
+      <div class="toast" role="status" aria-live="polite" hidden><strong>Patokan alamat tersimpan</strong><span>Informasi diteruskan ke Satria.</span></div>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>
