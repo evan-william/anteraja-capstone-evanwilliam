@@ -6,7 +6,7 @@ import { getCurrentUser } from '@/lib/auth';
 import type { ImportCategory, ImportHistory } from '@/lib/import/types';
 import { createClient } from '@/lib/supabase/server';
 
-export const metadata = { title: 'Import Mutasi — Expense Tracker' };
+export const metadata = { title: 'Rekonsiliasi — Anteraja Finance' };
 
 export default async function ImportPage() {
   const user = await getCurrentUser();
@@ -22,8 +22,9 @@ export default async function ImportPage() {
       <SiteHeader userName={user.name || user.email} />
       <main className="mx-auto w-full max-w-6xl space-y-6 px-4 py-8">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Import mutasi bank</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Tinjau hasil sebelum transaksi baru disimpan.</p>
+          <p className="eyebrow">Operasional keuangan</p>
+          <h1 className="mt-2 text-3xl font-semibold tracking-tight">Rekonsiliasi settlement</h1>
+          <p className="mt-2 max-w-2xl text-sm text-muted-foreground">Cocokkan mutasi rekening dengan pencatatan settlement pengiriman. Semua baris ditinjau sebelum disimpan.</p>
         </div>
         {categoriesResult.error || historyResult.error ? (
           <AlertLoadError />

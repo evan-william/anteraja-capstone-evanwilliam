@@ -4,15 +4,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 
 import { SignInForm } from './sign-in-form';
 
-export const metadata = { title: 'Masuk — Expense Tracker' };
+export const metadata = { title: 'Masuk — Anteraja Finance' };
 
 export default function MasukPage() {
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-md items-center px-4">
       <Card className="w-full">
         <CardHeader>
-          <CardTitle>Masuk</CardTitle>
-          <CardDescription>Masuk pakai email dan password kamu.</CardDescription>
+          <p className="eyebrow">Anteraja Finance</p>
+          <CardTitle className="text-2xl">Masuk ke ruang kerja</CardTitle>
+          <CardDescription>Periksa mutasi dan settlement pengiriman dalam satu alur.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <SignInForm />

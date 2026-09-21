@@ -3,7 +3,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { updateSession } from '@/lib/supabase/proxy';
 
 /** Halaman yang boleh dibuka tanpa login. */
-const PUBLIC_ROUTES = ['/masuk', '/daftar'];
+const PUBLIC_ROUTES = ['/masuk', '/daftar', '/ui-preview'];
 
 export async function proxy(request: NextRequest) {
   const { response, user } = await updateSession(request);

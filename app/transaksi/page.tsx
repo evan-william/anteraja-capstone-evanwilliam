@@ -8,7 +8,7 @@ import { SiteHeader } from '@/components/ui/site-header';
 import { getCurrentUser } from '@/lib/auth';
 import { createClient } from '@/lib/supabase/server';
 
-export const metadata = { title: 'Transaksi — Expense Tracker' };
+export const metadata = { title: 'Arus Dana — Anteraja Finance' };
 
 export default async function TransaksiPage() {
   const user = await getCurrentUser();
@@ -43,9 +43,10 @@ export default async function TransaksiPage() {
       <SiteHeader userName={user.name || user.email} />
       <main className="mx-auto w-full max-w-4xl space-y-6 px-4 py-8">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Transaksi</h1>
+          <p className="eyebrow">Anteraja Finance</p>
+          <h1 className="mt-2 text-3xl font-semibold tracking-tight">Arus dana</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Catat pemasukan dan pengeluaran harianmu.
+            Catat pemasukan settlement dan biaya operasional pengiriman.
           </p>
         </div>
 

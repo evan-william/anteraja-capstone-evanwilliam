@@ -163,9 +163,9 @@ export function ImportManager({
 
       <Card>
         <CardHeader>
-          <CardTitle>1. Pilih file mutasi</CardTitle>
+          <CardTitle>1. Unggah mutasi rekening settlement</CardTitle>
           <CardDescription>
-            CSV Bank A atau Bank B, maksimal 10 MB dan 50.000 baris. Format dikenali dari isi file.
+            CSV Bank A atau Bank B, maksimal 10 MB dan 50.000 baris. Format bank dikenali otomatis dari isi file.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
@@ -183,7 +183,7 @@ export function ImportManager({
       {rows.length > 0 ? (
         <Card>
           <CardHeader>
-            <CardTitle>2. Periksa dan kategorikan</CardTitle>
+            <CardTitle>2. Periksa kecocokan settlement</CardTitle>
             <CardDescription>
               {fileName} · {bank === 'bank_a' ? 'Bank A' : 'Bank B'} · {rows.length} baris
             </CardDescription>
@@ -261,7 +261,7 @@ export function ImportManager({
                 <span className="text-sm">Halaman {page} dari {totalPages}</span>
                 <Button type="button" variant="outline" size="sm" disabled={page === totalPages} onClick={() => setPage((value) => value + 1)}>Berikutnya</Button>
               </div>
-              <Button type="button" disabled={busy} onClick={() => void saveImport()}>{busy ? 'Menyimpan…' : 'Simpan impor'}</Button>
+              <Button type="button" disabled={busy} onClick={() => void saveImport()}>{busy ? 'Menyimpan…' : 'Simpan hasil rekonsiliasi'}</Button>
             </div>
           </CardContent>
         </Card>
@@ -269,8 +269,8 @@ export function ImportManager({
 
       <Card>
         <CardHeader>
-          <CardTitle>Riwayat impor</CardTitle>
-          <CardDescription>Pembatalan tidak menghapus transaksi lama yang hanya dicocokkan.</CardDescription>
+          <CardTitle>Riwayat rekonsiliasi</CardTitle>
+          <CardDescription>Pembatalan hanya menghapus transaksi baru dari proses tersebut; pencatatan lama yang dicocokkan tetap aman.</CardDescription>
         </CardHeader>
         <CardContent>
           {history.length === 0 ? <p className="text-sm text-muted-foreground">Belum ada impor.</p> : (

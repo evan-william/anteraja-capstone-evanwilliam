@@ -1,3 +1,18 @@
+# Anteraja Finance — FRD-06
+
+Branch `5-ui` mengembangkan Expense Tracker menjadi Anteraja Finance: antarmuka rekonsiliasi mutasi dan settlement pengiriman untuk seller/finance operations. Implementasi inti tetap mengikuti FRD-06—CSV Bank A/B, deteksi format, preview Baru/Cocok/Error, kategori dan aturan kata kunci, penyimpanan atomik, riwayat, serta pembatalan aman.
+
+Dokumen Day 5:
+
+- [PRD Anteraja Finance](docs/day5-ui/PRD-Anteraja-Finance.md)
+- [FRD-06 Rekonsiliasi Settlement](docs/day5-ui/FRD-06-Rekonsiliasi-Settlement.md)
+- [Keputusan desain UI](docs/day5-ui/DESIGN.md)
+- [Catatan keputusan produk](docs/day5-ui/product-decisions.md)
+
+Preview desain dapat dibuka tanpa login di `http://localhost:3000/ui-preview?screen=dashboard`. Nilai `screen` yang tersedia: `dashboard`, `upload`, `preview`, `history`, dan `shipment`.
+
+---
+
 # Studi Kasus Advanced: Antigravity + Multi-MCP
 
 Repo ini berisi aplikasi **Expense Tracker** yang udah jalan, satu PRD, dan **15 FRD fitur advanced**. Pilih satu FRD, lalu bangun sampai selesai pakai Antigravity.

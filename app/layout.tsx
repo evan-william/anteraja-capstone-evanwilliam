@@ -3,8 +3,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Expense Tracker',
-  description: 'Catat pemasukan dan pengeluaran harianmu.',
+  title: 'Anteraja Finance',
+  description: 'Rekonsiliasi mutasi dan settlement pengiriman untuk operasional seller.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

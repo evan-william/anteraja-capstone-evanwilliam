@@ -5,7 +5,7 @@ import { SiteHeader } from '@/components/ui/site-header';
 import { getCurrentUser } from '@/lib/auth';
 import { createClient } from '@/lib/supabase/server';
 
-export const metadata = { title: 'Kategori — Expense Tracker' };
+export const metadata = { title: 'Kategori — Anteraja Finance' };
 
 export default async function KategoriPage() {
   const user = await getCurrentUser();
@@ -23,7 +23,7 @@ export default async function KategoriPage() {
     <>
       <SiteHeader userName={user.name || user.email} />
       <main className="mx-auto w-full max-w-4xl space-y-6 px-4 py-8">
-        <h1 className="text-2xl font-semibold">Kelola Kategori</h1>
+        <div><p className="eyebrow">Aturan pencatatan</p><h1 className="mt-2 text-3xl font-semibold">Kelola kategori</h1><p className="mt-2 text-sm text-muted-foreground">Pisahkan COD, ongkir, retur, dan biaya layanan agar laporan settlement mudah diperiksa.</p></div>
 
         {error ? (
           <p className="text-sm text-destructive">Gagal memuat kategori. Coba muat ulang halaman.</p>
