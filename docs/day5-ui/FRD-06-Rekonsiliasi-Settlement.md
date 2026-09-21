@@ -63,7 +63,9 @@ Sebagai seller administrator, saya ingin melihat referensi nomor resi pada hasil
 
 ## 7. Data dan integrasi
 
-Implementasi memakai tabel `bank_imports`, `bank_import_rows`, `category_rules`, dan `transactions`. Supabase menangani autentikasi, Row Level Security, dan transaksi penyimpanan. PapaParse menangani CSV. Nomor resi pada desain Day 5 adalah atribut tampilan/proposal integrasi; pengambilan status shipment langsung tetap di luar lingkup.
+Implementasi memakai tabel `bank_imports`, `bank_import_rows`, `category_rules`, dan `transactions`. Konteks logistik disimpan pada `shipments`, `settlements`, dan `settlement_items`; `bank_import_rows.settlement_id` menjadi penghubung rekonsiliasi. Supabase menangani autentikasi, Row Level Security, dan transaksi penyimpanan. PapaParse menangani CSV. Pengambilan status shipment langsung tetap di luar lingkup sampai kontrak API tersedia.
+
+Relasi shipment memakai composite foreign key `(id, user_id)` untuk mencegah tautan lintas pemilik. Nilai bersih settlement dihitung PostgreSQL, total batch diperbarui trigger, dan RPC `link_bank_row_to_settlement` menolak nominal yang berbeda.
 
 ## 8. Peran MCP dalam verifikasi
 

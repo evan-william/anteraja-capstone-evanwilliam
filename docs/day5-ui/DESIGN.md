@@ -44,7 +44,7 @@ Kontrol memiliki label yang dapat dibaca pembaca layar (`rule/accessible-name-re
 
 ## Hubungan dengan FRD-06
 
-Desain tidak mengubah kontrak fitur yang sudah diuji. Status, kategori, aturan kata kunci, penyimpanan, riwayat, dan pembatalan tetap berasal dari FRD-06. Referensi pengiriman ditambahkan sebagai konteks yang dapat diisi ketika data settlement menyediakannya. API tracking langsung tetap dicatat sebagai tahap lanjutan, bukan dibuat seolah-olah sudah tersedia.
+Desain tidak mengubah kontrak fitur yang sudah diuji. Status, kategori, aturan kata kunci, penyimpanan, riwayat, dan pembatalan tetap berasal dari FRD-06. Referensi pengiriman kini memiliki rancangan database pada `shipments`, `settlements`, dan `settlement_items`, lalu ditautkan ke baris mutasi. API tracking langsung tetap dicatat sebagai tahap lanjutan, bukan dibuat seolah-olah sudah tersedia.
 
 ## File desain
 

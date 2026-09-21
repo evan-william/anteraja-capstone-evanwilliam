@@ -41,6 +41,7 @@ Masalah utamanya bukan sekadar mencari posisi paket. Tim perlu menjawab pertanya
 - Penyimpanan dan penautan hasil secara atomik.
 - Riwayat dan pembatalan impor.
 - Konteks nomor resi pada rancangan UI untuk menelusuri settlement pengiriman.
+- Model PostgreSQL untuk shipment, settlement, item settlement, dan relasinya ke baris mutasi.
 
 ## Di luar lingkup
 
@@ -65,4 +66,8 @@ Masalah utamanya bukan sekadar mencari posisi paket. Tim perlu menjawab pertanya
 2. **Shipment context:** referensi resi dan rincian settlement pada antarmuka.
 3. **Integrasi lanjutan:** adapter API tracking resmi jika akses dan kontrak datanya tersedia.
 
-Versi Day 5 berhenti pada tahap kedua di level rancangan UI. Hal ini menjaga desain tetap realistis: referensi shipment memperjelas pekerjaan pengguna tanpa mengklaim integrasi API yang belum dibangun.
+Versi Day 5 menyelesaikan rancangan UI dan fondasi database tahap kedua. Hal ini menjaga desain tetap realistis: referensi shipment sudah memiliki model penyimpanan, tetapi tidak mengklaim integrasi API tracking yang belum dibangun.
+
+## Model data shipment
+
+Satu user memiliki banyak shipment dan settlement. Satu settlement merangkum banyak `settlement_items`; setiap item menunjuk satu shipment dan menyimpan nilai COD, ongkir, biaya layanan, retur, serta nilai bersih yang dihitung database. Baris mutasi dapat ditautkan ke settlement setelah nominalnya sama. Detail PK, FK, aturan delete, dan RLS tersedia di `database/ERD.md` dan `database/DATABASE_RUN.md`.

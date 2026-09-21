@@ -12,6 +12,8 @@
 | Mobile 390 × 844 | Hierarki tetap terbaca; tabel dapat digulir horizontal |
 | Format desain | Enam file `.webp` |
 | Kredensial | `.env.example` hanya berisi placeholder |
+| Sintaks PostgreSQL | Seluruh file `database/*.sql` lulus parser PostgreSQL `pglast` |
+| Integritas shipment | Composite FK, generated amount, trigger total, RLS, dan RPC linkage terdokumentasi |
 
 ## Bukti repositori
 

@@ -8,6 +8,8 @@ Dokumen Day 5:
 - [FRD-06 Rekonsiliasi Settlement](docs/day5-ui/FRD-06-Rekonsiliasi-Settlement.md)
 - [Keputusan desain UI](docs/day5-ui/DESIGN.md)
 - [Catatan keputusan produk](docs/day5-ui/product-decisions.md)
+- [Setup database PostgreSQL/Supabase](database/DATABASE_RUN.md)
+- [ERD dan relasi PK/FK](database/ERD.md)
 
 Preview desain dapat dibuka tanpa login di `http://localhost:3000/ui-preview?screen=dashboard`. Nilai `screen` yang tersedia: `dashboard`, `upload`, `preview`, `history`, dan `shipment`.
 

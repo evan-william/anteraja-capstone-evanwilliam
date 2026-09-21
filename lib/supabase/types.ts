@@ -146,10 +146,44 @@ export type Database = {
           matched_transaction_id: string | null;
           created_transaction_id: string | null;
           error_message: string | null;
+          settlement_id: string | null;
           created_at: string;
         };
         Insert: never;
         Update: never;
+        Relationships: [];
+      };
+      shipments: {
+        Row: {
+          id: string; user_id: string; tracking_number: string;
+          service_type: 'regular' | 'next_day' | 'same_day' | 'economy' | 'cargo';
+          delivery_status: 'created' | 'picked_up' | 'in_transit' | 'delivered' | 'returned' | 'cancelled';
+          recipient_name: string | null; delivered_at: string | null;
+          created_at: string; updated_at: string;
+        };
+        Insert: { id?: string; user_id: string; tracking_number: string; service_type?: string; delivery_status?: string; recipient_name?: string | null; delivered_at?: string | null };
+        Update: { service_type?: string; delivery_status?: string; recipient_name?: string | null; delivered_at?: string | null };
+        Relationships: [];
+      };
+      settlements: {
+        Row: {
+          id: string; user_id: string; reference: string; settlement_date: string;
+          status: 'draft' | 'paid' | 'reconciled' | 'disputed' | 'cancelled';
+          gross_amount: number; fee_amount: number; return_amount: number; net_amount: number;
+          reconciled_at: string | null; created_at: string; updated_at: string;
+        };
+        Insert: { id?: string; user_id: string; reference: string; settlement_date: string; status?: string };
+        Update: { reference?: string; settlement_date?: string; status?: string; reconciled_at?: string | null };
+        Relationships: [];
+      };
+      settlement_items: {
+        Row: {
+          id: string; user_id: string; settlement_id: string; shipment_id: string;
+          cod_amount: number; shipping_fee: number; service_fee: number; return_amount: number;
+          net_amount: number; created_at: string; updated_at: string;
+        };
+        Insert: { id?: string; user_id: string; settlement_id: string; shipment_id: string; cod_amount?: number; shipping_fee?: number; service_fee?: number; return_amount?: number };
+        Update: { cod_amount?: number; shipping_fee?: number; service_fee?: number; return_amount?: number };
         Relationships: [];
       };
     };
@@ -166,6 +200,10 @@ export type Database = {
           cancelled_transactions: number;
           already_cancelled: boolean;
         };
+      };
+      link_bank_row_to_settlement: {
+        Args: { p_import_row_id: string; p_settlement_id: string };
+        Returns: { import_row_id: string; settlement_id: string; net_amount: number; status: 'reconciled' };
       };
     };
     Enums: Record<string, never>;
