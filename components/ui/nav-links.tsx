@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 
 const links = [
   { href: '/pengiriman', label: 'Pengiriman' },
+  { href: '/lacak', label: 'Lacak paket' },
   { href: '/transaksi', label: 'Arus dana' },
   { href: '/import', label: 'Rekonsiliasi' },
   { href: '/kategori', label: 'Kategori' },
