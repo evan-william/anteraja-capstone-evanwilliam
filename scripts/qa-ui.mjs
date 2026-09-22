@@ -60,6 +60,14 @@ await run('tracking valid dan tidak valid', async () => {
   await page.goto(`${baseURL}/lacak/ANT-100015?code=260926`, { waitUntil: 'networkidle' });
   await page.getByRole('heading', { name: 'ANT-100015' }).waitFor();
   await capture(page, '04-tracking-valid');
+  await page.locator('section[aria-labelledby="risk-status-title"]').screenshot({ path: join(output, '16-tracking-action-priority.webp'), type: 'webp', quality: 88 });
+  await page.getByRole('link', { name: 'Tangani sekarang' }).click();
+  await page.waitForTimeout(500);
+  const focusedSection = await page.evaluate(() => document.activeElement?.id);
+  if (focusedSection !== 'resolution-actions') throw new Error('Shortcut tindakan tidak memindahkan fokus ke form resolution.');
+  await page.getByRole('button', { name: 'Tulis laporan' }).click();
+  await page.getByLabel('Ceritakan kendalanya').fill('Kurir belum menemukan gang rumah. Patokannya minimarket di seberang jalan, lalu masuk sekitar 50 meter. Penerima dapat dihubungi melalui nomor yang tercantum pada paket.');
+  await page.locator('section[aria-labelledby="support-title"]').screenshot({ path: join(output, '17-support-report.webp'), type: 'webp', quality: 88 });
 });
 
 await run('loading tracking tanpa layout shift', async () => {
@@ -126,6 +134,13 @@ await run('mobile auth, tracking, dashboard, navigasi', async () => {
   await capture(publicMobilePage, '11-auth-mobile');
   await publicMobilePage.goto(`${baseURL}/lacak`, { waitUntil: 'networkidle' });
   await capture(publicMobilePage, '12-tracking-mobile');
+  await publicMobilePage.goto(`${baseURL}/lacak/ANT-100015?code=260926`, { waitUntil: 'networkidle' });
+  await publicMobilePage.getByRole('heading', { name: 'ANT-100015' }).waitFor();
+  const mobileOverflow = await publicMobilePage.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
+  if (mobileOverflow) throw new Error('Detail tracking melebar keluar viewport mobile.');
+  await publicMobilePage.locator('section[aria-labelledby="risk-status-title"]').screenshot({ path: join(output, '18-tracking-action-mobile.webp'), type: 'webp', quality: 88 });
+  await publicMobilePage.getByRole('button', { name: 'Tulis laporan' }).click();
+  await publicMobilePage.locator('section[aria-labelledby="support-title"]').screenshot({ path: join(output, '19-support-report-mobile.webp'), type: 'webp', quality: 88 });
   await publicMobileContext.close();
 
   await page.setViewportSize({ width: 390, height: 844 });

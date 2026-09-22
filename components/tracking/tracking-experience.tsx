@@ -4,13 +4,14 @@ import { FormEvent, useEffect, useState } from 'react';
 import Link from 'next/link';
 import {
   AlertTriangle, ArrowLeft, BellRing, CalendarClock, Check, CheckCircle2,
-  ChevronRight, Circle, Clock3, Copy, Headphones, MapPin,
+  ChevronDown, ChevronRight, Circle, Clock3, Copy, Headphones, MapPin,
   RefreshCcw, Route, ShieldCheck, Truck,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import type { ApiResponse } from '@/lib/api';
 import type { PublicTracking, RiskStatus } from '@/lib/tracking/types';
 import { cn } from '@/lib/utils';
@@ -18,7 +19,7 @@ import { cn } from '@/lib/utils';
 const riskMeta: Record<RiskStatus, { label: string; copy: string; className: string; icon: typeof CheckCircle2 }> = {
   on_track: { label: 'Sesuai jadwal', copy: 'Perjalanan berjalan sesuai rencana. Tidak ada tindakan yang dibutuhkan.', className: 'bg-emerald-50 text-emerald-950', icon: CheckCircle2 },
   at_risk: { label: 'Berisiko terlambat', copy: 'Kami mendeteksi jeda perjalanan lebih lama dari biasanya dan sedang memantaunya.', className: 'bg-amber-50 text-amber-950', icon: Clock3 },
-  action_required: { label: 'Perlu tindakanmu', copy: 'Tim kurir membutuhkan informasi tambahan agar pengiriman dapat dilanjutkan.', className: 'bg-rose-50 text-rose-950', icon: AlertTriangle },
+  action_required: { label: 'Perlu tindakanmu', copy: 'Tim kurir membutuhkan informasi tambahan agar pengiriman dapat dilanjutkan.', className: 'bg-[#ffe4f0] text-[#5d0a32]', icon: AlertTriangle },
   resolved: { label: 'Instruksi diterima', copy: 'Informasi terbaru sudah diteruskan ke tim operasional.', className: 'bg-sky-50 text-sky-950', icon: CheckCircle2 },
 };
 
@@ -84,17 +85,24 @@ export function TrackingExperience({ awb, code }: { awb: string; code: string })
         <Button variant="outline" size="sm" onClick={() => void copyLink()}>{copied ? <Check /> : <Copy />}{copied ? 'Tautan disalin' : 'Bagikan tracking'}</Button>
       </nav>
 
+      <section aria-labelledby="risk-status-title" className={cn('mb-5 flex flex-col gap-5 rounded-2xl p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6', risk.className)}>
+        <div className="flex min-w-0 gap-4">
+          <div className={cn('flex size-11 shrink-0 items-center justify-center rounded-xl', tracking.risk_status === 'action_required' ? 'bg-primary text-white' : 'bg-white/70')}><RiskIcon className="size-5" /></div>
+          <div className="min-w-0"><h2 id="risk-status-title" className="text-lg font-semibold">{risk.label}</h2><p className="mt-1 text-base text-pretty opacity-80 sm:text-sm">{tracking.exception_reason || risk.copy}</p></div>
+        </div>
+        {tracking.risk_status === 'action_required' ? (
+          <Button asChild variant="outline" className="w-full shrink-0 border-white/80 bg-white text-[#5d0a32] shadow-sm hover:bg-white/85 sm:w-auto">
+            <a href="#resolution-actions" onClick={() => window.setTimeout(() => document.getElementById('resolution-actions')?.focus({ preventScroll: true }), 400)}>Tangani sekarang <ChevronDown /></a>
+          </Button>
+        ) : null}
+      </section>
+
       <section className="relative overflow-hidden rounded-[1.5rem] bg-[#21171d] p-6 text-white shadow-[0_22px_60px_rgba(33,23,29,.18)] sm:p-9">
         <div className="absolute -right-18 -top-22 size-64 rounded-full bg-primary/25 blur-3xl" />
         <div className="relative grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
           <div><p className="text-xs font-bold uppercase tracking-[.18em] text-[#ff75bd]">{tracking.service_type.replace('_', ' ')} shipment</p><h1 className="mt-3 text-3xl font-bold tracking-[-.045em] sm:text-4xl">{tracking.tracking_number}</h1><p className="mt-3 text-sm text-white/60">{tracking.origin_city} <ChevronRight className="mx-1 inline size-4" /> {tracking.destination_city}</p></div>
           <div className="grid grid-cols-2 gap-x-7 gap-y-5 border-t border-white/12 pt-6 lg:min-w-72 lg:border-l lg:border-t-0 lg:pl-9 lg:pt-0"><div><p className="text-xs text-white/55">Estimasi tiba</p><p className="mt-1 font-semibold">{formatDate(tracking.estimated_delivery_at, false)}</p></div><div><p className="text-xs text-white/55">Penerima</p><p className="mt-1 font-semibold">{tracking.recipient_name ?? '—'}</p></div><div className="col-span-2 border-t border-white/12 pt-4"><p className="text-xs text-white/55">Posisi terakhir</p><p className="mt-1 font-semibold">{tracking.current_location ?? 'Belum tersedia'}</p></div></div>
         </div>
-      </section>
-
-      <section className={cn('mt-5 flex gap-4 rounded-2xl p-5 sm:p-6', risk.className)}>
-        <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white/70"><RiskIcon className="size-5" /></div>
-        <div><h2 className="font-bold">{risk.label}</h2><p className="mt-1 text-sm leading-6 opacity-75">{tracking.exception_reason || risk.copy}</p></div>
       </section>
 
       <div className="mt-5 grid gap-5 lg:grid-cols-[1.4fr_.8fr]">
@@ -160,7 +168,7 @@ function ResolutionCard({ awb, code, onSuccess }: { awb: string; code: string; o
     } catch (caught) { setError(caught instanceof Error ? caught.message : 'Instruksi belum dapat dikirim.'); }
     finally { setBusy(false); }
   }
-  return <section className="surface mt-5 overflow-hidden"><header className="border-b bg-accent/50 p-5 sm:p-6"><p className="eyebrow">Perlu tindakan</p><h2 className="mt-2 text-xl font-bold">Bantu kurir menyelesaikan pengiriman</h2><p className="mt-2 text-sm text-muted-foreground">Pilih satu instruksi. Demi keamanan, perubahan dibatasi satu kali per hari.</p></header>
+  return <section id="resolution-actions" tabIndex={-1} aria-labelledby="resolution-title" className="surface mt-5 scroll-mt-6 overflow-hidden focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"><header className="border-b bg-accent/50 p-5 sm:p-6"><p className="eyebrow">Perlu tindakan</p><h2 id="resolution-title" className="mt-2 text-xl font-semibold tracking-tight">Bantu kurir menyelesaikan pengiriman</h2><p className="mt-2 text-base text-pretty text-muted-foreground sm:text-sm">Pilih satu instruksi. Demi keamanan, perubahan dibatasi satu kali per hari.</p></header>
     <div className="p-5 sm:p-6"><div className="grid gap-2 sm:grid-cols-3">{([['update_address','Perjelas alamat'],['reschedule','Atur ulang jadwal'],['safe_drop','Titip di tempat aman']] as const).map(([value,label]) => <button key={value} onClick={() => setType(value)} className={cn('rounded-xl border px-4 py-3 text-left text-sm font-bold', type === value ? 'bg-accent text-accent-foreground shadow-[inset_0_0_0_1px_rgba(233,0,127,.12)]' : 'bg-white hover:bg-muted')}>{label}</button>)}</div>
       <form onSubmit={submit} className="mt-5 grid gap-4 sm:grid-cols-2">
         {type === 'update_address' ? <><Field name="district" label="Kecamatan" placeholder="Cilandak" /><Field name="street" label="Jalan dan nomor" placeholder="Jl. Terogong Raya No. 18" /><Field name="landmark" label="Patokan (maks. 150 karakter)" placeholder="Pagar hitam, sebelah minimarket" /><Field name="phone" label="Nomor penerima" placeholder="081234567890" /></> : null}
@@ -188,14 +196,14 @@ function NotificationCard({ awb, code }: { awb: string; code: string }) {
 }
 
 function SupportCard({ awb, code }: { awb: string; code: string }) {
-  const [open, setOpen] = useState(false); const [busy, setBusy] = useState(false); const [message, setMessage] = useState('');
+  const [open, setOpen] = useState(false); const [busy, setBusy] = useState(false); const [message, setMessage] = useState(''); const [note, setNote] = useState('');
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); setBusy(true); setMessage(''); const note = new FormData(event.currentTarget).get('note');
     const response = await fetch(`/api/v1/tracking/${encodeURIComponent(awb)}/escalate`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-tracking-code': code }, body: JSON.stringify({ note }) });
     const body = await response.json() as ApiResponse<{ ticket_number: string }>;
     setMessage(body.success ? `Tiket ${body.data.ticket_number} dibuat. Konteks perjalanan sudah dilampirkan.` : body.error.message); setBusy(false);
   }
-  return <section className="mt-5 rounded-2xl border bg-[#f0edef] p-5 sm:flex sm:items-center sm:justify-between sm:gap-8 sm:p-6"><div className="flex gap-4"><div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white text-primary"><Headphones className="size-5" /></div><div><h2 className="font-bold">Masih butuh bantuan?</h2><p className="mt-1 text-sm leading-6 text-muted-foreground">Tiket otomatis membawa resi, timeline, kendala, dan lokasi terakhir—tidak perlu mengulang cerita.</p></div></div>{!open ? <Button variant="outline" className="mt-4 bg-white sm:mt-0" onClick={() => setOpen(true)}>Buat tiket bantuan</Button> : null}{open ? <form onSubmit={submit} className="mt-4 min-w-0 flex-1 sm:mt-0"><Input name="note" placeholder="Tambahkan catatan singkat (opsional)" maxLength={500} /><div className="mt-2 flex items-center gap-3"><Button size="sm" disabled={busy}>{busy ? 'Membuat…' : 'Kirim ke CS'}</Button><p className="text-xs font-semibold text-emerald-700" aria-live="polite">{message}</p></div></form> : null}</section>;
+  return <section aria-labelledby="support-title" className="mt-5 rounded-2xl bg-[#f0edef] p-5 sm:p-6"><header className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between"><div className="flex min-w-0 gap-4"><div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white text-primary"><Headphones className="size-5" /></div><div className="min-w-0"><h2 id="support-title" className="text-lg font-semibold">Masih butuh bantuan?</h2><p className="mt-1 max-w-[70ch] text-base text-pretty text-muted-foreground sm:text-sm">Tiket otomatis membawa resi, timeline, kendala, dan lokasi terakhir. Kamu cukup menambahkan detail yang belum tercatat.</p></div></div>{!open ? <Button type="button" variant="outline" className="w-full shrink-0 bg-white sm:w-auto" onClick={() => setOpen(true)}>Tulis laporan</Button> : null}</header>{open ? <form onSubmit={submit} className="mt-6 grid gap-4"><label htmlFor="support-note" className="grid gap-2 text-base font-semibold sm:text-sm">Ceritakan kendalanya<Textarea id="support-note" name="note" value={note} onChange={(event) => setNote(event.target.value)} placeholder="Contoh: Kurir belum menemukan gang rumah. Patokannya minimarket di seberang jalan, lalu masuk sekitar 50 meter." maxLength={500} rows={6} aria-describedby="support-note-help" /></label><div id="support-note-help" className="flex flex-col gap-1 text-base text-muted-foreground sm:flex-row sm:items-center sm:justify-between sm:text-sm"><p>Maksimal 500 karakter. Data paket dan lima perjalanan terakhir otomatis dilampirkan.</p><p className="shrink-0 tabular">{note.length}/500</p></div><div className="flex flex-col gap-3 sm:flex-row sm:items-center"><Button type="submit" disabled={busy}>{busy ? 'Membuat…' : 'Kirim laporan ke CS'}</Button><p className="text-base font-semibold text-emerald-700 sm:text-sm" aria-live="polite">{message}</p></div></form> : null}</section>;
 }
 
 function TrackingSkeleton() {
