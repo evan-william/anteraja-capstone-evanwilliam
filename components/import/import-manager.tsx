@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { Check, FileSpreadsheet, RotateCcw, Upload } from 'lucide-react';
+import { Check, FileSpreadsheet, RotateCcw } from 'lucide-react';
 
 import { Alert } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
@@ -164,17 +164,15 @@ export function ImportManager({
 
       <Card className="overflow-hidden">
         <CardHeader>
-          <div className="flex items-center gap-3">
-            <span className="grid size-8 place-items-center rounded-full bg-primary text-xs font-bold text-white">1</span>
-            <div><CardTitle>Unggah mutasi bank</CardTitle><p className="mt-1 text-xs text-muted-foreground">Langkah 1 dari 3</p></div>
-          </div>
+          <p className="eyebrow">Langkah 1 dari 3</p>
+          <CardTitle>Unggah mutasi bank</CardTitle>
           <CardDescription>
             Pilih CSV Bank A atau Bank B. Format dikenali dari isi file, bukan nama file.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <label className="group flex cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-input bg-[#fbfaf9] px-6 py-10 text-center transition-colors hover:border-primary/60 hover:bg-accent/25">
-            <span className="grid size-11 place-items-center text-primary"><FileSpreadsheet className="size-7" /></span>
+          <label className="group flex cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-input bg-[#fbfaf9] px-6 py-10 text-center hover:bg-accent/25">
+            <FileSpreadsheet className="size-7 text-primary" />
             <span className="mt-3 text-sm font-semibold">Pilih file mutasi CSV</span>
             <span className="mt-1 text-xs leading-5 text-muted-foreground">Maksimum 10 MB atau 50.000 baris</span>
             <Input className="sr-only" aria-label="File mutasi bank" type="file" accept=".csv,text/csv" disabled={busy} onChange={(event) => void handleFile(event.target.files?.[0])} />
@@ -186,10 +184,8 @@ export function ImportManager({
       {rows.length > 0 ? (
         <Card className="overflow-hidden">
           <CardHeader>
-            <div className="flex items-center gap-3">
-              <span className="grid size-8 place-items-center rounded-full bg-primary text-xs font-bold text-white">2</span>
-              <div><CardTitle>Tinjau hasil pencocokan</CardTitle><p className="mt-1 text-xs text-muted-foreground">Langkah 2 dari 3</p></div>
-            </div>
+            <p className="eyebrow">Langkah 2 dari 3</p>
+            <CardTitle>Tinjau hasil pencocokan</CardTitle>
             <CardDescription>
               {fileName} · {bank === 'bank_a' ? 'Bank A' : 'Bank B'} · {rows.length} baris
             </CardDescription>
@@ -201,7 +197,7 @@ export function ImportManager({
               <div className="p-4"><strong className="block text-xl tabular">{counts.error}</strong><span className="status status-danger mt-1">Error</span></div>
             </div>
 
-            <div className="overflow-x-auto rounded-lg border">
+            <div className="overflow-x-auto border-y">
               <table className="data-table min-w-[900px]">
                 <thead>
                   <tr>
@@ -273,7 +269,7 @@ export function ImportManager({
 
       <Card className="overflow-hidden">
         <CardHeader>
-          <div className="flex items-center justify-between gap-4"><div><CardTitle>Riwayat rekonsiliasi</CardTitle><CardDescription className="mt-1">Setiap proses tetap tercatat untuk pemeriksaan.</CardDescription></div><Upload className="size-5 text-muted-foreground" /></div>
+          <div><CardTitle>Riwayat rekonsiliasi</CardTitle><CardDescription className="mt-1">Setiap proses tetap tercatat untuk pemeriksaan.</CardDescription></div>
         </CardHeader>
         <CardContent>
           {history.length === 0 ? <p className="py-8 text-center text-sm text-muted-foreground">Belum ada rekonsiliasi. Unggah mutasi pertama untuk mulai.</p> : (

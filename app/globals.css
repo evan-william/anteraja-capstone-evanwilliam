@@ -34,8 +34,8 @@
 
 :root {
   --radius: 0.75rem;
-  --background: #f8f7f5;
-  --foreground: #201b1e;
+  --background: #f7f5f3;
+  --foreground: #241d21;
   --card: #ffffff;
   --card-foreground: #201b1e;
   --primary: #e9007f;
@@ -43,7 +43,7 @@
   --secondary: #f0edef;
   --secondary-foreground: #30282d;
   --muted: #f1efed;
-  --muted-foreground: #716970;
+  --muted-foreground: #6d646a;
   --accent: #fce9f3;
   --accent-foreground: #a00058;
   --destructive: #c93643;
@@ -53,36 +53,48 @@
   --ring: #e9007f;
   --success: #157a54;
   --warning: #a25d08;
+  --info: #216285;
+  --surface-subtle: #fbfaf9;
+  --surface-strong: #2a2026;
+  --space-page: clamp(1.25rem, 3vw, 2rem);
+  --motion-fast: 140ms;
+  --motion-base: 220ms;
+  --motion-slow: 420ms;
   --ease-enter: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-move: cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 @layer base {
   * { border-color: var(--border); }
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; color-scheme: light; }
   body {
     min-width: 320px;
     background: radial-gradient(circle at 8% -10%, rgba(233, 0, 127, 0.055), transparent 28rem), var(--background);
     color: var(--foreground);
     font-family: "Open Sans", Arial, sans-serif;
     text-rendering: optimizeLegibility;
+    font-feature-settings: "kern", "liga", "clig", "calt";
+    -webkit-font-smoothing: antialiased;
   }
-  button, a, input, select { outline-offset: 3px; }
-  :focus-visible { outline: 2px solid var(--ring); }
+  button, a, input, select, textarea, summary { outline-offset: 3px; }
+  :focus-visible { outline: 2px solid var(--ring); outline-offset: 3px; }
+  button, a, summary { touch-action: manipulation; }
+  h1, h2, h3 { text-wrap: balance; }
+  button:disabled { cursor: not-allowed; }
   ::selection { background: rgba(233, 0, 127, 0.18); }
 }
 
 @layer components {
-  .app-container { @apply mx-auto w-full max-w-[1180px] px-4 sm:px-6 lg:px-8; }
-  .app-main { @apply mx-auto w-full max-w-[1180px] px-4 py-7 sm:px-6 sm:py-10 lg:px-8; }
+  .app-container { @apply mx-auto w-full max-w-[1240px] px-4 sm:px-6 lg:px-8; }
+  .app-main { @apply mx-auto w-full max-w-[1240px] px-4 py-7 sm:px-6 sm:py-10 lg:px-8; }
   .surface { @apply rounded-xl border bg-card shadow-[0_1px_2px_rgba(32,27,30,0.035),0_12px_32px_rgba(32,27,30,0.025)]; }
   .surface-flat { @apply rounded-xl border bg-card; }
-  .eyebrow { @apply text-[11px] font-bold uppercase tracking-[0.17em] text-primary; }
-  .page-title { @apply mt-2 text-[1.75rem] font-semibold leading-tight tracking-[-0.035em] sm:text-[2.25rem]; }
-  .page-copy { @apply mt-2 max-w-2xl text-sm leading-6 text-muted-foreground; }
+  .eyebrow { @apply text-[0.6875rem] font-bold uppercase tracking-[0.16em] text-primary; }
+  .page-title { @apply mt-2 text-[clamp(1.75rem,4vw,2.5rem)] font-semibold leading-[1.12] tracking-[-0.035em]; }
+  .page-copy { @apply mt-2 max-w-[66ch] text-base leading-7 text-muted-foreground; }
   .section-title { @apply text-base font-semibold tracking-[-0.015em]; }
   .data-table { @apply w-full text-left text-sm; }
-  .data-table thead { @apply bg-[#faf9f8] text-[11px] font-semibold text-muted-foreground; }
+  .data-table thead { @apply bg-[#faf9f8] text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground; }
   .data-table th { @apply h-11 whitespace-nowrap px-4 text-left; }
   .data-table td { @apply border-t px-4 py-3.5 align-top; }
   .status { @apply inline-flex items-center gap-1.5 whitespace-nowrap text-xs font-semibold; }
@@ -90,12 +102,15 @@
   .status-success { color: var(--success); }
   .status-warning { color: var(--warning); }
   .status-danger { color: var(--destructive); }
+  .status-info { color: var(--info); }
+  .field-help { @apply text-xs leading-5 text-muted-foreground; }
+  .section-rule { @apply border-t border-border/80; }
 }
 
 @layer utilities {
   .panel { @apply rounded-xl border bg-card shadow-[0_1px_2px_rgba(32,27,30,0.035),0_12px_32px_rgba(32,27,30,0.025)]; }
   .tabular { font-variant-numeric: tabular-nums; }
-  .page-enter { animation: page-enter 360ms var(--ease-enter) both; }
+  .page-enter { animation: page-enter var(--motion-slow) var(--ease-enter) both; }
   .reveal-1 { animation-delay: 45ms; }
   .reveal-2 { animation-delay: 90ms; }
   .reveal-3 { animation-delay: 135ms; }
@@ -113,8 +128,12 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .surface-lift { transition: transform 140ms var(--ease-enter), box-shadow 140ms ease; }
-  .surface-lift:hover { transform: translateY(-2px); box-shadow: 0 14px 35px rgba(32, 27, 30, 0.07); }
+  .surface-lift { transition: transform var(--motion-fast) var(--ease-enter), box-shadow var(--motion-fast) var(--ease-enter); }
+  .surface-lift:hover { transform: translateY(-1px); box-shadow: 0 12px 28px rgba(32, 27, 30, 0.065); }
+}
+
+@media (max-width: 639px) {
+  input, select, textarea { font-size: 16px !important; }
 }
 
 @media (prefers-reduced-motion: reduce) {

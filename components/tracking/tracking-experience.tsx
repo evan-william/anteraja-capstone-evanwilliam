@@ -16,10 +16,10 @@ import type { PublicTracking, RiskStatus } from '@/lib/tracking/types';
 import { cn } from '@/lib/utils';
 
 const riskMeta: Record<RiskStatus, { label: string; copy: string; className: string; icon: typeof CheckCircle2 }> = {
-  on_track: { label: 'Sesuai jadwal', copy: 'Perjalanan berjalan sesuai rencana. Tidak ada tindakan yang dibutuhkan.', className: 'border-emerald-200 bg-emerald-50 text-emerald-950', icon: CheckCircle2 },
-  at_risk: { label: 'Berisiko terlambat', copy: 'Kami mendeteksi jeda perjalanan lebih lama dari biasanya dan sedang memantaunya.', className: 'border-amber-200 bg-amber-50 text-amber-950', icon: Clock3 },
-  action_required: { label: 'Perlu tindakanmu', copy: 'Tim kurir membutuhkan informasi tambahan agar pengiriman dapat dilanjutkan.', className: 'border-rose-200 bg-rose-50 text-rose-950', icon: AlertTriangle },
-  resolved: { label: 'Instruksi diterima', copy: 'Informasi terbaru sudah diteruskan ke tim operasional.', className: 'border-sky-200 bg-sky-50 text-sky-950', icon: CheckCircle2 },
+  on_track: { label: 'Sesuai jadwal', copy: 'Perjalanan berjalan sesuai rencana. Tidak ada tindakan yang dibutuhkan.', className: 'bg-emerald-50 text-emerald-950', icon: CheckCircle2 },
+  at_risk: { label: 'Berisiko terlambat', copy: 'Kami mendeteksi jeda perjalanan lebih lama dari biasanya dan sedang memantaunya.', className: 'bg-amber-50 text-amber-950', icon: Clock3 },
+  action_required: { label: 'Perlu tindakanmu', copy: 'Tim kurir membutuhkan informasi tambahan agar pengiriman dapat dilanjutkan.', className: 'bg-rose-50 text-rose-950', icon: AlertTriangle },
+  resolved: { label: 'Instruksi diterima', copy: 'Informasi terbaru sudah diteruskan ke tim operasional.', className: 'bg-sky-50 text-sky-950', icon: CheckCircle2 },
 };
 
 function formatDate(value: string | null, includeTime = true) {
@@ -88,11 +88,11 @@ export function TrackingExperience({ awb, code }: { awb: string; code: string })
         <div className="absolute -right-18 -top-22 size-64 rounded-full bg-primary/25 blur-3xl" />
         <div className="relative grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
           <div><p className="text-xs font-bold uppercase tracking-[.18em] text-[#ff75bd]">{tracking.service_type.replace('_', ' ')} shipment</p><h1 className="mt-3 text-3xl font-bold tracking-[-.045em] sm:text-4xl">{tracking.tracking_number}</h1><p className="mt-3 text-sm text-white/60">{tracking.origin_city} <ChevronRight className="mx-1 inline size-4" /> {tracking.destination_city}</p></div>
-          <div className="grid grid-cols-2 gap-7 border-t border-white/12 pt-6 lg:border-l lg:border-t-0 lg:pl-9 lg:pt-0"><div><p className="text-xs text-white/45">Estimasi tiba</p><p className="mt-1 font-semibold">{formatDate(tracking.estimated_delivery_at, false)}</p></div><div><p className="text-xs text-white/45">Penerima</p><p className="mt-1 font-semibold">{tracking.recipient_name ?? '—'}</p></div></div>
+          <div className="grid grid-cols-2 gap-x-7 gap-y-5 border-t border-white/12 pt-6 lg:min-w-72 lg:border-l lg:border-t-0 lg:pl-9 lg:pt-0"><div><p className="text-xs text-white/55">Estimasi tiba</p><p className="mt-1 font-semibold">{formatDate(tracking.estimated_delivery_at, false)}</p></div><div><p className="text-xs text-white/55">Penerima</p><p className="mt-1 font-semibold">{tracking.recipient_name ?? '—'}</p></div><div className="col-span-2 border-t border-white/12 pt-4"><p className="text-xs text-white/55">Posisi terakhir</p><p className="mt-1 font-semibold">{tracking.current_location ?? 'Belum tersedia'}</p></div></div>
         </div>
       </section>
 
-      <section className={cn('mt-5 flex gap-4 rounded-2xl border p-5 sm:p-6', risk.className)}>
+      <section className={cn('mt-5 flex gap-4 rounded-2xl p-5 sm:p-6', risk.className)}>
         <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white/70"><RiskIcon className="size-5" /></div>
         <div><h2 className="font-bold">{risk.label}</h2><p className="mt-1 text-sm leading-6 opacity-75">{tracking.exception_reason || risk.copy}</p></div>
       </section>
@@ -119,7 +119,7 @@ function Timeline({ tracking }: { tracking: PublicTracking }) {
         {tracking.events.map((event, index) => (
           <li key={event.id} className="relative grid grid-cols-[32px_1fr] gap-3 pb-8 last:pb-0">
             {index < tracking.events.length - 1 ? <span className="absolute left-[15px] top-7 h-[calc(100%-10px)] w-px bg-border" /> : null}
-            <span className={cn('relative z-10 mt-1 flex size-8 items-center justify-center rounded-full border bg-white', index === 0 ? 'border-primary text-primary shadow-[0_0_0_5px_rgba(233,0,127,.08)]' : 'text-muted-foreground')}>
+            <span className={cn('relative z-10 mt-1 flex size-8 items-center justify-center rounded-full bg-white shadow-sm', index === 0 ? 'text-primary' : 'text-muted-foreground')}>
               {index === 0 ? <Truck className="size-4" /> : <Circle className="size-2 fill-current" />}
             </span>
             <div><div className="flex flex-wrap items-start justify-between gap-2"><h3 className="font-bold">{event.status_label}</h3><time className="text-xs text-muted-foreground tabular">{formatDate(event.occurred_at)}</time></div><p className="mt-1 text-sm leading-6 text-muted-foreground">{event.description}</p>{event.location ? <p className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold"><MapPin className="size-3.5 text-primary" /> {event.location}</p> : null}</div>
@@ -160,8 +160,8 @@ function ResolutionCard({ awb, code, onSuccess }: { awb: string; code: string; o
     } catch (caught) { setError(caught instanceof Error ? caught.message : 'Instruksi belum dapat dikirim.'); }
     finally { setBusy(false); }
   }
-  return <section className="surface mt-5 overflow-hidden border-primary/25"><div className="border-b bg-accent/50 p-5 sm:p-6"><p className="eyebrow">Perlu tindakan</p><h2 className="mt-2 text-xl font-bold">Bantu kurir menyelesaikan pengiriman</h2><p className="mt-2 text-sm text-muted-foreground">Pilih satu instruksi. Demi keamanan, perubahan dibatasi satu kali per hari.</p></div>
-    <div className="p-5 sm:p-6"><div className="grid gap-2 sm:grid-cols-3">{([['update_address','Perjelas alamat'],['reschedule','Atur ulang jadwal'],['safe_drop','Titip di tempat aman']] as const).map(([value,label]) => <button key={value} onClick={() => setType(value)} className={cn('rounded-xl border px-4 py-3 text-left text-sm font-bold transition', type === value ? 'border-primary bg-accent text-accent-foreground' : 'bg-white hover:border-primary/40')}>{label}</button>)}</div>
+  return <section className="surface mt-5 overflow-hidden"><div className="border-b bg-accent/50 p-5 sm:p-6"><p className="eyebrow">Perlu tindakan</p><h2 className="mt-2 text-xl font-bold">Bantu kurir menyelesaikan pengiriman</h2><p className="mt-2 text-sm text-muted-foreground">Pilih satu instruksi. Demi keamanan, perubahan dibatasi satu kali per hari.</p></div>
+    <div className="p-5 sm:p-6"><div className="grid gap-2 sm:grid-cols-3">{([['update_address','Perjelas alamat'],['reschedule','Atur ulang jadwal'],['safe_drop','Titip di tempat aman']] as const).map(([value,label]) => <button key={value} onClick={() => setType(value)} className={cn('rounded-xl border px-4 py-3 text-left text-sm font-bold', type === value ? 'bg-accent text-accent-foreground shadow-[inset_0_0_0_1px_rgba(233,0,127,.12)]' : 'bg-white hover:bg-muted')}>{label}</button>)}</div>
       <form onSubmit={submit} className="mt-5 grid gap-4 sm:grid-cols-2">
         {type === 'update_address' ? <><Field name="district" label="Kecamatan" placeholder="Cilandak" /><Field name="street" label="Jalan dan nomor" placeholder="Jl. Terogong Raya No. 18" /><Field name="landmark" label="Patokan (maks. 150 karakter)" placeholder="Pagar hitam, sebelah minimarket" /><Field name="phone" label="Nomor penerima" placeholder="081234567890" /></> : null}
         {type === 'reschedule' ? <><Field name="delivery_date" label="Tanggal pilihan" type="date" /><Field name="note" label="Catatan (opsional)" placeholder="Penerima tersedia setelah pukul 13.00" /></> : null}

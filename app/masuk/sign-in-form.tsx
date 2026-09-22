@@ -46,11 +46,11 @@ export function SignInForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {error ? <Alert variant="destructive">{error}</Alert> : null}
+      {error ? <Alert id="sign-in-error" variant="destructive">{error}</Alert> : null}
 
       <div className="space-y-2">
         <Label htmlFor="email">Email</Label>
-        <Input id="email" name="email" type="email" autoComplete="email" required />
+        <Input id="email" name="email" type="email" autoComplete="email" spellCheck={false} aria-invalid={Boolean(error)} aria-describedby={error ? 'sign-in-error' : undefined} required />
       </div>
 
       <div className="space-y-2">
@@ -60,6 +60,8 @@ export function SignInForm() {
           name="password"
           type="password"
           autoComplete="current-password"
+          aria-invalid={Boolean(error)}
+          aria-describedby={error ? 'sign-in-error' : undefined}
           required
         />
       </div>

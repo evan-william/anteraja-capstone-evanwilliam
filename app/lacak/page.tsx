@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { BellRing, MapPinned, ShieldCheck, Sparkles } from 'lucide-react';
+import { BellRing, MapPinned, ShieldCheck } from 'lucide-react';
 
 import { PublicHeader } from '@/components/tracking/public-header';
 import { TrackingSearchForm } from '@/components/tracking/tracking-search-form';
@@ -19,11 +19,11 @@ export default function TrackingLandingPage() {
           </div>
           <div className="app-container grid min-h-[650px] items-center gap-12 py-18 lg:grid-cols-[1.08fr_.92fr] lg:py-24">
             <div className="max-w-2xl page-enter">
-              <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/8 px-3 py-1.5 text-xs font-bold uppercase tracking-[.16em] text-[#ff8bc5] backdrop-blur"><Sparkles className="size-3.5" /> Lebih dari status paket</div>
+              <p className="mb-6 text-xs font-bold uppercase tracking-[.16em] text-[#ff8bc5]">Tracking dan penyelesaian kendala</p>
               <h1 className="text-4xl font-bold leading-[1.06] tracking-[-.055em] sm:text-6xl lg:text-[4.5rem]">Tahu posisinya.<br /><span className="text-[#ff3ca3]">Tahu langkah berikutnya.</span></h1>
               <p className="mt-7 max-w-xl text-base leading-7 text-white/68 sm:text-lg">Timeline yang mudah dibaca, peringatan risiko lebih awal, dan solusi langsung saat pengiriman membutuhkan bantuanmu.</p>
             </div>
-            <div className="page-enter reveal-2 rounded-[1.5rem] border border-white/12 bg-white/95 p-5 text-foreground shadow-[0_30px_100px_rgba(0,0,0,.38)] backdrop-blur-xl sm:p-7">
+            <div className="page-enter reveal-2 rounded-2xl border border-white/20 bg-white p-5 text-foreground shadow-[0_26px_70px_rgba(0,0,0,.28)] sm:p-7">
               <p className="eyebrow">Tracking aman</p>
               <h2 className="mt-2 text-2xl font-bold tracking-[-.035em]">Di mana paketmu?</h2>
               <p className="mb-6 mt-2 text-sm leading-6 text-muted-foreground">Masukkan resi dan kode akses dari pesan pengiriman.</p>
@@ -35,14 +35,14 @@ export default function TrackingLandingPage() {
 
         <section className="app-container py-18 sm:py-24">
           <div className="max-w-xl"><p className="eyebrow">Satu alur, lebih pasti</p><h2 className="page-title">Tracking yang membantu mengambil keputusan.</h2></div>
-          <div className="mt-10 grid gap-4 md:grid-cols-3">
+          <div className="mt-10 grid border-y md:grid-cols-3 md:divide-x">
             {[
               [MapPinned, 'Konteks, bukan kode', 'Lokasi, waktu, estimasi, dan arti status disusun sebagai satu cerita perjalanan.'],
               [BellRing, 'Risiko terlihat lebih awal', 'Status Sesuai Jadwal, Berisiko, atau Perlu Tindakan membuat prioritas langsung jelas.'],
               [ShieldCheck, 'Aksi tetap aman', 'Detail penerima disamarkan. Perubahan penting membutuhkan kode akses enam digit.'],
             ].map(([Icon, title, copy]) => (
-              <article key={String(title)} className="surface surface-lift p-6 sm:p-7">
-                <div className="mb-8 flex size-11 items-center justify-center rounded-xl bg-accent text-primary"><Icon className="size-5" /></div>
+              <article key={String(title)} className="border-b py-7 last:border-b-0 md:border-b-0 md:px-7 md:first:pl-0 md:last:pr-0">
+                <Icon className="mb-6 size-5 text-primary" />
                 <h3 className="text-lg font-bold tracking-[-.025em]">{String(title)}</h3><p className="mt-2 text-sm leading-6 text-muted-foreground">{String(copy)}</p>
               </article>
             ))}

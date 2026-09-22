@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
-import { AlertTriangle, ArrowUpRight, CheckCircle2, Clock3, Download, PackageSearch, Search, ShieldAlert } from 'lucide-react';
+import { AlertTriangle, ArrowUpRight, Download, Search } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -42,11 +42,11 @@ export function SellerDashboard({ shipments }: { shipments: SellerShipment[] }) 
 
   const counts = (risk: RiskStatus) => shipments.filter((x) => x.risk_status === risk).length;
   return <div className="space-y-5">
-    <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      <Metric icon={PackageSearch} label="Kiriman aktif" value={shipments.length} detail="Dalam pemantauan" />
-      <Metric icon={CheckCircle2} label="Sesuai jadwal" value={counts('on_track')} detail="Tidak perlu aksi" tone="success" />
-      <Metric icon={Clock3} label="Berisiko" value={counts('at_risk')} detail="Pantau lebih dekat" tone="warning" />
-      <Metric icon={ShieldAlert} label="Perlu tindakan" value={counts('action_required')} detail="Prioritas hari ini" tone="danger" />
+    <section className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+      <Metric label="Kiriman aktif" value={shipments.length} detail="Dalam pemantauan" />
+      <Metric label="Sesuai jadwal" value={counts('on_track')} detail="Tidak perlu tindakan" />
+      <Metric label="Berisiko" value={counts('at_risk')} detail="Perlu dipantau" />
+      <Metric label="Perlu tindakan" value={counts('action_required')} detail="Prioritas hari ini" />
     </section>
 
     <section className="surface overflow-hidden">
@@ -56,13 +56,12 @@ export function SellerDashboard({ shipments }: { shipments: SellerShipment[] }) 
       </div></div>
       <div className="overflow-x-auto"><table className="data-table"><thead><tr><th>Kiriman</th><th>Tujuan</th><th>Status</th><th>Estimasi</th><th>Posisi terakhir</th><th><span className="sr-only">Buka</span></th></tr></thead><tbody>
         {visible.map((shipment) => <tr key={shipment.id} className="group hover:bg-[#fcfbfb]"><td><Link href={`/pengiriman/${shipment.tracking_number}`} className="font-bold hover:text-primary">{shipment.tracking_number}</Link><p className="mt-1 text-xs text-muted-foreground">{shipment.recipient_name ?? 'Penerima tidak tersedia'} · {shipment.service_type.replace('_',' ')}</p></td><td>{shipment.destination_city ?? '—'}</td><td><span className={cn('status', meta[shipment.risk_status].className)}>{meta[shipment.risk_status].label}</span>{shipment.exception_reason ? <p className="mt-1 max-w-52 text-xs text-muted-foreground line-clamp-1">{shipment.exception_reason}</p> : null}</td><td className="whitespace-nowrap text-xs tabular">{shipment.estimated_delivery_at ? new Intl.DateTimeFormat('id-ID',{ dateStyle:'medium' }).format(new Date(shipment.estimated_delivery_at)) : '—'}</td><td className="max-w-48 text-xs text-muted-foreground">{shipment.current_location ?? '—'}</td><td><Button variant="ghost" size="icon" asChild><Link href={`/pengiriman/${shipment.tracking_number}`} aria-label={`Buka ${shipment.tracking_number}`}><ArrowUpRight /></Link></Button></td></tr>)}
-        {!visible.length ? <tr><td colSpan={6} className="py-14 text-center text-muted-foreground"><AlertTriangle className="mx-auto mb-3 size-5" />Tidak ada kiriman yang cocok.</td></tr> : null}
+        {!visible.length ? <tr><td colSpan={6} className="py-14 text-center text-muted-foreground"><AlertTriangle className="mx-auto mb-3 size-5" /><strong className="block text-sm text-foreground">{shipments.length ? 'Tidak ada kiriman yang cocok' : 'Belum ada kiriman di akun ini'}</strong><span className="mt-1 block text-xs">{shipments.length ? 'Ubah filter atau kata pencarian untuk melihat hasil lain.' : 'Data setiap akun terisolasi. Akun demo memiliki contoh data pengiriman untuk ditinjau.'}</span></td></tr> : null}
       </tbody></table></div>
     </section>
   </div>;
 }
 
-function Metric({ icon: Icon, label, value, detail, tone = 'neutral' }: { icon: typeof PackageSearch; label: string; value: number; detail: string; tone?: 'neutral' | 'success' | 'warning' | 'danger' }) {
-  const colors = { neutral: 'bg-accent text-primary', success: 'bg-emerald-50 text-emerald-700', warning: 'bg-amber-50 text-amber-700', danger: 'bg-rose-50 text-rose-700' };
-  return <article className="surface surface-lift p-5"><div className="flex items-start justify-between"><div><p className="text-xs font-semibold text-muted-foreground">{label}</p><p className="mt-2 text-3xl font-bold tracking-[-.05em] tabular">{value}</p></div><div className={cn('flex size-10 items-center justify-center rounded-xl', colors[tone])}><Icon className="size-5" /></div></div><p className="mt-4 text-xs text-muted-foreground">{detail}</p></article>;
+function Metric({ label, value, detail }: { label: string; value: number; detail: string }) {
+  return <article className="surface p-4 sm:p-5"><p className="truncate text-xs font-semibold text-muted-foreground">{label}</p><p className="mt-2 text-3xl font-bold tracking-[-.05em] tabular">{value}</p><p className="mt-3 text-xs leading-5 text-muted-foreground">{detail}</p></article>;
 }

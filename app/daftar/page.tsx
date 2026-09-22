@@ -19,7 +19,7 @@ export default function DaftarPage() {
           <p className="mt-6 text-sm text-muted-foreground">Sudah punya akun? <Link href="/masuk" className="font-semibold text-primary underline-offset-4 hover:underline">Masuk</Link></p>
         </div>
       </section>
-      <AuthCarousel />
+      <AuthCarousel className="lg:order-last" />
     </main>
   );
 }

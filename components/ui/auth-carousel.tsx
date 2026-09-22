@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import { Pause, Play } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 import { cn } from '@/lib/utils';
@@ -13,7 +14,7 @@ const slides = [
     description: 'Pantau biaya pengiriman dan settlement dalam alur yang mudah ditelusuri.',
   },
   {
-    image: '/auth/sorting-hub.png',
+    image: '/auth/sorting-hub-bright.png',
     eyebrow: 'Operasional terhubung',
     title: 'Ribuan paket, satu catatan yang tetap rapi.',
     description: 'Cocokkan mutasi bank dengan data operasional sebelum transaksi disimpan.',
@@ -47,7 +48,7 @@ export function AuthCarousel({ className }: { className?: string }) {
 
   return (
     <section
-      className={cn('group relative hidden min-h-screen overflow-hidden bg-[#211a1f] text-white lg:block', className)}
+      className={cn('group relative order-first min-h-56 overflow-hidden bg-[#211a1f] text-white sm:min-h-64 lg:min-h-screen', className)}
       aria-label="Operasional Anteraja"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
@@ -56,26 +57,29 @@ export function AuthCarousel({ className }: { className?: string }) {
     >
       {slides.map((slide, index) => (
         <div key={slide.image} className={cn('absolute inset-0 transition-opacity duration-700 [transition-timing-function:var(--ease-enter)]', index === active ? 'z-10 opacity-100' : 'z-0 opacity-0')} aria-hidden={index !== active}>
-          <Image src={slide.image} alt="" fill priority={index === 0} sizes="55vw" className={cn('object-cover transition-transform duration-[5500ms] ease-linear', index === active ? 'scale-105' : 'scale-100')} />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(20,14,18,.22)_0%,rgba(20,14,18,.28)_35%,rgba(20,14,18,.92)_100%)]" />
+          <Image src={slide.image} alt="" fill priority={index === 0} sizes="(max-width: 1023px) 100vw, 55vw" className={cn('object-cover transition-transform duration-[5500ms] ease-linear', index === active && !reduceMotion ? 'scale-[1.035]' : 'scale-100')} />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(28,20,25,.12)_0%,rgba(28,20,25,.18)_35%,rgba(28,20,25,.82)_100%)]" />
         </div>
       ))}
 
-      <div className="absolute inset-x-0 top-0 z-20 flex items-center gap-3 p-10 xl:p-12">
+      <div className="absolute inset-x-0 top-0 z-20 hidden items-center gap-3 p-10 lg:flex xl:p-12">
         <Image src="/brand/anteraja-favicon.png" alt="" width={46} height={46} className="size-10 object-contain brightness-0 invert" priority />
         <span className="text-2xl font-bold tracking-[-0.045em]">anteraja</span>
       </div>
 
-      <div className="absolute inset-x-0 bottom-0 z-20 p-10 xl:p-12">
+      <div className="absolute inset-x-0 bottom-0 z-20 p-5 sm:p-6 lg:p-10 xl:p-12">
         <div key={active} className="page-enter max-w-xl">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#ff8eca]">{slides[active].eyebrow}</p>
-          <h2 className="mt-4 text-4xl font-semibold leading-[1.08] tracking-[-0.04em] xl:text-5xl">{slides[active].title}</h2>
-          <p className="mt-4 max-w-lg text-base leading-7 text-white/72">{slides[active].description}</p>
+          <h2 className="mt-2 max-w-xl text-xl font-semibold leading-tight tracking-[-0.035em] sm:text-2xl lg:mt-4 lg:text-4xl xl:text-5xl">{slides[active].title}</h2>
+          <p className="mt-2 hidden max-w-lg text-base leading-7 text-white/78 lg:mt-4 lg:block">{slides[active].description}</p>
         </div>
-        <div className="mt-8 flex items-center gap-2" role="tablist" aria-label="Pilih cerita operasional">
-          {slides.map((slide, index) => (
-            <button key={slide.image} type="button" role="tab" aria-selected={index === active} aria-label={`Tampilkan slide ${index + 1}: ${slide.eyebrow}`} onClick={() => setActive(index)} className={cn('h-1.5 w-9 origin-left rounded-full transition-[transform,background-color] duration-300', index === active ? 'scale-x-100 bg-primary' : 'scale-x-[.45] bg-white/45 hover:bg-white/75')} />
-          ))}
+        <div className="mt-4 flex items-center justify-between gap-4 lg:mt-8">
+          <div className="flex items-center gap-1" role="tablist" aria-label="Pilih cerita operasional">
+            {slides.map((slide, index) => (
+              <button key={slide.image} type="button" role="tab" aria-selected={index === active} aria-label={`Tampilkan slide ${index + 1}: ${slide.eyebrow}`} onClick={() => setActive(index)} className={cn('grid size-11 place-items-center rounded-lg', index === active ? 'text-white' : 'text-white/65')}><span className={cn('h-1.5 w-8 origin-center rounded-full transition-[transform,background-color] duration-300', index === active ? 'scale-x-100 bg-primary' : 'scale-x-50 bg-white/50')} /></button>
+            ))}
+          </div>
+          <button type="button" className="grid size-11 place-items-center rounded-lg border border-white/25 bg-black/15 text-white transition-colors hover:bg-black/30" onClick={() => setPaused((value) => !value)} aria-label={paused ? 'Putar carousel' : 'Jeda carousel'} aria-pressed={paused}>{paused ? <Play className="size-4" /> : <Pause className="size-4" />}</button>
         </div>
       </div>
     </section>

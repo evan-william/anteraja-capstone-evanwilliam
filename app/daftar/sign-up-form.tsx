@@ -59,17 +59,17 @@ export function SignUpForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {error ? <Alert variant="destructive">{error}</Alert> : null}
+      {error ? <Alert id="sign-up-error" variant="destructive">{error}</Alert> : null}
       {notice ? <Alert>{notice}</Alert> : null}
 
       <div className="space-y-2">
         <Label htmlFor="name">Nama</Label>
-        <Input id="name" name="name" autoComplete="name" required />
+        <Input id="name" name="name" autoComplete="name" aria-invalid={Boolean(error)} aria-describedby={error ? 'sign-up-error' : undefined} required />
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="email">Email</Label>
-        <Input id="email" name="email" type="email" autoComplete="email" required />
+        <Input id="email" name="email" type="email" autoComplete="email" spellCheck={false} aria-invalid={Boolean(error)} aria-describedby={error ? 'sign-up-error' : undefined} required />
       </div>
 
       <div className="space-y-2">
@@ -79,10 +79,12 @@ export function SignUpForm() {
           name="password"
           type="password"
           autoComplete="new-password"
+          aria-invalid={Boolean(error)}
+          aria-describedby={error ? 'sign-up-error password-help' : 'password-help'}
           minLength={8}
           required
         />
-        <p className="text-xs text-muted-foreground">Minimal 8 karakter.</p>
+        <p id="password-help" className="field-help">Minimal 8 karakter.</p>
       </div>
 
       <Button type="submit" className="w-full" disabled={isPending}>

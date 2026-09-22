@@ -15,6 +15,7 @@ test('masuk, buat kategori, lalu catat transaksi', async ({ page }) => {
   await page.getByRole('button', { name: 'Masuk' }).click();
   await expect(page).toHaveURL(/\/transaksi$/, { timeout: 15_000 });
 
+  await page.getByRole('navigation', { name: 'Navigasi utama' }).getByText('Finance', { exact: true }).click();
   await page.getByRole('link', { name: 'Kategori' }).click();
   await expect(page).toHaveURL(/\/kategori$/);
 
@@ -24,13 +25,14 @@ test('masuk, buat kategori, lalu catat transaksi', async ({ page }) => {
 
   await expect(page.getByText(namaKategori)).toBeVisible();
 
-  await page.getByRole('link', { name: 'Transaksi' }).click();
+  await page.getByRole('navigation', { name: 'Navigasi utama' }).getByText('Finance', { exact: true }).click();
+  await page.getByRole('link', { name: 'Arus dana' }).click();
   await expect(page).toHaveURL(/\/transaksi$/);
 
   await page.getByLabel('Kategori').selectOption({ label: `${namaKategori} (pengeluaran)` });
   await page.getByLabel('Nominal (Rp)').fill('75000');
   await page.getByLabel('Deskripsi (opsional)').fill('Kopi sore');
-  await page.getByRole('button', { name: 'Tambah transaksi' }).click();
+  await page.getByRole('button', { name: 'Simpan transaksi' }).click();
 
   await expect(page.getByText('Kopi sore')).toBeVisible();
   await expect(page.getByTestId('transaction-amount').first()).toHaveText('Rp75.000');

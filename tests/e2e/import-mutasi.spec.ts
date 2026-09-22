@@ -2,8 +2,8 @@ import path from 'node:path';
 
 import { expect, test, type Page } from '@playwright/test';
 
-const bankA = path.resolve('docs/data/mutasi-bank-a.csv');
-const bankB = path.resolve('docs/data/mutasi-bank-b.csv');
+const bankA = path.resolve(__dirname, '../../docs/data/mutasi-bank-a.csv');
+const bankB = path.resolve(__dirname, '../../docs/data/mutasi-bank-b.csv');
 
 async function signIn(page: Page) {
   await page.goto('/masuk');
@@ -21,7 +21,7 @@ async function assignAllNewRows(page: Page) {
     const income = /Salary|Transfer from Checking|Refund Shopee|GAJI|REFUND|BUNGA/.test(
       text ?? '',
     );
-    await row.getByRole('combobox').selectOption({ label: income ? 'Gaji' : 'Makanan & Minuman' });
+    await row.getByRole('combobox').selectOption({ label: income ? 'Settlement COD' : 'Biaya pengiriman' });
   }
 }
 
@@ -38,14 +38,15 @@ test('Bank A, Bank B, rekonsiliasi manual, dan pembatalan import', async ({ page
   await signIn(page);
 
   // Satu dari dua mutasi Grab Food identik harus Cocok; kandidat tidak boleh dipakai dua kali.
-  await page.getByLabel('Kategori').selectOption({ label: 'Makanan & Minuman (pengeluaran)' });
+  await page.getByLabel('Kategori').selectOption({ label: 'Biaya pengiriman (pengeluaran)' });
   await page.getByLabel('Nominal (Rp)').fill('54000');
   await page.getByLabel('Tanggal').fill('2026-08-02');
   await page.getByLabel('Deskripsi (opsional)').fill('Grab Food');
-  await page.getByRole('button', { name: 'Tambah transaksi' }).click();
+  await page.getByRole('button', { name: 'Simpan transaksi' }).click();
   await expect(page.getByText('Grab Food').first()).toBeVisible();
 
-  await page.getByRole('link', { name: 'Import' }).click();
+  await page.getByRole('navigation', { name: 'Navigasi utama' }).getByText('Finance', { exact: true }).click();
+  await page.getByRole('link', { name: 'Rekonsiliasi' }).click();
   await page.getByLabel('File mutasi bank').setInputFiles(bankB);
   await expect(page.getByText('Bank B', { exact: false })).toBeVisible();
   await expect(page.locator('tbody tr')).toHaveCount(11);
@@ -53,7 +54,7 @@ test('Bank A, Bank B, rekonsiliasi manual, dan pembatalan import', async ({ page
   expect(matchedRows).toBeGreaterThan(0);
   expect(matchedRows).toBeLessThanOrEqual(2);
   await assignAllNewRows(page);
-  await page.getByRole('button', { name: 'Simpan impor' }).click();
+  await page.getByRole('button', { name: 'Simpan rekonsiliasi' }).click();
   await expect(page.getByText('Impor berhasil. Transaksi baru sudah ditambahkan.')).toBeVisible();
   await cancelLatestImport(page, 'mutasi-bank-b.csv');
 
@@ -62,7 +63,7 @@ test('Bank A, Bank B, rekonsiliasi manual, dan pembatalan import', async ({ page
   await expect(page.locator('tbody tr')).toHaveCount(10);
   await expect(page.locator('tbody tr').filter({ hasText: 'Error' })).toHaveCount(4);
   await assignAllNewRows(page);
-  await page.getByRole('button', { name: 'Simpan impor' }).click();
+  await page.getByRole('button', { name: 'Simpan rekonsiliasi' }).click();
   await expect(page.getByText('Impor berhasil. Transaksi baru sudah ditambahkan.')).toBeVisible();
   await cancelLatestImport(page, 'mutasi-bank-a.csv');
 });

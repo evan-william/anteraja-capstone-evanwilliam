@@ -23,7 +23,7 @@ export function SiteHeader({ userName }: { userName: string }) {
           </form>
         </div>
       </div>
-      <div className="app-container border-t py-1.5 md:hidden"><NavLinks /></div>
+      <div className="app-container border-t md:hidden"><NavLinks mobile /></div>
     </header>
   );
 }
