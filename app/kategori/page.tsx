@@ -23,7 +23,7 @@ export default async function KategoriPage() {
   return (
     <>
       <SiteHeader userName={user.name || user.email} />
-      <main className="app-main max-w-5xl">
+      <main id="main-content" className="app-main max-w-5xl">
         <PageHeader eyebrow="Aturan pencatatan" title="Kelola kategori" description="Pisahkan COD, ongkir, retur, dan biaya layanan agar setiap settlement mudah ditelusuri." />
 
         {error ? (

@@ -87,6 +87,8 @@
 @layer components {
   .app-container { @apply mx-auto w-full max-w-[1240px] px-4 sm:px-6 lg:px-8; }
   .app-main { @apply mx-auto w-full max-w-[1240px] px-4 py-7 sm:px-6 sm:py-10 lg:px-8; }
+  .skip-link { @apply fixed left-4 top-3 z-[100] -translate-y-20 rounded-md bg-foreground px-4 py-2 text-sm font-semibold text-background; }
+  .skip-link:focus { @apply translate-y-0; }
   .surface { @apply rounded-xl border bg-card shadow-[0_1px_2px_rgba(32,27,30,0.035),0_12px_32px_rgba(32,27,30,0.025)]; }
   .surface-flat { @apply rounded-xl border bg-card; }
   .eyebrow { @apply text-[0.6875rem] font-bold uppercase tracking-[0.16em] text-primary; }

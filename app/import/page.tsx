@@ -21,7 +21,7 @@ export default async function ImportPage() {
   return (
     <>
       <SiteHeader userName={user.name || user.email} />
-      <main className="app-main">
+      <main id="main-content" className="app-main">
         <PageHeader eyebrow="Mutasi dan settlement" title="Rekonsiliasi bank" description="Cocokkan mutasi rekening dengan settlement pengiriman. Tidak ada data yang disimpan sebelum kamu meninjau hasilnya." />
         {categoriesResult.error || historyResult.error ? (
           <AlertLoadError />

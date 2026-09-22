@@ -8,9 +8,9 @@ export const metadata = { title: 'Lacak Kiriman — Anteraja', description: 'Cek
 
 export default function TrackingLandingPage() {
   return (
-    <div className="min-h-screen bg-[#fbfaf9]">
+    <>
       <PublicHeader />
-      <main>
+      <main id="main-content">
         <section className="relative isolate overflow-hidden bg-[#21171d] text-white">
           <div className="absolute inset-0 -z-10">
             <Image src="/auth/courier-city.png" alt="Kurir Anteraja mengantar paket di kawasan perkotaan" fill priority className="object-cover object-center opacity-42" sizes="100vw" />
@@ -23,18 +23,18 @@ export default function TrackingLandingPage() {
               <h1 className="text-4xl font-bold leading-[1.06] tracking-[-.055em] sm:text-6xl lg:text-[4.5rem]">Tahu posisinya.<br /><span className="text-[#ff3ca3]">Tahu langkah berikutnya.</span></h1>
               <p className="mt-7 max-w-xl text-base leading-7 text-white/68 sm:text-lg">Timeline yang mudah dibaca, peringatan risiko lebih awal, dan solusi langsung saat pengiriman membutuhkan bantuanmu.</p>
             </div>
-            <div className="page-enter reveal-2 rounded-2xl border border-white/20 bg-white p-5 text-foreground shadow-[0_26px_70px_rgba(0,0,0,.28)] sm:p-7">
+            <section aria-labelledby="tracking-form-title" className="page-enter reveal-2 rounded-2xl border border-white/20 bg-white p-5 text-foreground shadow-[0_26px_70px_rgba(0,0,0,.28)] sm:p-7">
               <p className="eyebrow">Tracking aman</p>
-              <h2 className="mt-2 text-2xl font-bold tracking-[-.035em]">Di mana paketmu?</h2>
+              <h2 id="tracking-form-title" className="mt-2 text-2xl font-bold tracking-[-.035em]">Di mana paketmu?</h2>
               <p className="mb-6 mt-2 text-sm leading-6 text-muted-foreground">Masukkan resi dan kode akses dari pesan pengiriman.</p>
               <TrackingSearchForm />
               <div className="mt-5 border-t pt-5 text-xs text-muted-foreground"><strong className="text-foreground">Demo:</strong> ANT-100015 · kode 260926</div>
-            </div>
+            </section>
           </div>
         </section>
 
         <section className="app-container py-18 sm:py-24">
-          <div className="max-w-xl"><p className="eyebrow">Satu alur, lebih pasti</p><h2 className="page-title">Tracking yang membantu mengambil keputusan.</h2></div>
+          <header className="max-w-xl"><p className="eyebrow">Satu alur, lebih pasti</p><h2 className="page-title">Tracking yang membantu mengambil keputusan.</h2></header>
           <div className="mt-10 grid border-y md:grid-cols-3 md:divide-x">
             {[
               [MapPinned, 'Konteks, bukan kode', 'Lokasi, waktu, estimasi, dan arti status disusun sebagai satu cerita perjalanan.'],
@@ -49,6 +49,6 @@ export default function TrackingLandingPage() {
           </div>
         </section>
       </main>
-    </div>
+    </>
   );
 }

@@ -68,21 +68,21 @@ export function TrackingExperience({ awb, code }: { awb: string; code: string })
 
   if (loading) return <TrackingSkeleton />;
   if (error || !tracking) return (
-    <div className="mx-auto max-w-xl py-20 text-center">
+    <article aria-labelledby="tracking-error-title" className="mx-auto max-w-xl py-20 text-center">
       <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-rose-50 text-destructive"><AlertTriangle /></div>
-      <h1 className="mt-5 text-2xl font-bold">Kiriman belum ditemukan</h1><p className="mt-2 text-sm leading-6 text-muted-foreground">{error}</p>
-      <div className="mt-7 flex justify-center gap-3"><Button variant="outline" asChild><Link href="/lacak"><ArrowLeft /> Coba resi lain</Link></Button><Button onClick={() => void load()}><RefreshCcw /> Muat ulang</Button></div>
-    </div>
+      <h1 id="tracking-error-title" className="mt-5 text-2xl font-bold">Kiriman belum ditemukan</h1><p className="mt-2 text-sm leading-6 text-muted-foreground">{error}</p>
+      <nav aria-label="Pemulihan tracking" className="mt-7 flex justify-center gap-3"><Button variant="outline" asChild><Link href="/lacak"><ArrowLeft /> Coba resi lain</Link></Button><Button onClick={() => void load()}><RefreshCcw /> Muat ulang</Button></nav>
+    </article>
   );
 
   const risk = riskMeta[tracking.risk_status];
   const RiskIcon = risk.icon;
   return (
-    <div className="page-enter">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+    <article className="page-enter">
+      <nav aria-label="Aksi tracking" className="mb-6 flex flex-wrap items-center justify-between gap-4">
         <Link href="/lacak" className="inline-flex items-center gap-2 text-sm font-semibold text-muted-foreground hover:text-foreground"><ArrowLeft className="size-4" /> Lacak resi lain</Link>
         <Button variant="outline" size="sm" onClick={() => void copyLink()}>{copied ? <Check /> : <Copy />}{copied ? 'Tautan disalin' : 'Bagikan tracking'}</Button>
-      </div>
+      </nav>
 
       <section className="relative overflow-hidden rounded-[1.5rem] bg-[#21171d] p-6 text-white shadow-[0_22px_60px_rgba(33,23,29,.18)] sm:p-9">
         <div className="absolute -right-18 -top-22 size-64 rounded-full bg-primary/25 blur-3xl" />
@@ -107,14 +107,14 @@ export function TrackingExperience({ awb, code }: { awb: string; code: string })
 
       {tracking.risk_status === 'action_required' ? <ResolutionCard awb={awb} code={code} onSuccess={load} /> : null}
       <SupportCard awb={awb} code={code} />
-    </div>
+    </article>
   );
 }
 
 function Timeline({ tracking }: { tracking: PublicTracking }) {
   return (
     <section className="surface overflow-hidden">
-      <div className="border-b p-5 sm:p-6"><p className="eyebrow">Perjalanan paket</p><h2 className="mt-2 text-xl font-bold tracking-[-.025em]">Timeline pengiriman</h2></div>
+      <header className="border-b p-5 sm:p-6"><p className="eyebrow">Perjalanan paket</p><h2 className="mt-2 text-xl font-bold tracking-[-.025em]">Timeline pengiriman</h2></header>
       <ol className="p-5 sm:p-7">
         {tracking.events.map((event, index) => (
           <li key={event.id} className="relative grid grid-cols-[32px_1fr] gap-3 pb-8 last:pb-0">
@@ -160,7 +160,7 @@ function ResolutionCard({ awb, code, onSuccess }: { awb: string; code: string; o
     } catch (caught) { setError(caught instanceof Error ? caught.message : 'Instruksi belum dapat dikirim.'); }
     finally { setBusy(false); }
   }
-  return <section className="surface mt-5 overflow-hidden"><div className="border-b bg-accent/50 p-5 sm:p-6"><p className="eyebrow">Perlu tindakan</p><h2 className="mt-2 text-xl font-bold">Bantu kurir menyelesaikan pengiriman</h2><p className="mt-2 text-sm text-muted-foreground">Pilih satu instruksi. Demi keamanan, perubahan dibatasi satu kali per hari.</p></div>
+  return <section className="surface mt-5 overflow-hidden"><header className="border-b bg-accent/50 p-5 sm:p-6"><p className="eyebrow">Perlu tindakan</p><h2 className="mt-2 text-xl font-bold">Bantu kurir menyelesaikan pengiriman</h2><p className="mt-2 text-sm text-muted-foreground">Pilih satu instruksi. Demi keamanan, perubahan dibatasi satu kali per hari.</p></header>
     <div className="p-5 sm:p-6"><div className="grid gap-2 sm:grid-cols-3">{([['update_address','Perjelas alamat'],['reschedule','Atur ulang jadwal'],['safe_drop','Titip di tempat aman']] as const).map(([value,label]) => <button key={value} onClick={() => setType(value)} className={cn('rounded-xl border px-4 py-3 text-left text-sm font-bold', type === value ? 'bg-accent text-accent-foreground shadow-[inset_0_0_0_1px_rgba(233,0,127,.12)]' : 'bg-white hover:bg-muted')}>{label}</button>)}</div>
       <form onSubmit={submit} className="mt-5 grid gap-4 sm:grid-cols-2">
         {type === 'update_address' ? <><Field name="district" label="Kecamatan" placeholder="Cilandak" /><Field name="street" label="Jalan dan nomor" placeholder="Jl. Terogong Raya No. 18" /><Field name="landmark" label="Patokan (maks. 150 karakter)" placeholder="Pagar hitam, sebelah minimarket" /><Field name="phone" label="Nomor penerima" placeholder="081234567890" /></> : null}

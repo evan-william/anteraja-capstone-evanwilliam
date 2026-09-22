@@ -8,7 +8,7 @@ export const metadata = { title: 'Daftar — Anteraja Finance' };
 
 export default function DaftarPage() {
   return (
-    <main className="grid min-h-screen lg:grid-cols-[.9fr_1.1fr]">
+    <main id="main-content" className="grid min-h-screen lg:grid-cols-[.9fr_1.1fr]">
       <section className="flex items-center justify-center px-5 py-10 sm:px-10">
         <div className="page-enter w-full max-w-md">
           <div className="mb-10 flex items-center gap-3"><Image src="/brand/anteraja-mark.png" alt="" width={42} height={42} className="size-9 scale-[1.65]" priority /><span className="text-2xl font-bold tracking-[-.045em] text-primary">anteraja</span></div>

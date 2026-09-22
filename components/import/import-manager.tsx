@@ -158,7 +158,7 @@ export function ImportManager({
   }
 
   return (
-    <div className="page-enter reveal-1 space-y-5">
+    <section aria-label="Rekonsiliasi mutasi bank" className="page-enter reveal-1 space-y-5">
       {error ? <Alert variant="destructive">{error}</Alert> : null}
       {message ? <Alert>{message}</Alert> : null}
 
@@ -191,17 +191,18 @@ export function ImportManager({
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid divide-y rounded-lg border text-sm sm:grid-cols-3 sm:divide-x sm:divide-y-0">
-              <div className="p-4"><strong className="block text-xl tabular">{counts.new}</strong><span className="status status-warning mt-1">Baru</span></div>
-              <div className="p-4"><strong className="block text-xl tabular">{counts.matched}</strong><span className="status status-success mt-1">Cocok</span></div>
-              <div className="p-4"><strong className="block text-xl tabular">{counts.error}</strong><span className="status status-danger mt-1">Error</span></div>
-            </div>
+            <dl className="grid divide-y rounded-lg border text-sm sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+              <div className="p-4"><dt className="status status-warning">Baru</dt><dd className="mt-1 text-xl font-bold tabular">{counts.new}</dd></div>
+              <div className="p-4"><dt className="status status-success">Cocok</dt><dd className="mt-1 text-xl font-bold tabular">{counts.matched}</dd></div>
+              <div className="p-4"><dt className="status status-danger">Error</dt><dd className="mt-1 text-xl font-bold tabular">{counts.error}</dd></div>
+            </dl>
 
             <div className="overflow-x-auto border-y">
               <table className="data-table min-w-[900px]">
+                <caption className="sr-only">Pratinjau baris mutasi dan hasil pencocokan</caption>
                 <thead>
                   <tr>
-                    <th>Baris</th><th>Tanggal</th><th>Keterangan</th><th>Nominal</th><th>Status</th><th>Kategori dan aturan</th>
+                    <th scope="col">Baris</th><th scope="col">Tanggal</th><th scope="col">Keterangan</th><th scope="col">Nominal</th><th scope="col">Status</th><th scope="col">Kategori dan aturan</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -255,14 +256,14 @@ export function ImportManager({
               </table>
             </div>
 
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div className="flex items-center gap-2">
+            <footer className="flex flex-wrap items-center justify-between gap-3">
+              <nav aria-label="Halaman pratinjau rekonsiliasi" className="flex items-center gap-2">
                 <Button type="button" variant="outline" size="sm" disabled={page === 1} onClick={() => setPage((value) => value - 1)}>Sebelumnya</Button>
                 <span className="text-sm">Halaman {page} dari {totalPages}</span>
                 <Button type="button" variant="outline" size="sm" disabled={page === totalPages} onClick={() => setPage((value) => value + 1)}>Berikutnya</Button>
-              </div>
+              </nav>
               <Button type="button" disabled={busy} onClick={() => void saveImport()}><Check />{busy ? 'Menyimpan…' : 'Simpan rekonsiliasi'}</Button>
-            </div>
+            </footer>
           </CardContent>
         </Card>
       ) : null}
@@ -273,9 +274,9 @@ export function ImportManager({
         </CardHeader>
         <CardContent>
           {history.length === 0 ? <p className="py-8 text-center text-sm text-muted-foreground">Belum ada rekonsiliasi. Unggah mutasi pertama untuk mulai.</p> : (
-            <div className="divide-y">
+            <ul className="divide-y">
               {history.map((item) => (
-                <div key={item.id} className="flex flex-col justify-between gap-3 py-4 first:pt-0 last:pb-0 sm:flex-row sm:items-center">
+                <li key={item.id} className="flex flex-col justify-between gap-3 py-4 first:pt-0 last:pb-0 sm:flex-row sm:items-center">
                   <div>
                     <p className="font-medium">{item.file_name}</p>
                     <p className="text-sm text-muted-foreground">
@@ -285,12 +286,12 @@ export function ImportManager({
                   {item.status === 'completed' ? (
                     <Button type="button" variant="outline" size="sm" disabled={busy} onClick={() => void cancelImport(item.id)}><RotateCcw />Batalkan impor</Button>
                   ) : <span className="status text-muted-foreground">Dibatalkan</span>}
-                </div>
+                </li>
               ))}
-            </div>
+            </ul>
           )}
         </CardContent>
       </Card>
-    </div>
+    </section>
   );
 }

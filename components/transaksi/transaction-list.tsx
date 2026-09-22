@@ -31,7 +31,7 @@ function DayHeader({ date, net }: { date: string; net: number }) {
   const isPositive = net >= 0;
 
   return (
-    <div className="sticky top-[105px] z-10 flex items-baseline justify-between gap-3 border-b bg-white/95 py-2 backdrop-blur">
+    <header className="sticky top-[105px] z-10 flex items-baseline justify-between gap-3 border-b bg-white/95 py-2 backdrop-blur">
       <div className="flex items-baseline gap-2">
         <h3 className="text-sm font-semibold">{label}</h3>
         <span className="text-xs text-muted-foreground">{subLabel}</span>
@@ -46,7 +46,7 @@ function DayHeader({ date, net }: { date: string; net: number }) {
         {formatRupiah(Math.abs(net))}
         <span className="sr-only">selisih hari ini</span>
       </span>
-    </div>
+    </header>
   );
 }
 
@@ -159,15 +159,15 @@ function TransactionRow({
 
 function EmptyState() {
   return (
-    <div className="flex flex-col items-center justify-center px-6 py-14 text-center">
+    <section aria-labelledby="empty-transactions-title" className="flex flex-col items-center justify-center px-6 py-14 text-center">
       <span className="flex size-12 items-center justify-center text-muted-foreground">
         <WalletCards className="size-6" aria-hidden="true" />
       </span>
-      <h3 className="mt-4 text-sm font-semibold">Belum ada transaksi</h3>
+      <h3 id="empty-transactions-title" className="mt-4 text-sm font-semibold">Belum ada transaksi</h3>
       <p className="mt-1 max-w-sm text-sm text-muted-foreground">
         Catat transaksi pertama melalui formulir. Transaksi akan muncul berdasarkan tanggal.
       </p>
-    </div>
+    </section>
   );
 }
 
@@ -184,7 +184,7 @@ export function TransactionList({
   }
 
   return (
-    <div className="space-y-5">
+    <section aria-label="Transaksi berdasarkan tanggal" className="space-y-5">
       {groups.map((group) => (
         <section key={group.date} className="space-y-2">
           <DayHeader date={group.date} net={group.net} />
@@ -207,6 +207,6 @@ export function TransactionList({
           </ul>
         </section>
       ))}
-    </div>
+    </section>
   );
 }

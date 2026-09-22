@@ -7,5 +7,5 @@ export const metadata = { title: 'Status Kiriman — Anteraja' };
 
 export default async function TrackingDetailPage({ params, searchParams }: PageProps) {
   const [{ awb }, { code = '' }] = await Promise.all([params, searchParams]);
-  return <div className="min-h-screen bg-[#f8f7f5]"><PublicHeader /><main className="app-main max-w-[1060px]"><TrackingExperience awb={decodeURIComponent(awb).toUpperCase()} code={code} /></main></div>;
+  return <><PublicHeader /><main id="main-content" className="min-h-screen bg-[#f8f7f5] app-main max-w-[1060px]"><TrackingExperience awb={decodeURIComponent(awb).toUpperCase()} code={code} /></main></>;
 }

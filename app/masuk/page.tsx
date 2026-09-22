@@ -8,7 +8,7 @@ export const metadata = { title: 'Masuk — Anteraja Finance' };
 
 export default function MasukPage() {
   return (
-    <main className="grid min-h-screen lg:grid-cols-[1.05fr_.95fr]">
+    <main id="main-content" className="grid min-h-screen lg:grid-cols-[1.05fr_.95fr]">
       <AuthCarousel />
       <section className="flex items-center justify-center px-5 py-10 sm:px-10">
         <div className="page-enter w-full max-w-md">

@@ -23,7 +23,7 @@ export function CategoryManager({ categories }: { categories: CategoryRow[] }) {
   }
 
   return (
-    <div className="page-enter reveal-1 space-y-5">
+    <section aria-label="Pengelolaan kategori" className="page-enter reveal-1 space-y-5">
       <Card>
         <CardHeader>
           <CardTitle>Tambah kategori</CardTitle>
@@ -35,10 +35,10 @@ export function CategoryManager({ categories }: { categories: CategoryRow[] }) {
 
       {error ? <Alert variant="destructive">{error}</Alert> : null}
 
-      <div className="grid gap-5 lg:grid-cols-2">
+      <section aria-label="Daftar kategori" className="grid gap-5 lg:grid-cols-2">
         <Card><CardHeader className="flex-row items-center justify-between space-y-0"><CardTitle>Pengeluaran</CardTitle><span className="text-xs text-muted-foreground">{expense.length} kategori</span></CardHeader><CardContent><CategoryList categories={expense} onChanged={refresh} onError={setError} /></CardContent></Card>
         <Card><CardHeader className="flex-row items-center justify-between space-y-0"><CardTitle>Pemasukan</CardTitle><span className="text-xs text-muted-foreground">{income.length} kategori</span></CardHeader><CardContent><CategoryList categories={income} onChanged={refresh} onError={setError} /></CardContent></Card>
-      </div>
-    </div>
+      </section>
+    </section>
   );
 }

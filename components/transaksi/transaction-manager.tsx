@@ -26,7 +26,7 @@ export function TransactionManager({ transactions, categories }: TransactionMana
   const [pendingId, setPendingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const formRef = useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLElement>(null);
 
   function refresh() {
     setError(null);
@@ -71,7 +71,7 @@ export function TransactionManager({ transactions, categories }: TransactionMana
   }
 
   return (
-    <div className="page-enter reveal-1 grid items-start gap-5 lg:grid-cols-[340px_minmax(0,1fr)]">
+    <section aria-label="Pengelolaan transaksi" className="page-enter reveal-1 grid items-start gap-5 lg:grid-cols-[340px_minmax(0,1fr)]">
       <Card ref={formRef} className="scroll-mt-24 lg:sticky lg:top-24">
         <CardHeader>
           <CardTitle>{editing ? 'Ubah transaksi' : 'Transaksi baru'}</CardTitle>
@@ -98,7 +98,7 @@ export function TransactionManager({ transactions, categories }: TransactionMana
         </CardContent>
       </Card>
 
-      <div className="space-y-4">
+      <section aria-label="Daftar aktivitas transaksi" className="space-y-4">
         {error ? <Alert variant="destructive">{error}</Alert> : null}
         <Card>
           <CardHeader className="flex-row items-center justify-between space-y-0">
@@ -109,7 +109,7 @@ export function TransactionManager({ transactions, categories }: TransactionMana
             <TransactionList groups={groups} pendingId={pendingId} onEdit={handleEdit} onDelete={handleDelete} />
           </CardContent>
         </Card>
-      </div>
-    </div>
+      </section>
+    </section>
   );
 }
