@@ -76,10 +76,10 @@ export function AuthCarousel({ className }: { className?: string }) {
         <div className="mt-4 flex items-center justify-between gap-4 lg:mt-8">
           <div className="flex items-center gap-1" role="tablist" aria-label="Pilih cerita operasional">
             {slides.map((slide, index) => (
-              <button key={slide.image} type="button" role="tab" aria-selected={index === active} aria-label={`Tampilkan slide ${index + 1}: ${slide.eyebrow}`} onClick={() => setActive(index)} className={cn('grid size-11 place-items-center rounded-lg', index === active ? 'text-white' : 'text-white/65')}><span className={cn('h-1.5 w-8 origin-center rounded-full transition-[transform,background-color] duration-300', index === active ? 'scale-x-100 bg-primary' : 'scale-x-50 bg-white/50')} /></button>
+              <button suppressHydrationWarning key={slide.image} type="button" role="tab" aria-selected={index === active} aria-label={`Tampilkan slide ${index + 1}: ${slide.eyebrow}`} onClick={() => setActive(index)} className={cn('grid size-11 place-items-center rounded-lg', index === active ? 'text-white' : 'text-white/65')}><span className={cn('h-1.5 w-8 origin-center rounded-full transition-[transform,background-color] duration-300', index === active ? 'scale-x-100 bg-primary' : 'scale-x-50 bg-white/50')} /></button>
             ))}
           </div>
-          <button type="button" className="grid size-11 place-items-center rounded-lg border border-white/25 bg-black/15 text-white transition-colors hover:bg-black/30" onClick={() => setPaused((value) => !value)} aria-label={paused ? 'Putar carousel' : 'Jeda carousel'} aria-pressed={paused}>{paused ? <Play className="size-4" /> : <Pause className="size-4" />}</button>
+          <button suppressHydrationWarning type="button" className="grid size-11 place-items-center rounded-lg border border-white/25 bg-black/15 text-white transition-colors hover:bg-black/30" onClick={() => setPaused((value) => !value)} aria-label={paused ? 'Putar carousel' : 'Jeda carousel'} aria-pressed={paused}>{paused ? <Play className="size-4" /> : <Pause className="size-4" />}</button>
         </div>
       </div>
     </section>
