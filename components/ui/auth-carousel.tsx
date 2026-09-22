@@ -58,7 +58,8 @@ export function AuthCarousel({ className }: { className?: string }) {
       {slides.map((slide, index) => (
         <div key={slide.image} className={cn('absolute inset-0 transition-opacity duration-700 [transition-timing-function:var(--ease-enter)]', index === active ? 'z-10 opacity-100' : 'z-0 opacity-0')} aria-hidden={index !== active}>
           <Image src={slide.image} alt="" fill priority={index === 0} sizes="(max-width: 1023px) 100vw, 55vw" className={cn('object-cover transition-transform duration-[5500ms] ease-linear', index === active && !reduceMotion ? 'scale-[1.035]' : 'scale-100')} />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(28,20,25,.12)_0%,rgba(28,20,25,.18)_35%,rgba(28,20,25,.82)_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(24,17,22,.04)_0%,rgba(24,17,22,.1)_36%,rgba(24,17,22,.88)_100%)]" />
+          <div className="absolute inset-y-0 left-0 w-[92%] bg-[linear-gradient(90deg,rgba(20,14,18,.55)_0%,rgba(20,14,18,.26)_58%,transparent_100%)] lg:w-[86%]" />
         </div>
       ))}
 
@@ -68,10 +69,10 @@ export function AuthCarousel({ className }: { className?: string }) {
       </div>
 
       <div className="absolute inset-x-0 bottom-0 z-20 p-5 sm:p-6 lg:p-10 xl:p-12">
-        <div key={active} className="page-enter max-w-xl">
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#ff8eca]">{slides[active].eyebrow}</p>
-          <h2 className="mt-2 max-w-xl text-xl font-semibold leading-tight tracking-[-0.035em] sm:text-2xl lg:mt-4 lg:text-4xl xl:text-5xl">{slides[active].title}</h2>
-          <p className="mt-2 hidden max-w-lg text-base leading-7 text-white/78 lg:mt-4 lg:block">{slides[active].description}</p>
+        <div key={active} className="page-enter max-w-xl [text-shadow:0_2px_20px_rgba(9,5,8,.72)]">
+          <p className="text-xs font-semibold tracking-[0.16em] text-[#ff9bd1]">{slides[active].eyebrow}</p>
+          <h2 className="mt-2 max-w-[18ch] text-balance text-xl font-semibold tracking-[-0.035em] sm:text-2xl lg:mt-4 lg:text-4xl xl:text-5xl">{slides[active].title}</h2>
+          <p className="mt-2 hidden max-w-[48ch] text-pretty text-base text-white/88 lg:mt-4 lg:block">{slides[active].description}</p>
         </div>
         <div className="mt-4 flex items-center justify-between gap-4 lg:mt-8">
           <div className="flex items-center gap-1" role="tablist" aria-label="Pilih cerita operasional">

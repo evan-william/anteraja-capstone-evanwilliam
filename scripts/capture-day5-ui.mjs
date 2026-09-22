@@ -2,7 +2,7 @@ import { chromium } from '@playwright/test';
 import { mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
 
-const output = join(process.cwd(), 'docs', 'day5-ui', 'designs');
+const output = join(process.cwd(), 'docs', 'design', 'screens');
 await mkdir(output, { recursive: true });
 
 const browser = await chromium.launch({ headless: true });

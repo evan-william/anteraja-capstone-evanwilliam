@@ -37,4 +37,4 @@ npm test
 npm run build
 ```
 
-Dokumen: [PRD](docs/day5-ui/PRD-Anteraja-Tracking-Platform.md), [FRD](docs/day5-ui/FRD-Anteraja-Tracking-Platform.md), [desain](docs/day5-ui/DESIGN.md), [setup database](database/DATABASE_RUN.md), [ERD](database/ERD.md), dan [FRD-06 Finance](docs/day5-ui/FRD-06-Rekonsiliasi-Settlement.md).
+Dokumen: [PRD terpadu](docs/product/prd.md), [FRD terpadu](docs/product/frd.md), [keputusan produk](docs/product/decisions.md), [desain UI](docs/design/ui-design.md), [setup database](database/DATABASE_RUN.md), dan [ERD](database/ERD.md).

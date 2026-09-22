@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { SignUpForm } from './sign-up-form';
 import { AuthCarousel } from '@/components/ui/auth-carousel';
 
-export const metadata = { title: 'Daftar — Anteraja Finance' };
+export const metadata = { title: 'Daftar — Anteraja Tracking & Operations' };
 
 export default function DaftarPage() {
   return (

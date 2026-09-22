@@ -5,7 +5,7 @@ import { join } from 'node:path';
 
 const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? 'http://localhost:3000';
 const projectRoot = fileURLToPath(new URL('../', import.meta.url));
-const output = join(projectRoot, 'docs', 'day5-ui', 'qa');
+const output = join(projectRoot, 'docs', 'quality', 'evidence');
 await mkdir(output, { recursive: true });
 
 const browser = await chromium.launch({ headless: true });
@@ -120,11 +120,17 @@ await run('finance dan rekonsiliasi', async () => {
 });
 
 await run('mobile auth, tracking, dashboard, navigasi', async () => {
+  const publicMobileContext = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  const publicMobilePage = await publicMobileContext.newPage();
+  await publicMobilePage.goto(`${baseURL}/masuk`, { waitUntil: 'networkidle' });
+  await capture(publicMobilePage, '11-auth-mobile');
+  await publicMobilePage.goto(`${baseURL}/lacak`, { waitUntil: 'networkidle' });
+  await capture(publicMobilePage, '12-tracking-mobile');
+  await publicMobileContext.close();
+
   await page.setViewportSize({ width: 390, height: 844 });
-  for (const [path, name] of [['/masuk', '11-auth-mobile'], ['/lacak', '12-tracking-mobile'], ['/pengiriman', '13-dashboard-mobile']]) {
-    await page.goto(`${baseURL}${path}`, { waitUntil: 'networkidle' });
-    await capture(page, name);
-  }
+  await page.goto(`${baseURL}/pengiriman`, { waitUntil: 'networkidle' });
+  await capture(page, '13-dashboard-mobile');
   await page.getByText('Menu', { exact: true }).click();
   await page.getByRole('link', { name: 'Rekonsiliasi' }).waitFor();
 });

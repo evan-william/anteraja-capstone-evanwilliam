@@ -2,11 +2,11 @@ import { chromium } from '@playwright/test';
 import { mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
 
-const output = join(process.cwd(), 'docs', 'day5-ui', 'evidence');
+const output = join(process.cwd(), 'docs', 'submissions', 'day-5');
 await mkdir(output, { recursive: true });
 const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
-await page.goto('https://github.com/evan-william/expense-tracker-casestudy/tree/5-ui', {
+await page.goto('https://github.com/evan-william/anteraja-capstone-evanwilliam/tree/5-ui', {
   waitUntil: 'domcontentloaded',
   timeout: 60000,
 });
@@ -18,7 +18,7 @@ await page.screenshot({
   quality: 88,
   fullPage: false,
 });
-await page.goto('https://github.com/evan-william/expense-tracker-casestudy/tree/5-ui/docs/day5-ui/designs', {
+await page.goto('https://github.com/evan-william/anteraja-capstone-evanwilliam/tree/5-ui/docs/design/screens', {
   waitUntil: 'domcontentloaded',
   timeout: 60000,
 });

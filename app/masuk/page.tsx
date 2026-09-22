@@ -4,7 +4,7 @@ import { AuthCarousel } from '@/components/ui/auth-carousel';
 
 import { SignInForm } from './sign-in-form';
 
-export const metadata = { title: 'Masuk — Anteraja Finance' };
+export const metadata = { title: 'Masuk — Anteraja Tracking & Operations' };
 
 export default function MasukPage() {
   return (
