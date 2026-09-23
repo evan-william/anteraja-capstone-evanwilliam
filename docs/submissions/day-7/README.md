@@ -4,9 +4,9 @@
 
 [Branch `7-prototype`](https://github.com/evan-william/anteraja-capstone-evanwilliam/tree/7-prototype)
 
-## Bukti functional requirement
+## Bukti antarmuka
 
-Screenshot `fr-trk-05-action-required.webp` menunjukkan implementasi TRK-05 pada hasil tracking `ANT-100015`. Pengguna langsung melihat status **Perlu tindakan**, alasan kendala, ETA, timeline, posisi terakhir, dan tombol menuju form penanganan.
+PDF memuat 25 screenshot: 19 bukti implementasi dan state UI, ditambah 6 layar pendukung untuk settlement, upload, preview rekonsiliasi, riwayat pembatalan, rincian shipment, dan tampilan mobile. Screenshot `fr-trk-05-action-required.webp` tetap disediakan sebagai bukti utama TRK-05 pada hasil tracking `ANT-100015`.
 
 ## Checklist penilaian
 
@@ -18,8 +18,8 @@ Screenshot `fr-trk-05-action-required.webp` menunjukkan implementasi TRK-05 pada
 | JSON-LD | `WebApplication` pada `/lacak`, mengikuti `https://schema.org/WebApplication` |
 | Responsif | Mobile-first dari 320 px, tabel scroll, navigation mobile, breakpoint hingga xl |
 | Selector JS/jQuery | ID dan class `js-*` didokumentasikan dalam `SELECTOR_REFERENCE.md` |
-| Commit modular | Lima commit terpisah pada branch `7-prototype` |
+| Commit modular | Enam commit terpisah pada branch `7-prototype` |
 
 ## Berkas LMS
 
-Upload `output/pdf/day7-prototype-report.pdf`. PDF memuat link branch dan screenshot FR sesuai instruksi tugas.
+Upload `output/pdf/day7-prototype-report.pdf`. PDF memuat link branch, peta halaman ke FRD, seluruh screenshot UI yang tersedia, serta bukti implementasi teknis.
