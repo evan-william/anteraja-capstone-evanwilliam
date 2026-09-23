@@ -188,7 +188,8 @@ def build_zip() -> None:
 def main() -> None:
     SUBMISSION.mkdir(parents=True, exist_ok=True)
     OUTPUT.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(SOURCE_SCREENSHOT, SCREENSHOT)
+    if not SCREENSHOT.exists() or SOURCE_SCREENSHOT.read_bytes() != SCREENSHOT.read_bytes():
+        shutil.copy2(SOURCE_SCREENSHOT, SCREENSHOT)
     build_pdf()
     build_zip()
     print(f"SCREENSHOT: {SCREENSHOT}")

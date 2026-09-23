@@ -89,7 +89,7 @@ for (const doc of [
 let commitCount = 0;
 try {
   commitCount = Number(
-    execFileSync('git', ['rev-list', '--count', '6-prototype..HEAD'], {
+    execFileSync('git', ['-c', `safe.directory=${root.replaceAll('\\', '/')}`, 'rev-list', '--count', '6-prototype..HEAD'], {
       cwd: root,
       encoding: 'utf8',
     }).trim(),
