@@ -4,14 +4,16 @@ import { signOut } from '@/app/actions';
 import { Brand } from '@/components/ui/brand';
 import { Button } from '@/components/ui/button';
 import { NavLinks } from '@/components/ui/nav-links';
+import type { AccountRole } from '@/lib/supabase/types';
+import { roleHome } from '@/lib/roles';
 
-export function SiteHeader({ userName }: { userName: string }) {
+export function SiteHeader({ userName, role }: { userName: string; role: AccountRole }) {
   return (
     <header className="sticky top-0 z-40 border-b bg-white/90 backdrop-blur-xl">
       <div className="app-container flex min-h-16 items-center justify-between gap-4 py-2">
         <div className="flex min-w-0 items-center gap-7">
-          <Brand className="shrink-0" />
-          <div className="hidden md:block"><NavLinks /></div>
+          <Brand className="shrink-0" href={roleHome(role)} />
+          <div className="hidden lg:block"><NavLinks role={role} /></div>
         </div>
 
         <div className="flex items-center gap-3">
@@ -23,7 +25,7 @@ export function SiteHeader({ userName }: { userName: string }) {
           </form>
         </div>
       </div>
-      <div className="app-container border-t md:hidden"><NavLinks mobile /></div>
+      <div className="app-container border-t lg:hidden"><NavLinks role={role} mobile /></div>
     </header>
   );
 }

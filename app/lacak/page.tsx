@@ -7,7 +7,9 @@ import { serializeJsonLd, trackingApplicationJsonLd } from '@/lib/structured-dat
 
 export const metadata = { title: 'Lacak Kiriman — Anteraja', description: 'Cek posisi paket, kepastian jadwal, dan selesaikan kendala pengiriman dalam satu alur.' };
 
-export default function TrackingLandingPage() {
+export default async function TrackingLandingPage({ searchParams }: { searchParams: Promise<{ resi?: string }> }) {
+  const { resi = '' } = await searchParams;
+  const initialAwb = /^ANT-[0-9]{6}$/.test(resi.toUpperCase()) ? resi.toUpperCase() : '';
   return (
     <>
       <script
@@ -33,7 +35,7 @@ export default function TrackingLandingPage() {
               <p className="eyebrow">Tracking aman</p>
               <h2 id="tracking-form-title" className="mt-2 text-2xl font-bold tracking-[-.035em]">Di mana paketmu?</h2>
               <p className="mb-6 mt-2 text-sm leading-6 text-muted-foreground">Masukkan resi dan kode akses dari pesan pengiriman.</p>
-              <TrackingSearchForm />
+              <TrackingSearchForm initialAwb={initialAwb} />
               <div className="mt-5 border-t pt-5 text-xs text-muted-foreground"><strong className="text-foreground">Demo:</strong> ANT-100015 · kode 260926</div>
             </section>
           </div>

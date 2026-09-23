@@ -3,9 +3,9 @@ import Link from 'next/link';
 
 import { cn } from '@/lib/utils';
 
-export function Brand({ compact = false, className }: { compact?: boolean; className?: string }) {
+export function Brand({ compact = false, className, href = '/pengiriman' }: { compact?: boolean; className?: string; href?: string }) {
   return (
-    <Link href="/pengiriman" className={cn('inline-flex items-center gap-2.5 rounded-md', className)} aria-label="Anteraja — buka operasi pengiriman">
+    <Link href={href} className={cn('inline-flex items-center gap-2.5 rounded-md', className)} aria-label="Anteraja — buka ruang kerja">
       <Image src="/brand/anteraja-mark.png" alt="" width={42} height={42} className="size-9 scale-[1.65] object-contain" priority />
       {!compact ? (
         <span className="leading-none">

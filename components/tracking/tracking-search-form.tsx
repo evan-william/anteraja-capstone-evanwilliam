@@ -7,9 +7,9 @@ import { ArrowRight, LockKeyhole, PackageSearch } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
-export function TrackingSearchForm({ compact = false }: { compact?: boolean }) {
+export function TrackingSearchForm({ compact = false, initialAwb = '' }: { compact?: boolean; initialAwb?: string }) {
   const router = useRouter();
-  const [awb, setAwb] = useState('');
+  const [awb, setAwb] = useState(initialAwb);
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
 
