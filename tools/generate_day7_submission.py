@@ -203,7 +203,7 @@ def build_pdf() -> None:
         ("Halaman mengikuti PRD dan FRD", "Tracking publik, autentikasi, seller operations, arus dana, rekonsiliasi, dan kategori tersedia sebagai rute nyata."),
         ("UI dan UX diterapkan", "Hierarchy, status, error, loading, empty state, keyboard focus, privasi, dan tindakan utama mengikuti kebutuhan pengguna."),
         ("Halaman saling terhubung", "Navigasi publik, navigasi seller, link detail, serta anchor Tangani sekarang membentuk alur lengkap."),
-        ("Enam commit modular", "Structured data, selector, dokumentasi, verifier, paket pengumpulan, dan finalisasi dipisahkan agar mudah ditinjau."),
+        ("Commit modular", "Structured data, selector, dokumentasi, verifier, paket pengumpulan, dan penyempurnaan laporan dipisahkan agar mudah ditinjau."),
     ]
     for title_value, body in checks:
         y = bullet(c, 50, y, title_value, body)
@@ -255,7 +255,7 @@ def build_pdf() -> None:
     y = bullet(c, 50, y, "JSON-LD Schema.org", "Halaman /lacak memuat WebApplication dengan applicationCategory, browserRequirements, inLanguage, isAccessibleForFree, dan featureList.")
     y = bullet(c, 50, y, "Responsive", "Layout mobile-first dimulai dari 320 px. Grid berkembang pada sm, md, lg, xl; tabel dapat digulir; input mobile minimal 16 px.")
     y = bullet(c, 50, y, "Selector siap untuk latihan berikutnya", "Form tracking, field resi, kode akses, autentikasi, filter, pencarian, ekspor, file CSV, dan tombol simpan memiliki ID atau class js-* yang stabil.")
-    y = bullet(c, 50, y, "Commit modular", "Enam commit memisahkan structured data, selector, dokumentasi, verifier, paket pengumpulan, dan finalisasi.")
+    y = bullet(c, 50, y, "Commit modular", "Riwayat branch melampaui syarat lima commit dan memisahkan perubahan berdasarkan tujuan pengerjaan.")
     text(c, "Dokumentasi lengkap: docs/prototype/", 50, 74, 10, True, INK)
     text(c, "Verifier: npm run verify:prototype", 50, 54, 9.5, False, MUTED)
     c.showPage()

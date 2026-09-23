@@ -18,7 +18,7 @@ PDF memuat 25 screenshot: 19 bukti implementasi dan state UI, ditambah 6 layar p
 | JSON-LD | `WebApplication` pada `/lacak`, mengikuti `https://schema.org/WebApplication` |
 | Responsif | Mobile-first dari 320 px, tabel scroll, navigation mobile, breakpoint hingga xl |
 | Selector JS/jQuery | ID dan class `js-*` didokumentasikan dalam `SELECTOR_REFERENCE.md` |
-| Commit modular | Enam commit terpisah pada branch `7-prototype` |
+| Commit modular | Melebihi syarat minimal lima commit pada branch `7-prototype` |
 
 ## Berkas LMS
 
