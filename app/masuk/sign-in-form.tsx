@@ -45,7 +45,7 @@ export function SignInForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form id="sign-in-form" onSubmit={handleSubmit} className="js-sign-in-form space-y-4">
       {error ? <Alert id="sign-in-error" variant="destructive">{error}</Alert> : null}
 
       <div className="space-y-2">
@@ -66,7 +66,7 @@ export function SignInForm() {
         />
       </div>
 
-      <Button type="submit" className="w-full" disabled={isPending}>
+      <Button id="sign-in-submit" type="submit" className="js-sign-in-submit w-full" disabled={isPending}>
         {isPending ? 'Memeriksa akun…' : 'Masuk'}
       </Button>
     </form>

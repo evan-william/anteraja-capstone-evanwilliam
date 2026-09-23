@@ -175,7 +175,7 @@ export function ImportManager({
             <FileSpreadsheet className="size-7 text-primary" />
             <span className="mt-3 text-sm font-semibold">Pilih file mutasi CSV</span>
             <span className="mt-1 text-xs leading-5 text-muted-foreground">Maksimum 10 MB atau 50.000 baris</span>
-            <Input className="sr-only" aria-label="File mutasi bank" type="file" accept=".csv,text/csv" disabled={busy} onChange={(event) => void handleFile(event.target.files?.[0])} />
+            <Input id="bank-statement-file" name="bank_statement_file" className="js-bank-statement-file sr-only" aria-label="File mutasi bank" type="file" accept=".csv,text/csv" disabled={busy} onChange={(event) => void handleFile(event.target.files?.[0])} />
           </label>
           {busy ? <p className="mt-3 text-sm text-muted-foreground" role="status">Membaca dan memeriksa baris mutasi…</p> : null}
         </CardContent>
@@ -262,7 +262,7 @@ export function ImportManager({
                 <span className="text-sm">Halaman {page} dari {totalPages}</span>
                 <Button type="button" variant="outline" size="sm" disabled={page === totalPages} onClick={() => setPage((value) => value + 1)}>Berikutnya</Button>
               </nav>
-              <Button type="button" disabled={busy} onClick={() => void saveImport()}><Check />{busy ? 'Menyimpan…' : 'Simpan rekonsiliasi'}</Button>
+              <Button id="save-reconciliation" type="button" className="js-save-reconciliation" disabled={busy} onClick={() => void saveImport()}><Check />{busy ? 'Menyimpan…' : 'Simpan rekonsiliasi'}</Button>
             </footer>
           </CardContent>
         </Card>

@@ -58,7 +58,7 @@ export function SignUpForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form id="sign-up-form" onSubmit={handleSubmit} className="js-sign-up-form space-y-4">
       {error ? <Alert id="sign-up-error" variant="destructive">{error}</Alert> : null}
       {notice ? <Alert>{notice}</Alert> : null}
 
@@ -87,7 +87,7 @@ export function SignUpForm() {
         <p id="password-help" className="field-help">Minimal 8 karakter.</p>
       </div>
 
-      <Button type="submit" className="w-full" disabled={isPending}>
+      <Button id="sign-up-submit" type="submit" className="js-sign-up-submit w-full" disabled={isPending}>
         {isPending ? 'Membuat akun…' : 'Buat akun'}
       </Button>
     </form>
