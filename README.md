@@ -37,4 +37,4 @@ npm test
 npm run build
 ```
 
-Dokumen: [PRD terpadu](docs/product/prd.md), [FRD terpadu](docs/product/frd.md), [keputusan produk](docs/product/decisions.md), [desain UI](docs/design/ui-design.md), [setup database](database/DATABASE_RUN.md), dan [ERD](database/ERD.md).
+Dokumen: [PRD terpadu](docs/product/prd.md), [FRD terpadu](docs/product/frd.md), [keputusan produk](docs/product/decisions.md), [desain UI](docs/design/ui-design.md), [dokumentasi prototype](docs/prototype/README.md), [pemetaan halaman ke FRD](docs/prototype/PAGE_FRD_MAPPING.md), [selector JavaScript/jQuery](docs/prototype/SELECTOR_REFERENCE.md), [setup database](database/DATABASE_RUN.md), dan [ERD](database/ERD.md).
