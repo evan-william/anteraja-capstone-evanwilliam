@@ -108,7 +108,7 @@ def main() -> None:
     erd = DB / "erd" / "anteraja-database-erd.webp"
     with Image.open(erd) as image:
         assert image.format == "WEBP"
-        assert image.size == (2600, 1760)
+        assert image.size == (3000, 1500)
 
     pdf = ROOT / "output" / "pdf" / "day6-database-report.pdf"
     assert len(PdfReader(str(pdf)).pages) == 9

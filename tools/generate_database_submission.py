@@ -203,64 +203,33 @@ def rounded(draw: ImageDraw.ImageDraw, box: tuple[int, int, int, int], radius: i
 def arrow(draw: ImageDraw.ImageDraw, start: tuple[int, int], end: tuple[int, int], color: str = "#8C8588") -> None:
     sx, sy = start
     ex, ey = end
-    midx = (sx + ex) // 2
-    draw.line([(sx, sy), (midx, sy), (midx, ey), (ex, ey)], fill=color, width=3)
-    draw.polygon([(ex, ey), (ex - 12, ey - 7), (ex - 12, ey + 7)], fill=color)
+    if abs(ex - sx) >= abs(ey - sy):
+        midx = (sx + ex) // 2
+        points = [(sx, sy), (midx, sy), (midx, ey), (ex, ey)]
+        direction = 1 if ex >= sx else -1
+        head = [(ex, ey), (ex - direction * 12, ey - 7), (ex - direction * 12, ey + 7)]
+    else:
+        midy = (sy + ey) // 2
+        points = [(sx, sy), (sx, midy), (ex, midy), (ex, ey)]
+        direction = 1 if ey >= sy else -1
+        head = [(ex, ey), (ex - 7, ey - direction * 12), (ex + 7, ey - direction * 12)]
+    draw.line(points, fill=color, width=3)
+    draw.polygon(head, fill=color)
 
 
 def build_erd() -> Path:
-    w, h = 2600, 1760
+    w, h = 3000, 1500
     image = Image.new("RGB", (w, h), PAPER)
     draw = ImageDraw.Draw(image)
-    title = font(FONT_BOLD, 54)
-    subtitle = font(FONT_REGULAR, 25)
-    label = font(FONT_BOLD, 22)
-    body = font(FONT_MONO, 18)
-    small = font(FONT_REGULAR, 19)
+    title = font(FONT_BOLD, 48)
+    subtitle = font(FONT_REGULAR, 23)
+    label = font(FONT_BOLD, 20)
+    body = font(FONT_MONO, 16)
+    small = font(FONT_REGULAR, 18)
 
-    draw.text((90, 60), "ERD - Anteraja Tracking & Operations", font=title, fill=INK)
-    draw.text((90, 130), "PostgreSQL / Supabase | 15 tabel publik | PK, FK, composite FK, RLS", font=subtitle, fill=MUTED)
-    draw.line((90, 185, w - 90, 185), fill=LINE, width=3)
-
-    boxes = {
-        "users": (90, 300, 420, 500),
-        "categories": (90, 830, 420, 1050),
-        "transactions": (480, 830, 850, 1090),
-        "category_rules": (90, 1130, 420, 1350),
-        "bank_imports": (480, 1190, 850, 1410),
-        "bank_import_rows": (930, 1190, 1370, 1535),
-        "shipments": (560, 265, 990, 650),
-        "shipment_events": (1110, 240, 1490, 480),
-        "shipment_resolutions": (1110, 520, 1490, 760),
-        "support_tickets": (1580, 240, 1960, 480),
-        "notification_preferences": (1580, 520, 1960, 760),
-        "integration_outbox": (2050, 380, 2430, 620),
-        "tracking_rate_limits": (2050, 700, 2430, 900),
-        "settlements": (1500, 1060, 1870, 1320),
-        "settlement_items": (2050, 1040, 2430, 1320),
-    }
-
-    draw.text((90, 230), "IDENTITY", font=label, fill=MAGENTA)
-    draw.text((560, 230), "LOGISTICS & TRACKING", font=label, fill=MAGENTA)
-    draw.text((90, 785), "FINANCE & RECONCILIATION", font=label, fill=MAGENTA)
-
-    rels = [
-        ("users", "shipments"), ("users", "categories"),
-        ("categories", "transactions"), ("categories", "category_rules"),
-        ("users", "bank_imports"), ("bank_imports", "bank_import_rows"),
-        ("transactions", "bank_import_rows"), ("shipments", "shipment_events"),
-        ("shipments", "shipment_resolutions"), ("shipments", "support_tickets"),
-        ("shipments", "notification_preferences"), ("shipments", "integration_outbox"),
-        ("users", "settlements"), ("settlements", "settlement_items"),
-        ("shipments", "settlement_items"), ("settlements", "bank_import_rows"),
-    ]
-    for left, right in rels:
-        lb, rb = boxes[left], boxes[right]
-        if rb[0] >= lb[2]:
-            start, end = (lb[2], (lb[1] + lb[3]) // 2), (rb[0], (rb[1] + rb[3]) // 2)
-        else:
-            start, end = ((lb[0] + lb[2]) // 2, lb[3]), ((rb[0] + rb[2]) // 2, rb[1])
-        arrow(draw, start, end)
+    draw.text((60, 42), "ERD - Anteraja Tracking & Operations", font=title, fill=INK)
+    draw.text((60, 108), "PostgreSQL / Supabase | 15 tabel publik | PK, FK, composite FK, RLS", font=subtitle, fill=MUTED)
+    draw.line((60, 165, w - 60, 165), fill=LINE, width=3)
 
     tables = {
         "users": ["PK id", "UQ email", "name", "created_at"],
@@ -280,19 +249,74 @@ def build_erd() -> Path:
         "settlement_items": ["PK id", "FK settlement_id + user_id", "FK shipment_id + user_id", "cod / fees / return", "net_amount generated"],
     }
 
+    specs = {
+        "users": (60, 250, 300),
+        "shipments": (430, 230, 390),
+        "shipment_events": (900, 215, 380),
+        "shipment_resolutions": (900, 490, 380),
+        "support_tickets": (1390, 215, 400),
+        "notification_preferences": (1390, 490, 420),
+        "integration_outbox": (1920, 215, 400),
+        "tracking_rate_limits": (1920, 490, 400),
+        "categories": (60, 830, 330),
+        "category_rules": (60, 1120, 330),
+        "transactions": (470, 830, 380),
+        "bank_imports": (470, 1130, 400),
+        "bank_import_rows": (970, 910, 460),
+        "settlements": (1560, 830, 430),
+        "settlement_items": (2110, 830, 500),
+    }
+
+    def table_height(rows: list[str]) -> int:
+        return 76 + len(rows) * 34
+
+    boxes = {
+        name: (x, y, x + width, y + table_height(tables[name]))
+        for name, (x, y, width) in specs.items()
+    }
+
+    draw.text((60, 195), "IDENTITY", font=label, fill=MAGENTA)
+    draw.text((430, 195), "LOGISTICS & TRACKING", font=label, fill=MAGENTA)
+    draw.text((60, 780), "FINANCE & RECONCILIATION", font=label, fill=MAGENTA)
+
+    # Relasi digambar lebih dahulu agar garis tidak menutupi isi tabel.
+    rels = [
+        ("users", "shipments"), ("users", "categories"),
+        ("categories", "transactions"), ("categories", "category_rules"),
+        ("users", "bank_imports"), ("bank_imports", "bank_import_rows"),
+        ("transactions", "bank_import_rows"), ("shipments", "shipment_events"),
+        ("shipments", "shipment_resolutions"), ("shipments", "support_tickets"),
+        ("shipments", "notification_preferences"), ("shipments", "integration_outbox"),
+        ("users", "settlements"), ("settlements", "settlement_items"),
+        ("shipments", "settlement_items"), ("settlements", "bank_import_rows"),
+    ]
+    for parent, child in rels:
+        pb, cb = boxes[parent], boxes[child]
+        parent_center = ((pb[0] + pb[2]) // 2, (pb[1] + pb[3]) // 2)
+        child_center = ((cb[0] + cb[2]) // 2, (cb[1] + cb[3]) // 2)
+        dx = child_center[0] - parent_center[0]
+        dy = child_center[1] - parent_center[1]
+        if abs(dx) >= abs(dy):
+            start = (pb[2], parent_center[1]) if dx >= 0 else (pb[0], parent_center[1])
+            end = (cb[0], child_center[1]) if dx >= 0 else (cb[2], child_center[1])
+        else:
+            start = (parent_center[0], pb[3]) if dy >= 0 else (parent_center[0], pb[1])
+            end = (child_center[0], cb[1]) if dy >= 0 else (child_center[0], cb[3])
+        arrow(draw, start, end)
+
     for name, rows in tables.items():
         x1, y1, x2, y2 = boxes[name]
         rounded(draw, (x1, y1, x2, y2), 14, "#FFFFFF", LINE, 3)
-        draw.rectangle((x1, y1, x2, y1 + 54), fill=INK)
-        draw.rectangle((x1, y1, x1 + 8, y1 + 54), fill=MAGENTA)
-        draw.text((x1 + 22, y1 + 14), name, font=label, fill="#FFFFFF")
-        y = y1 + 70
+        draw.rectangle((x1, y1, x2, y1 + 50), fill=INK)
+        draw.rectangle((x1, y1, x1 + 8, y1 + 50), fill=MAGENTA)
+        draw.text((x1 + 20, y1 + 13), name, font=label, fill="#FFFFFF")
+        y = y1 + 64
         for row in rows:
-            draw.text((x1 + 22, y), row, font=body, fill=INK)
-            y += 38
+            draw.text((x1 + 20, y), row, font=body, fill=INK)
+            y += 34
 
-    draw.text((90, 1650), "Notasi: PK = primary key | FK = foreign key | UQ = unique | panah menuju tabel child", font=small, fill=MUTED)
-    draw.text((90, 1685), "Composite FK menyertakan user_id untuk mencegah relasi lintas akun.", font=small, fill=MUTED)
+    draw.text((60, 1420), "Notasi: PK = primary key | FK = foreign key | UQ = unique | panah menuju tabel child", font=small, fill=MUTED)
+    draw.text((60, 1452), "Composite FK menyertakan user_id untuk mencegah relasi lintas akun.", font=small, fill=MUTED)
 
     path = ERD_DIR / "anteraja-database-erd.webp"
     image.save(path, "WEBP", quality=92, method=6)
