@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { createClient } from '@/lib/supabase/client';
+import { roleHome, isAccountRole } from '@/lib/roles';
 import { firstIssueMessage, signInSchema } from '@/lib/validation';
 
 export function SignInForm() {
@@ -32,15 +33,17 @@ export function SignInForm() {
 
     setIsPending(true);
     const supabase = createClient();
-    const { error: signInError } = await supabase.auth.signInWithPassword(parsed.data);
-    setIsPending(false);
+    const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword(parsed.data);
 
     if (signInError) {
+      setIsPending(false);
       setError('Email atau password salah.');
       return;
     }
 
-    router.push('/transaksi');
+    const { data: accountRole } = await supabase.from('account_roles').select('role').eq('user_id', signInData.user.id).maybeSingle();
+    setIsPending(false);
+    router.push(roleHome(isAccountRole(accountRole?.role) ? accountRole.role : 'consumer'));
     router.refresh();
   }
 

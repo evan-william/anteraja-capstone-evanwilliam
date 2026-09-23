@@ -1,7 +1,7 @@
 import type { NextRequest } from 'next/server';
 
 import { getCurrentUser } from '@/lib/auth';
-import { notFound, ok, serverError, unauthorized, validationError } from '@/lib/api';
+import { forbidden, notFound, ok, serverError, unauthorized, validationError } from '@/lib/api';
 import { createClient } from '@/lib/supabase/server';
 import { firstIssueMessage, updateTransactionSchema } from '@/lib/validation';
 
@@ -13,6 +13,7 @@ type RouteContext = { params: Promise<{ id: string }> };
 export async function PATCH(request: NextRequest, { params }: RouteContext) {
   const user = await getCurrentUser();
   if (!user) return unauthorized();
+  if (user.role !== 'seller') return forbidden();
 
   const { id } = await params;
 
@@ -62,6 +63,7 @@ export async function PATCH(request: NextRequest, { params }: RouteContext) {
 export async function DELETE(_request: NextRequest, { params }: RouteContext) {
   const user = await getCurrentUser();
   if (!user) return unauthorized();
+  if (user.role !== 'seller') return forbidden();
 
   const { id } = await params;
   const supabase = await createClient();

@@ -1,19 +1,16 @@
-import { redirect } from 'next/navigation';
-
 import {
   TransactionManager,
   type TransactionWithCategory,
 } from '@/components/transaksi/transaction-manager';
 import { SiteHeader } from '@/components/ui/site-header';
 import { PageHeader } from '@/components/ui/page-header';
-import { getCurrentUser } from '@/lib/auth';
+import { requireRole } from '@/lib/auth';
 import { createClient } from '@/lib/supabase/server';
 
 export const metadata = { title: 'Arus Dana — Anteraja Finance' };
 
 export default async function TransaksiPage() {
-  const user = await getCurrentUser();
-  if (!user) redirect('/masuk');
+  const user = await requireRole(['seller']);
 
   const supabase = await createClient();
 
@@ -41,7 +38,7 @@ export default async function TransaksiPage() {
 
   return (
     <>
-      <SiteHeader userName={user.name || user.email} />
+      <SiteHeader userName={user.name || user.email} role={user.role} />
       <main id="main-content" className="app-main max-w-5xl">
         <PageHeader eyebrow="Keuangan operasional" title="Arus dana" description="Catat settlement masuk dan biaya pengiriman. Data terbaru ditampilkan lebih dahulu." />
 

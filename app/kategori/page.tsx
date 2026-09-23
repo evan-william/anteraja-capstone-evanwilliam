@@ -1,16 +1,13 @@
-import { redirect } from 'next/navigation';
-
 import { CategoryManager } from '@/components/kategori/category-manager';
 import { SiteHeader } from '@/components/ui/site-header';
 import { PageHeader } from '@/components/ui/page-header';
-import { getCurrentUser } from '@/lib/auth';
+import { requireRole } from '@/lib/auth';
 import { createClient } from '@/lib/supabase/server';
 
 export const metadata = { title: 'Kategori — Anteraja Finance' };
 
 export default async function KategoriPage() {
-  const user = await getCurrentUser();
-  if (!user) redirect('/masuk');
+  const user = await requireRole(['seller']);
 
   const supabase = await createClient();
   const { data, error } = await supabase
@@ -22,7 +19,7 @@ export default async function KategoriPage() {
 
   return (
     <>
-      <SiteHeader userName={user.name || user.email} />
+      <SiteHeader userName={user.name || user.email} role={user.role} />
       <main id="main-content" className="app-main max-w-5xl">
         <PageHeader eyebrow="Aturan pencatatan" title="Kelola kategori" description="Pisahkan COD, ongkir, retur, dan biaya layanan agar setiap settlement mudah ditelusuri." />
 

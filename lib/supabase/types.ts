@@ -1,4 +1,5 @@
 export type CategoryType = 'expense' | 'income';
+export type AccountRole = 'admin' | 'seller' | 'consumer';
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 export type Database = {
@@ -21,6 +22,24 @@ export type Database = {
           email?: string;
           name?: string | null;
         };
+        Relationships: [];
+      };
+      account_roles: {
+        Row: { user_id: string; role: AccountRole; created_at: string; updated_at: string };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
+      recipient_shipments: {
+        Row: { user_id: string; shipment_id: string; linked_at: string };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
+      admin_ticket_actions: {
+        Row: { id: string; ticket_id: string; actor_id: string; old_status: string; new_status: string; created_at: string };
+        Insert: never;
+        Update: never;
         Relationships: [];
       };
       categories: {
@@ -186,7 +205,9 @@ export type Database = {
       };
       support_tickets: {
         Row: { id: string; user_id: string; shipment_id: string; ticket_number: string; customer_note: string | null; context_snapshot: Json; status: 'open' | 'in_progress' | 'resolved' | 'closed'; response_due_at: string; created_at: string; updated_at: string };
-        Insert: never; Update: { status?: 'open' | 'in_progress' | 'resolved' | 'closed' }; Relationships: [];
+        Insert: never; Update: { status?: 'open' | 'in_progress' | 'resolved' | 'closed' }; Relationships: [
+          { foreignKeyName: 'support_tickets_shipment_user_fkey'; columns: ['shipment_id', 'user_id']; isOneToOne: false; referencedRelation: 'shipments'; referencedColumns: ['id', 'user_id'] },
+        ];
       };
       notification_preferences: {
         Row: { id: string; user_id: string; shipment_id: string; whatsapp_enabled: boolean; email_enabled: boolean; push_enabled: boolean; meaningful_changes_only: boolean; destination_masked: string | null; created_at: string; updated_at: string };
@@ -224,6 +245,29 @@ export type Database = {
     };
     Views: Record<string, never>;
     Functions: {
+      admin_update_ticket_status: {
+          Args: { p_ticket_id: string; p_status: 'in_progress' | 'resolved' };
+          Returns: boolean;
+        };
+      redeem_admin_activation_code: {
+        Args: { p_code: string };
+        Returns: boolean;
+      };
+      get_my_shipments: {
+        Args: Record<string, never>;
+        Returns: {
+          tracking_number: string;
+          service_type: string;
+          delivery_status: string;
+          risk_status: string;
+          origin_city: string | null;
+          destination_city: string | null;
+          estimated_delivery_at: string | null;
+          last_scan_at: string | null;
+          current_location: string | null;
+          exception_reason: string | null;
+        }[];
+      };
       save_bank_import: {
         Args: { p_file_name: string; p_bank: string; p_rows: unknown; p_rules?: unknown };
         Returns: string;

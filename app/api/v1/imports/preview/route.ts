@@ -1,6 +1,6 @@
 import type { NextRequest } from 'next/server';
 
-import { fail, ok, serverError, unauthorized, validationError } from '@/lib/api';
+import { fail, forbidden, ok, serverError, unauthorized, validationError } from '@/lib/api';
 import { getCurrentUser } from '@/lib/auth';
 import { matchImportRows, type MatchableTransaction } from '@/lib/import/matching';
 import type { ImportCategory } from '@/lib/import/types';
@@ -11,6 +11,7 @@ import { firstIssueMessage } from '@/lib/validation';
 export async function POST(request: NextRequest) {
   const user = await getCurrentUser();
   if (!user) return unauthorized();
+  if (user.role !== 'seller') return forbidden();
 
   let payload: unknown;
   try {

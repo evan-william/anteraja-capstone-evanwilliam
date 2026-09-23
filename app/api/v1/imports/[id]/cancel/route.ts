@@ -1,4 +1,4 @@
-import { ok, serverError, unauthorized, validationError } from '@/lib/api';
+import { forbidden, ok, serverError, unauthorized, validationError } from '@/lib/api';
 import { getCurrentUser } from '@/lib/auth';
 import { createClient } from '@/lib/supabase/server';
 
@@ -8,6 +8,7 @@ export async function POST(
 ) {
   const user = await getCurrentUser();
   if (!user) return unauthorized();
+  if (user.role !== 'seller') return forbidden();
   const { id } = await context.params;
   if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)) {
     return validationError('ID impor tidak valid.');

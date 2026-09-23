@@ -1,7 +1,7 @@
 import type { NextRequest } from 'next/server';
 
 import { getCurrentUser } from '@/lib/auth';
-import { ok, serverError, unauthorized, validationError } from '@/lib/api';
+import { forbidden, ok, serverError, unauthorized, validationError } from '@/lib/api';
 import { createClient } from '@/lib/supabase/server';
 import { createTransactionSchema, firstIssueMessage } from '@/lib/validation';
 
@@ -11,6 +11,7 @@ const TRANSACTION_FIELDS =
 export async function GET(request: NextRequest) {
   const user = await getCurrentUser();
   if (!user) return unauthorized();
+  if (user.role !== 'seller') return forbidden();
 
   const limitParam = Number(request.nextUrl.searchParams.get('limit') ?? '50');
   const limit = Number.isInteger(limitParam) && limitParam > 0 ? Math.min(limitParam, 200) : 50;
@@ -33,6 +34,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   const user = await getCurrentUser();
   if (!user) return unauthorized();
+  if (user.role !== 'seller') return forbidden();
 
   let payload: unknown;
   try {

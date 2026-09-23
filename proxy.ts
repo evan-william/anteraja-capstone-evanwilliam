@@ -4,7 +4,6 @@ import { updateSession } from '@/lib/supabase/proxy';
 
 /** Halaman yang boleh dibuka tanpa login. */
 const PUBLIC_ROUTES = ['/masuk', '/daftar', '/ui-preview', '/lacak'];
-const AUTH_ROUTES = ['/masuk', '/daftar'];
 
 export async function proxy(request: NextRequest) {
   const { response, user } = await updateSession(request);
@@ -21,17 +20,6 @@ export async function proxy(request: NextRequest) {
   if (!user && !isPublic) {
     const url = request.nextUrl.clone();
     url.pathname = '/masuk';
-    url.search = '';
-    return NextResponse.redirect(url);
-  }
-
-  const isAuthRoute = AUTH_ROUTES.some(
-    (route) => pathname === route || pathname.startsWith(`${route}/`),
-  );
-
-  if (user && isAuthRoute) {
-    const url = request.nextUrl.clone();
-    url.pathname = '/pengiriman';
     url.search = '';
     return NextResponse.redirect(url);
   }

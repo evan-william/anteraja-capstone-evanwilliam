@@ -27,6 +27,9 @@ export function fail(
 export const unauthorized = () =>
   fail('UNAUTHORIZED', 'Kamu harus masuk dulu untuk mengakses data ini.', 401);
 
+export const forbidden = () =>
+  fail('FORBIDDEN', 'Akun ini tidak memiliki akses ke ruang kerja tersebut.', 403);
+
 export const notFound = (message = 'Data tidak ditemukan.') =>
   fail('NOT_FOUND', message, 404);
 

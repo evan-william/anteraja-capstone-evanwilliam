@@ -1,7 +1,7 @@
 import type { NextRequest } from 'next/server';
 
 import { getCurrentUser } from '@/lib/auth';
-import { conflict, ok, serverError, unauthorized, validationError } from '@/lib/api';
+import { conflict, forbidden, ok, serverError, unauthorized, validationError } from '@/lib/api';
 import { createClient } from '@/lib/supabase/server';
 import { createCategorySchema, firstIssueMessage } from '@/lib/validation';
 
@@ -10,6 +10,7 @@ const UNIQUE_VIOLATION = '23505';
 export async function GET(request: NextRequest) {
   const user = await getCurrentUser();
   if (!user) return unauthorized();
+  if (user.role !== 'seller') return forbidden();
 
   const status = request.nextUrl.searchParams.get('status');
   const supabase = await createClient();
@@ -33,6 +34,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   const user = await getCurrentUser();
   if (!user) return unauthorized();
+  if (user.role !== 'seller') return forbidden();
 
   let payload: unknown;
   try {

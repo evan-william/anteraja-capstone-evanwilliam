@@ -1,6 +1,6 @@
 import type { NextRequest } from 'next/server';
 
-import { ok, serverError, unauthorized, validationError } from '@/lib/api';
+import { forbidden, ok, serverError, unauthorized, validationError } from '@/lib/api';
 import { getCurrentUser } from '@/lib/auth';
 import { saveImportSchema } from '@/lib/import/validation';
 import { createClient } from '@/lib/supabase/server';
@@ -12,6 +12,7 @@ const HISTORY_FIELDS =
 export async function GET() {
   const user = await getCurrentUser();
   if (!user) return unauthorized();
+  if (user.role !== 'seller') return forbidden();
   const supabase = await createClient();
   const { data, error } = await supabase
     .from('bank_imports')
@@ -26,6 +27,7 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   const user = await getCurrentUser();
   if (!user) return unauthorized();
+  if (user.role !== 'seller') return forbidden();
 
   let payload: unknown;
   try {

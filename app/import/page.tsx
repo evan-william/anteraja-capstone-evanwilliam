@@ -1,17 +1,14 @@
-import { redirect } from 'next/navigation';
-
 import { ImportManager } from '@/components/import/import-manager';
 import { SiteHeader } from '@/components/ui/site-header';
 import { PageHeader } from '@/components/ui/page-header';
-import { getCurrentUser } from '@/lib/auth';
+import { requireRole } from '@/lib/auth';
 import type { ImportCategory, ImportHistory } from '@/lib/import/types';
 import { createClient } from '@/lib/supabase/server';
 
 export const metadata = { title: 'Rekonsiliasi — Anteraja Finance' };
 
 export default async function ImportPage() {
-  const user = await getCurrentUser();
-  if (!user) redirect('/masuk');
+  const user = await requireRole(['seller']);
   const supabase = await createClient();
   const [categoriesResult, historyResult] = await Promise.all([
     supabase.from('categories').select('id, name, type').eq('user_id', user.id).eq('is_archived', false).order('name'),
@@ -20,7 +17,7 @@ export default async function ImportPage() {
 
   return (
     <>
-      <SiteHeader userName={user.name || user.email} />
+      <SiteHeader userName={user.name || user.email} role={user.role} />
       <main id="main-content" className="app-main">
         <PageHeader eyebrow="Mutasi dan settlement" title="Rekonsiliasi bank" description="Cocokkan mutasi rekening dengan settlement pengiriman. Tidak ada data yang disimpan sebelum kamu meninjau hasilnya." />
         {categoriesResult.error || historyResult.error ? (

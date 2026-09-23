@@ -1,12 +1,16 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { AuthCarousel } from '@/components/ui/auth-carousel';
+import { getCurrentUser, roleHome } from '@/lib/auth';
 
 import { SignInForm } from './sign-in-form';
 
 export const metadata = { title: 'Masuk — Anteraja Tracking & Operations' };
 
-export default function MasukPage() {
+export default async function MasukPage() {
+  const user = await getCurrentUser();
+  if (user) redirect(roleHome(user.role));
   return (
     <main id="main-content" className="grid min-h-screen lg:grid-cols-[1.05fr_.95fr]">
       <AuthCarousel />

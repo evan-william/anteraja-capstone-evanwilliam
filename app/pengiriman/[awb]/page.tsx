@@ -1,10 +1,10 @@
 import Link from 'next/link';
-import { redirect, notFound } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { ArrowLeft, CalendarClock, MapPin, ShieldAlert } from 'lucide-react';
 
 import { SiteHeader } from '@/components/ui/site-header';
 import { Button } from '@/components/ui/button';
-import { getCurrentUser } from '@/lib/auth';
+import { requireRole } from '@/lib/auth';
 import { createClient } from '@/lib/supabase/server';
 import { buildJourney } from '@/lib/tracking/journey';
 import { JourneyMap } from '@/components/tracking/journey-map';
@@ -17,7 +17,7 @@ const riskLabel: Record<RiskStatus, string> = {
 
 type PageProps = { params: Promise<{ awb: string }> };
 export default async function SellerShipmentDetail({ params }: PageProps) {
-  const user = await getCurrentUser(); if (!user) redirect('/masuk');
+  const user = await requireRole(['seller']);
   const { awb } = await params; const supabase = await createClient();
   const shipmentResult = await supabase.from('shipments').select('*').eq('user_id', user.id).eq('tracking_number', decodeURIComponent(awb).toUpperCase()).maybeSingle();
   if (!shipmentResult.data) notFound();
@@ -28,7 +28,7 @@ export default async function SellerShipmentDetail({ params }: PageProps) {
     supabase.from('shipment_resolutions').select('*').eq('shipment_id', shipment.id).order('submitted_at', { ascending: false }),
     supabase.from('support_tickets').select('*').eq('shipment_id', shipment.id).order('created_at', { ascending: false }),
   ]);
-  return <><SiteHeader userName={user.name || user.email} /><main id="main-content" className="app-main max-w-5xl"><Button variant="ghost" size="sm" asChild><Link href="/pengiriman"><ArrowLeft /> Kembali ke pengiriman</Link></Button>
+  return <><SiteHeader userName={user.name || user.email} role={user.role} /><main id="main-content" className="app-main max-w-5xl"><Button variant="ghost" size="sm" asChild><Link href="/pengiriman"><ArrowLeft /> Kembali ke pengiriman</Link></Button>
     <section className="mt-5 rounded-2xl bg-[#2a2026] p-6 text-white sm:p-8"><p className="text-xs font-bold uppercase tracking-[.16em] text-[#ff75bd]">Detail operasional</p><div className="mt-3 flex flex-wrap items-end justify-between gap-4"><div><h1 className="text-3xl font-bold tracking-[-.045em]">{shipment.tracking_number}</h1><p className="mt-2 text-sm text-white/65">{shipment.origin_city} → {shipment.destination_city}</p></div><span className="status text-[#ff8bc5]">{riskLabel[shipment.risk_status as RiskStatus] ?? 'Status diperbarui'}</span></div></section>
     {journey ? <JourneyMap journey={journey} /> : null}
     <section aria-label="Informasi operasional pengiriman" className="mt-5 grid gap-5 lg:grid-cols-[1.3fr_.7fr]"><section className="surface p-6"><h2 className="section-title">Timeline</h2><ol className="mt-6 space-y-6">{(events.data ?? []).map((event) => <li key={event.id} className="flex gap-3"><span className="mt-1 flex size-7 shrink-0 items-center justify-center rounded-full bg-accent text-primary"><MapPin className="size-3.5" /></span><article><h3 className="text-sm font-bold">{event.status_label}</h3><p className="mt-1 text-sm leading-6 text-muted-foreground">{event.description}</p><p className="mt-1 text-xs text-muted-foreground">{event.location} · {new Intl.DateTimeFormat('id-ID',{dateStyle:'medium',timeStyle:'short'}).format(new Date(event.occurred_at))}</p></article></li>)}</ol></section>
