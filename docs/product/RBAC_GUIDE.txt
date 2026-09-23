@@ -1,0 +1,105 @@
+PANDUAN TIGA RUANG KERJA
+Anteraja Tracking & Operations — prototipe demo
+
+1. RINGKASAN
+
+Tracking tetap inti produk. Finance adalah jejak dana setelah pengiriman,
+bukan aplikasi terpisah. Tiap akun melihat pekerjaan yang relevan:
+
+Admin     /admin, /admin/kiriman, /admin/tiket, /admin/finance
+          Membaca kiriman lintas Seller, melihat alasan kendala, event,
+          instruksi penerima, dan tiket CS. Admin dapat mengubah status tiket
+          Baru → Sedang ditangani → Selesai. Perubahan disimpan dengan aktor
+          dan waktu. Finance lintas Seller hanya dapat dibaca, tidak diubah.
+
+Seller    /seller, /pengiriman, /transaksi, /import, /kategori
+          Hanya melihat kiriman, settlement, transaksi, kategori, dan mutasi
+          milik akunnya. Filter, pencarian, ekspor, dan FRD-06 tetap tersedia.
+
+Konsumen  /akun dan /lacak
+          /akun hanya menampilkan paket yang telah ditautkan ke identitas
+          Konsumen. Paket lain tetap dapat dicek lewat /lacak dengan resi
+          dan kode akses. Konsumen tidak menerima akses tabel shipment mentah
+          ataupun Finance.
+
+2. PENDAFTARAN DAN KODE ADMIN
+
+/daftar menawarkan tiga pilihan role. Seller/Konsumen langsung dibuat.
+Pilihan Admin membuat akun Konsumen sementara, lalu menukar kode resmi
+melalui server. Kode disimpan sebagai SHA-256 hash, sekali pakai, berlaku
+30 hari sejak seed, dan maksimal lima percobaan per jam per akun. Bila
+konfirmasi email aktif, pengguna masuk dahulu lalu membuka /aktivasi-admin.
+Mengubah metadata profil di browser tidak menaikkan hak Admin.
+
+Sepuluh kode demo asli tersimpan hanya di file lokal yang diabaikan Git:
+  .private/admin-activation-codes.txt
+Jangan upload file ini ke GitHub atau LMS. Hash-only seed berada di:
+  supabase/seed-admin-activation-hashes.sql
+
+3. AKUN DEMO
+
+Alamat email/password tiga akun berada di file privat lokal:
+  .private/demo-rbac-accounts.txt
+Seller lama memakai demo@contoh.test. Admin dan Konsumen dibuat oleh seed
+tambahan tanpa menghapus 305 kiriman serta data Finance yang sudah ada.
+Konsumen ditautkan secara eksplisit ke ANT-100015, ANT-100084, ANT-100112.
+Resi/kode demo bersama bukan bukti kepemilikan akun Konsumen.
+
+4. DATABASE
+
+Project demo: rfkcbmacwlknowskdwbf (Supabase PostgreSQL).
+Migrasi yang diterapkan dan tercatat di riwayat Supabase:
+  20260923000100_add_account_roles.sql
+  20260923000200_admin_ticket_triage.sql
+  20260923000300_harden_ticket_status.sql
+
+Tabel baru: account_roles, admin_activation_codes,
+admin_activation_attempts, recipient_shipments, admin_ticket_actions.
+Foreign key menghubungkan role ke users, paket tertaut ke shipments,
+dan aksi tiket ke support_tickets serta petugas. RLS dan server guard
+berjalan bersama. Finance RPC yang memakai SECURITY DEFINER juga dibatasi
+oleh trigger Seller-only agar bypass halaman tidak membuka akses tulis.
+Status tiket tidak dapat diubah langsung oleh Seller; hanya RPC Admin yang
+menulis status sekaligus audit.
+
+Data sebelum migrasi disalin sebagai JSON per tabel ke .private/backup-data-*.json.
+Jumlah salinan diverifikasi: 305 shipments, 1.001 shipment_events, dan tabel
+aplikasi/auth terkait. Skema sebelumnya tersimpan dalam migrasi repository
+dan branch before-rbac. Ini salinan data privat, bukan dump pg_dump penuh;
+Docker/pg_dump tidak tersedia di mesin ini. Jangan bagikan backup karena
+memuat data akun dan detail kiriman demo.
+
+5. CARA MENJALANKAN
+
+Di folder project, isi .env.local dari .env.example dengan URL dan
+publishable key project Supabase. Jalankan npm install lalu npm run dev.
+Buka http://localhost:3000. Jangan jalankan supabase db reset pada
+project remote karena perintah itu menghapus data.
+
+Untuk membuat ulang pada database demo BARU: terapkan migrasi sesuai urutan,
+jalankan seed dasar hanya pada database baru, kemudian seed-rbac-demo.sql.
+Seed RBAC memerlukan app.demo_admin_password dan
+app.demo_consumer_password diset pada sesi SQL yang sama; simpan password
+hanya di luar repository. Jalankan seed-admin-activation-hashes.sql untuk
+memasang hash kode resmi. Seed lama supabase/seed.sql menghapus dan membuat
+ulang data demo; JANGAN jalankan pada database yang sudah berisi data.
+
+6. CEK CEPAT
+
+- Masuk sebagai Admin: /admin menampilkan prioritas dari 245 kiriman aktif;
+  /admin/kiriman memuat seluruh 305 kiriman dengan pencarian, filter,
+  dan pagination; /admin/tiket menampilkan tiket dan aksi bertahap.
+- Masuk sebagai Seller: /pengiriman dan Finance dapat dipakai,
+  /admin harus menolak akses.
+- Masuk sebagai Konsumen: /akun menampilkan tiga paket tertaut,
+  /pengiriman dan Finance harus menolak akses.
+- Akses langsung ke tabel Supabase: Konsumen melihat 0 row pada shipments
+  dan transactions; Admin dapat membaca tetapi tidak menulis Finance.
+- Jalankan node tools/verify-rbac.mjs dengan env demo sesuai kebutuhan.
+
+7. BATAS DEMO
+
+Tidak ada scan kurir live, pengiriman pesan WhatsApp nyata, atau OTP
+untuk mengklaim paket mandiri. Outbox mencatat pekerjaan integrasi;
+status pending bukan bukti pesan sudah dikirim. Akun dan resi demo bukan
+data operasional Anteraja sungguhan.

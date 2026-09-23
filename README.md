@@ -9,13 +9,12 @@ npm install
 cp .env.example .env.local
 npx supabase link --project-ref <PROJECT_REF>
 npx supabase db push
-npx supabase db reset
 npm run dev
 ```
 
 Isi `.env.local` dengan `NEXT_PUBLIC_SUPABASE_URL` dan `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. Jangan commit credential.
 
-Demo: buka `http://localhost:3000/lacak`, gunakan resi `ANT-100015` dan kode `260926`. Ruang seller memakai `demo@contoh.test` / `demo12345`.
+Demo: buka `http://localhost:3000/lacak`, gunakan resi `ANT-100015` dan kode `260926`. Ruang Seller memakai akun demo lama. Untuk tiga akun demo, peran, dan kode aktivasi lihat [panduan RBAC](docs/product/RBAC_GUIDE.txt). Jangan menjalankan `db reset` pada project remote: perintah itu menghapus data.
 
 Ada 300 resi fiktif tambahan (`ANT-200001`–`ANT-200300`) di `supabase/seed-demo-shipments.sql`. Jalankan setelah seed dasar pada database demo; panduan contoh resi ada di `docs/prototype/DEMO_SHIPMENTS.md`.
 
@@ -29,6 +28,12 @@ Detail kiriman kini memiliki [peta perjalanan](docs/prototype/ROUTE_MAP.md) yang
 | Finance | `/transaksi` | Arus dana settlement dan biaya |
 | Rekonsiliasi | `/import` | Preview/simpan/batal impor FRD-06 |
 | Kategori | `/kategori` | Klasifikasi keuangan |
+| Pusat operasi | `/admin` | Prioritas kiriman lintas Seller |
+| Tiket CS | `/admin/tiket` | Penanganan bertahap dengan audit |
+| Finance Admin | `/admin/finance` | Ringkasan settlement lintas Seller, hanya baca |
+| Ruang Seller | `/seller` | Ringkasan kiriman dan Finance milik akun |
+| Paket saya | `/akun` | Hanya paket Konsumen yang ditautkan |
+| Aktivasi Admin | `/aktivasi-admin` | Tukar kode resmi setelah login |
 
 Next.js menangani UI/API. Supabase menyediakan Auth, PostgreSQL, RLS, dan RPC atomik. Tracking publik memeriksa kode akses, memasking PII, dan dibatasi 10 request/IP/menit. Action menulis resolution, event, dan integration outbox dalam satu transaksi. Outbox menjadi batas aman untuk integrasi kurir, CS, WhatsApp, email, atau push; demo tidak mengklaim memakai API internal Anteraja.
 

@@ -11,6 +11,9 @@ Dokumen ini menjadi satu sumber functional requirement untuk tracking, seller op
 | AUTH-01 | Daftar dan masuk | Pengguna dapat membuat akun dan masuk menggunakan Supabase Auth |
 | AUTH-02 | Isolasi data | Row Level Security membatasi data seller dan Finance berdasarkan `user_id` |
 | AUTH-03 | Credential | `.env.local` tidak ter-track; `.env.example` hanya memuat placeholder |
+| AUTH-04 | Pilihan role | Pendaftaran menyediakan Konsumen, Seller, dan Admin; Admin baru aktif setelah kode resmi diverifikasi server |
+| AUTH-05 | Aktivasi Admin | Kode disimpan sebagai hash, sekali pakai, kedaluwarsa, dan dibatasi lima percobaan per jam per akun |
+| AUTH-06 | Isolasi role | Admin membaca semua kiriman dan tiket; Seller hanya data miliknya; Konsumen hanya proyeksi paket yang ditautkan; URL/API/RLS memeriksa izin |
 
 ## Tracking publik
 
@@ -41,6 +44,16 @@ Resolution harus membuat perubahan status, event, dan pekerjaan integrasi dalam 
 | OPS-04 | Detail | Pengguna dapat membuka timeline, risiko, dan tindak lanjut satu kiriman |
 | OPS-05 | Ekspor | CSV dan JSON berisi data yang sama dengan filter aktif di layar |
 | OPS-06 | Empty state | Akun kosong mendapat penjelasan dan petunjuk tentang akun demo |
+
+## Pusat operasi dan ruang Konsumen
+
+| ID | Requirement | Kriteria terima |
+|---|---|---|
+| ADM-01 | Antrean lintas Seller | Admin melihat kiriman aktif berisiko/perlu tindakan dari seluruh Seller tanpa hak mengubah Finance mereka |
+| ADM-02 | Detail kasus | Admin dapat menelusuri event, instruksi penerima, dan tiket CS dari satu resi |
+| ADM-03 | Penanganan tiket | Hanya Admin dapat mengubah tiket dari Baru → Sedang ditangani → Selesai; setiap transisi menyimpan aktor dan waktu |
+| CSM-01 | Paket saya | Konsumen hanya melihat paket yang ditautkan secara terverifikasi ke akunnya melalui proyeksi terbatas |
+| CSM-02 | Pelacakan lain | Paket belum ditautkan tetap bisa dicari dengan resi dan kode akses; kode demo bersama tidak otomatis membuktikan kepemilikan akun |
 
 ## Finance operations
 
@@ -74,8 +87,10 @@ Semua tindakan harus dapat dioperasikan dengan keyboard. Focus harus terlihat. S
 
 - `shipments` menyimpan identitas kiriman dan status terkini.
 - `shipment_events` menyimpan perjalanan paket.
-- `delivery_resolutions` menyimpan instruksi penerima.
-- `tracking_tickets` menyimpan laporan beserta snapshot konteks.
+- `shipment_resolutions` menyimpan instruksi penerima.
+- `support_tickets` menyimpan laporan beserta snapshot konteks.
+- `account_roles`, `admin_activation_codes`, dan `recipient_shipments` memisahkan hak akses.
+- `admin_ticket_actions` mencatat transisi tiket yang dilakukan petugas.
 - `notification_preferences` menyimpan opt-in channel.
 - `settlements` dan `settlement_items` menghubungkan nilai pengiriman dengan pencairan.
 - `bank_imports` dan `bank_import_rows` menyimpan proses rekonsiliasi.

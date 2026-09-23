@@ -28,12 +28,21 @@ Produk ini membantu pengguna menjawab dua kelompok pertanyaan tanpa berpindah si
 | Customer service | Menerima laporan yang sudah membawa konteks paket |
 | Finance operations | Mencocokkan settlement dengan mutasi bank secara aman |
 | Pemilik usaha | Melihat hubungan operasional dan arus dana dalam satu produk |
+| Petugas operasi Anteraja (Admin) | Melihat kasus lintas Seller, membaca konteks resi, dan menangani tiket CS dengan jejak audit |
 
 ## Struktur produk
 
 ### Tracking publik
 
 Penerima memasukkan nomor resi dan kode akses enam digit. Hasil tracking menampilkan posisi terakhir, estimasi tiba, status ketepatan waktu, perjalanan paket, dan tindakan yang tersedia.
+
+### Ruang Konsumen
+
+Konsumen yang masuk melihat hanya paket yang telah ditautkan secara terverifikasi ke akunnya. Akun tidak dapat melihat tabel pengiriman mentah milik Seller lain. Untuk paket yang belum tertaut, pencarian publik tetap menggunakan resi dan kode akses.
+
+### Pusat operasi Anteraja
+
+Admin mendapat antrean kiriman berisiko lintas Seller, riwayat perjalanan, instruksi penerima, dan tiket CS. Status tiket dapat dipindahkan secara bertahap dengan jejak aktor dan waktu. Admin tidak otomatis boleh mengubah transaksi keuangan Seller.
 
 ### Seller operations
 
@@ -63,6 +72,8 @@ Tracking dan Finance bukan dua produk terpisah. Finance adalah kelanjutan admini
 8. Impor CSV Bank A dan Bank B dengan status Baru, Cocok, atau Error.
 9. Penyimpanan rekonsiliasi atomik, pencegahan duplikasi, riwayat, dan pembatalan aman.
 10. Model data shipment dan settlement yang dapat ditelusuri kembali ke mutasi bank.
+11. Tiga ruang kerja dengan pembatasan akses di halaman, API, dan RLS.
+12. Penanganan tiket oleh Admin dengan audit perubahan status.
 
 ## Ukuran keberhasilan
 
@@ -87,6 +98,7 @@ Tracking dan Finance bukan dua produk terpisah. Finance adalah kelanjutan admini
 - Baris mutasi yang sudah cocok tidak boleh dibuat ulang.
 - Pembatalan hanya menghapus secara lunak transaksi baru yang dibuat oleh impor tersebut.
 - Integrasi eksternal memakai outbox sampai API resmi tersedia.
+- Aktivasi Admin memerlukan kode resmi sekali pakai yang tidak disimpan sebagai teks polos di database atau repository.
 
 ## Di luar lingkup MVP
 

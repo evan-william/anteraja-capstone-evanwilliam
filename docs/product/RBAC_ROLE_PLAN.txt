@@ -110,10 +110,10 @@ kasus/tiket mencatat actor_id, waktu, objek, dan perubahan status.
 
 6. TIGA AKUN DEMO
 
-Admin: akun demo lama menjadi Admin supaya 305 kiriman yang ada tetap utuh dan
-terlihat dari control tower. Seller: akun baru dengan kiriman dan contoh
-finance miliknya sendiri. Konsumen: akun baru dengan beberapa kiriman tertaut
-secara eksplisit. Seed harus idempotent dan tidak menghapus data lama. Password
+Seller: akun demo lama tetap Seller supaya 305 kiriman dan Finance yang ada
+tetap dapat dipakai. Admin: akun baru membaca seluruh kiriman melalui RLS.
+Konsumen: akun baru dengan tiga kiriman tertaut secara eksplisit.
+Seed harus idempotent dan tidak menghapus data lama. Password
 demo hanya untuk lingkungan demo; jangan digunakan pada deployment publik.
 
 7. ARAH VISUAL DAN MOTION
@@ -192,8 +192,8 @@ TERVERIFIKASI: schema sekarang memakai user_id dan RLS per akun; daftar publik
 belum mempunyai role; 300 resi tambahan berada pada satu akun demo.
 
 DITETAPKAN UNTUK FASE DEMO: Admin dapat membaca semua shipment dan ringkasan
-finance, tetapi perubahan finance lintas seller tidak dibuka. Seller yang baru
-punya data demo sendiri; Konsumen ditautkan ke beberapa resi lewat seed.
+finance, tetapi perubahan finance lintas seller tidak dibuka. Seller lama
+tetap memiliki seluruh data demo; Konsumen ditautkan ke tiga resi lewat seed.
 
 BELUM TERSEDIA: OTP penerima, API kurir, kiriman live, notifikasi eksternal,
 dan data operasi untuk menghitung dampak bisnis. Tanpa itu UI harus memberi

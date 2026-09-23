@@ -1,0 +1,45 @@
+VERIFIKASI RBAC — 23 SEPTEMBER 2026
+
+Database demo: rfkcbmacwlknowskdwbf.
+Branch kerja: 8-rbac. Cadangan kode: before-rbac pada commit 1340c07.
+Salinan data sebelum migrasi: .private/backup-data-*.json (diabaikan Git).
+
+Hasil nyata:
+- Migrasi role dan penanganan tiket lulus uji BEGIN/ROLLBACK.
+- Tiga migrasi diterapkan dan ditandai applied di riwayat Supabase.
+- 3 role ada: Admin 1, Seller 1, Konsumen 1.
+- 10 kode aktivasi belum dipakai; kode salah ditolak, kode benar berhasil,
+  replay ditolak, kode kedaluwarsa ditolak, dan percobaan keenam dibatasi
+  dalam uji transaksi yang di-rollback.
+- Metadata requested_role=admin saat pembuatan akun tidak memberikan Admin;
+  requested_role=seller memberikan Seller. Kedua akun tes di-rollback.
+- Admin demo: login berhasil, dapat membaca 305 shipment dan 30 transaksi;
+  percobaan menulis kategori Finance ditolak.
+- Seller demo: login berhasil, dapat membaca 305 shipment dan 30 transaksi
+  miliknya; URL /admin ditolak.
+- Konsumen demo: login berhasil, tabel shipment dan transaksi mentah memberi
+  nol baris; RPC get_my_shipments hanya mengembalikan tiga paket tertaut;
+  percobaan menulis kategori Finance ditolak.
+- Browser: Admin /pengiriman dialihkan ke /akses-ditolak; Seller /admin
+  dialihkan ke /akses-ditolak; API transaksi dan impor untuk Konsumen
+  mengembalikan HTTP 403.
+- Browser: transisi tiket Baru → Sedang ditangani berhasil; audit bertambah
+  satu baris. Pengujian transisi berikutnya dan larangan bagi Konsumen
+  lulus dalam transaksi ROLLBACK.
+- Setelah pengetatan izin, Seller juga gagal mengubah status tiket secara
+  langsung; Admin tetap bisa memakai RPC yang diaudit.
+- QA mobile 390 px: halaman tiket diperbaiki dari tabel horizontal menjadi
+  daftar responsif; tidak ada overflow dokumen dan tombol tindakan terlihat.
+- TypeScript, ESLint, seluruh unit test, dan production build lulus.
+- Tracking publik dengan ANT-100015/kode valid membuka timeline dan ringkasan;
+  kode salah menampilkan pesan aman tanpa data paket.
+
+Batas verifikasi:
+- Belum ada uji end-to-end registrasi email baru lewat UI karena konfirmasi
+  email pada project demo dapat memerlukan inbox nyata; trigger dan penukaran
+  kode diuji langsung di database dengan rollback.
+- Tidak ada OTP pengaitan paket, data kurir live, atau notifikasi eksternal.
+- Backup JSON menyimpan baris data privat tetapi bukan dump pg_dump lengkap.
+  Skema sebelum perubahan berasal dari migrasi repository dan branch backup.
+- Halaman tambahan yang disebut sebagai ide pada RBAC_ROLE_PLAN.txt tetapi
+  belum ada dalam fase inti ini tidak diklaim selesai.
