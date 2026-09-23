@@ -20,6 +20,14 @@ npx supabase db reset
 
 Seed membuat akun `demo@contoh.test` dengan password `demo12345`. Resi utama `ANT-100015` memakai kode akses `260926`.
 
+Untuk menambah 300 kiriman fiktif yang dapat dilacak, jalankan `supabase/seed-demo-shipments.sql` lewat SQL Editor **setelah** seed dasar. Alternatif melalui CLI pada project demo ini:
+
+```bash
+npx supabase db query --linked --project-ref rfkcbmacwlknowskdwbf --file supabase/seed-demo-shipments.sql
+```
+
+Skrip tambahan ini aman dijalankan ulang dan tidak menghapus data lama. Jangan menjalankan `db reset` pada project remote hanya untuk menambah data. Daftar skenario dan contoh resi ada di `docs/prototype/DEMO_SHIPMENTS.md`.
+
 ## Environment dan aplikasi
 
 Salin `.env.example` menjadi `.env.local` dan isi:

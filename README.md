@@ -17,6 +17,8 @@ Isi `.env.local` dengan `NEXT_PUBLIC_SUPABASE_URL` dan `NEXT_PUBLIC_SUPABASE_PUB
 
 Demo: buka `http://localhost:3000/lacak`, gunakan resi `ANT-100015` dan kode `260926`. Ruang seller memakai `demo@contoh.test` / `demo12345`.
 
+Ada 300 resi fiktif tambahan (`ANT-200001`–`ANT-200300`) di `supabase/seed-demo-shipments.sql`. Jalankan setelah seed dasar pada database demo; panduan contoh resi ada di `docs/prototype/DEMO_SHIPMENTS.md`.
+
 Detail kiriman kini memiliki [peta perjalanan](docs/prototype/ROUTE_MAP.md) yang menampilkan jalur jalan perkiraan. Untuk produksi, konfigurasi `ROAD_ROUTER_URL` ke router OSRM ber-SLA; tanpa konfigurasi, aplikasi menggunakan layanan demo publik dan tetap menampilkan titik kota/hub saat layanan rute tidak tersedia.
 
 | Area | Rute | Fungsi |
