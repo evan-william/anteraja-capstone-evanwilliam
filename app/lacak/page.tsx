@@ -19,7 +19,7 @@ export default function TrackingLandingPage() {
       <main id="main-content">
         <section className="relative isolate overflow-hidden bg-[#21171d] text-white">
           <div className="absolute inset-0 -z-10">
-            <Image src="/auth/courier-city.png" alt="Kurir Anteraja mengantar paket di kawasan perkotaan" fill priority className="object-cover object-center opacity-42" sizes="100vw" />
+            <Image src="/auth/courier-city.webp" alt="Kurir Anteraja mengantar paket di kawasan perkotaan" fill priority quality={82} className="object-cover object-center opacity-42" sizes="100vw" />
             <div className="absolute inset-0 bg-[linear-gradient(90deg,#21171d_7%,rgba(33,23,29,.93)_38%,rgba(33,23,29,.36)_77%,#21171d_115%)]" />
             <div className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-[#21171d] to-transparent" />
           </div>

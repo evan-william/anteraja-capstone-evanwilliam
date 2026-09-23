@@ -18,6 +18,9 @@ export default function MasukPage() {
           <p className="page-copy mb-7">Gunakan akun operasional yang sudah terdaftar.</p>
           <SignInForm />
           <p className="mt-6 text-sm text-muted-foreground">Belum punya akun? <Link href="/daftar" className="font-semibold text-primary underline-offset-4 hover:underline">Buat akun</Link></p>
+          <nav aria-label="Akses tanpa akun" className="mt-12 border-t border-border/60 pt-5 text-sm text-muted-foreground">
+            Ingin melihat perjalanan paket? <Link href="/lacak" className="font-semibold text-foreground underline decoration-primary/50 underline-offset-4 hover:decoration-primary">Lacak resi tanpa masuk →</Link>
+          </nav>
         </div>
       </section>
     </main>

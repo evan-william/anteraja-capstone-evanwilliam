@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "leaflet/dist/leaflet.css";
 
 @font-face {
   font-family: "Open Sans";
@@ -133,6 +134,15 @@
   .surface-lift { transition: transform var(--motion-fast) var(--ease-enter), box-shadow var(--motion-fast) var(--ease-enter); }
   .surface-lift:hover { transform: translateY(-1px); box-shadow: 0 12px 28px rgba(32, 27, 30, 0.065); }
 }
+
+.auth-progress { width: 100%; transform-origin: left; animation: auth-progress 5.5s linear both; }
+.auth-progress-paused { animation-play-state: paused; }
+@keyframes auth-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+.journey-map .leaflet-container { background: #e9e4df; font-family: "Open Sans", Arial, sans-serif; }
+.journey-map .leaflet-control-attribution { font-size: 10px; }
+.journey-map .leaflet-control-zoom a { color: #241d21; }
+.journey-map .leaflet-interactive:focus-visible { outline: 3px solid var(--primary); }
 
 @media (max-width: 639px) {
   input, select, textarea { font-size: 16px !important; }

@@ -17,6 +17,9 @@ export default function DaftarPage() {
           <p className="page-copy mb-7">Siapkan ruang kerja untuk pencatatan dan rekonsiliasi settlement.</p>
           <SignUpForm />
           <p className="mt-6 text-sm text-muted-foreground">Sudah punya akun? <Link href="/masuk" className="font-semibold text-primary underline-offset-4 hover:underline">Masuk</Link></p>
+          <nav aria-label="Akses tanpa akun" className="mt-10 border-t border-border/60 pt-5 text-sm text-muted-foreground">
+            Hanya ingin melihat status kiriman? <Link href="/lacak" className="font-semibold text-foreground underline decoration-primary/50 underline-offset-4 hover:decoration-primary">Lacak resi tanpa akun →</Link>
+          </nav>
         </div>
       </section>
       <AuthCarousel className="lg:order-last" />
