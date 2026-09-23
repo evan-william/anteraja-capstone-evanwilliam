@@ -1,0 +1,205 @@
+RENCANA PRODUK — TIGA RUANG KERJA ANTERAJA
+Status: rancangan untuk implementasi; bukan klaim bahwa fitur sudah tersedia.
+Dasar: Business Acumen Day 1, docs/product/prd.md, docs/product/frd.md.
+Cadangan sebelum perubahan: branch before-rbac, commit 1340c07.
+
+1. TUJUAN
+
+Masalah utama tetap sama: penerima dan seller perlu tahu saat kiriman menyimpang,
+apa penyebab yang diketahui, dan tindakan yang bisa menyelamatkan pengiriman.
+Admin operasional perlu melihat antrean kendala lintas seller tanpa kehilangan
+jejak instruksi penerima, tiket CS, dan status tindak lanjut. Finance adalah
+kelanjutan jejak shipment, bukan produk terpisah.
+
+Ukuran keberhasilan: kiriman berisiko yang diselesaikan sebelum gagal antar,
+waktu penyelesaian kasus, pengulangan kontak CS, first-attempt delivery success,
+dan tidak adanya akses data lintas role/akun yang tidak sah. Angka target harus
+ditentukan setelah ada data operasi nyata; data demo tidak boleh dijadikan klaim.
+
+2. ROLE DAN HAK AKSES
+
+ADMIN — petugas operasi Anteraja dalam prototipe.
+  Baca seluruh kiriman, event, resolution, tiket, dan ringkasan finance lintas
+  seller. Tangani tiket dan kasus lewat aksi terkontrol dengan audit log.
+  Tidak otomatis boleh mengubah data bank atau mengambil alih akun seller.
+
+SELLER — pengirim/pemilik toko.
+  Baca hanya kiriman dan data finance milik akunnya. Lihat prioritas kendala,
+  detail resi, penyelesaian, ekspor sesuai filter, settlement, mutasi, kategori.
+  Tidak boleh membaca data seller lain atau mengubah scan kurir.
+
+KONSUMEN — penerima paket.
+  Buka /lacak dengan resi + kode akses seperti saat ini. Setelah login,
+  lihat hanya paket yang terhubung secara terverifikasi ke akunnya, status
+  tindakan, notifikasi, dan tiketnya. Tidak mendapat akses tabel shipment
+  mentah, daftar penerima lain, data seller, atau finance.
+
+Keputusan keamanan: registrasi publik boleh memilih Konsumen, Seller, atau
+Admin. Pilihan Admin baru berhasil setelah kode aktivasi resmi diverifikasi
+di server dan ditukar secara atomik; kode sekali pakai, kedaluwarsa, disimpan
+sebagai hash, dibatasi percobaannya, dan tidak pernah ada di bundle browser,
+commit, log, atau dokumentasi publik. Mengubah metadata profil/JWT di klien
+tidak dapat menaikkan role. Sepuluh kode awal disiapkan untuk lingkungan demo
+dan daftar plaintext disimpan lokal terpisah dari repository.
+
+3. ALUR PEMBEDA: RESCUE LOOP
+
+Scan tidak segar / alamat bermasalah → sistem memberi penanda risiko berbasis
+aturan transparan → Admin mendapat antrean kasus lintas seller → Seller melihat
+pengiriman miliknya yang perlu diprioritaskan → Konsumen memberi patokan atau
+jadwal lewat tracking → instruksi dan tiket masuk ke satu timeline → Admin
+menandai tindak lanjut → ketiga pihak melihat status sesuai hak akses.
+
+Ini memperluas FRD TRK-05 s.d. TRK-12 dan OPS-01 s.d. OPS-05, bukan mengganti
+tracking publik atau FRD Finance. Tanpa API kurir resmi, status sinkronisasi
+harus jujur: 'menunggu integrasi', bukan 'sudah diterima kurir'.
+
+4. HALAMAN YANG BENAR-BENAR PUNYA PEKERJAAN
+
+PUBLIK
+  /lacak dan /lacak/[awb]: pencarian aman, timeline, ETA, risiko, tindakan.
+  /masuk dan /daftar: pilihan role, form dan onboarding yang sesuai.
+
+ADMIN (baru, di bawah /admin)
+  /admin: ringkasan operasi, kiriman perlu tindakan, scan tertunda, tiket baru.
+  /admin/kiriman: daftar lintas seller dengan filter, pencarian, dan detail.
+  /admin/kasus: antrean exception berbasis usia kasus dan langkah berikutnya.
+  /admin/tiket: laporan CS dengan konteks resi dan riwayat penanganan.
+  /admin/kualitas-data: scan stale, event hilang, dan integrasi outbox tertunda.
+  /admin/finance: ringkasan read-only yang dapat ditelusuri ke settlement.
+
+SELLER
+  /seller: ringkasan kiriman miliknya, prioritas kendala, tren singkat.
+  /pengiriman dan /pengiriman/[awb]: halaman lama tetap hidup, khusus seller.
+  /seller/kendala: daftar masalah yang perlu diikuti, status instruksi/tiket.
+  /transaksi, /import, /kategori: FRD Finance lama tetap bekerja.
+
+KONSUMEN
+  /akun: ringkasan paket yang terhubung, status dan tindakan mendesak.
+  /akun/paket: daftar paket sendiri, bukan seluruh shipment.
+  /akun/bantuan: tiket sendiri dan perkembangannya.
+  /akun/notifikasi: preferensi kanal dan perubahan bermakna.
+
+Jangan membuat halaman kosong hanya demi jumlah. Komponen bersama boleh
+dipakai ulang, tetapi prioritas informasi dan aksi per role harus berbeda.
+
+5. MODEL DATA DAN OTORISASI
+
+Saat ini public.users tidak punya role; seluruh RLS shipment dan Finance
+berbasis user_id. Karena itu menyembunyikan menu saja tidak cukup.
+
+Tambahkan tabel role/keanggotaan yang tidak bisa ditulis klien secara bebas.
+Tambahkan tabel kode aktivasi admin dengan hash, expires_at, used_at, used_by,
+attempt_count, dan audit redemption. Registrasi Admin memakai fungsi/server
+endpoint dengan validasi dan konsumsi kode dalam satu transaksi. Jangan
+mempercayai raw_user_meta_data untuk hak Admin. Perubahan role setelah akun
+dibuat harus lewat jalur admin yang diaudit, bukan update public.users sendiri.
+
+Pertahankan user_id sebagai pemilik seller untuk fase pertama. Admin membaca
+lintas akun melalui kebijakan read-only/RPC berotorisasi; mutasi sensitif
+memerlukan endpoint terpisah. Konsumen membaca proyeksi terbatas melalui RPC
+yang memeriksa hubungan penerima terverifikasi, bukan SELECT * pada shipments.
+Untuk demo, tautkan beberapa resi ke akun Konsumen melalui seed yang eksplisit.
+Jangan menganggap resi + kode demo bersama 260926 sebagai bukti kepemilikan
+akun Konsumen. Klaim paket mandiri menunggu OTP email/telepon nyata.
+
+Seluruh API dan server action memeriksa role di server; RLS/RPC menjadi lapis
+kedua. Akses langsung ke route lain menghasilkan 403/redirect yang jelas.
+Admin global bukan service_role yang dikirim ke browser. Semua perubahan pada
+kasus/tiket mencatat actor_id, waktu, objek, dan perubahan status.
+
+6. TIGA AKUN DEMO
+
+Admin: akun demo lama menjadi Admin supaya 305 kiriman yang ada tetap utuh dan
+terlihat dari control tower. Seller: akun baru dengan kiriman dan contoh
+finance miliknya sendiri. Konsumen: akun baru dengan beberapa kiriman tertaut
+secara eksplisit. Seed harus idempotent dan tidak menghapus data lama. Password
+demo hanya untuk lingkungan demo; jangan digunakan pada deployment publik.
+
+7. ARAH VISUAL DAN MOTION
+
+Satu identitas Anteraja: logo/aset dan Open Sans lokal yang sudah tersedia,
+magenta sebagai aksen aksi, permukaan terang hangat, teks gelap hangat.
+Admin padat informasi dan memakai split list-detail untuk menindak kasus;
+Seller menonjolkan prioritas pengiriman dan jejak dana; Konsumen menonjolkan
+cerita satu paket dan langkah yang bisa dilakukan. Tidak ada badge/garis tepi
+warna berulang, tumpukan kartu seragam, atau dashboard yang jadi landing page.
+
+Motion hanya memperjelas perubahan: antrean kasus berpindah status, detail
+terbuka dari baris asal, timeline mendapat event baru, dan tindakan sukses.
+Interaksi rutin tetap cepat (umumnya <=300 ms), tabel tidak beranimasi besar,
+tidak ada gerak saat input keyboard, semua punya prefers-reduced-motion.
+Peta tetap membedakan rute perkiraan dari lokasi GPS kurir sungguhan.
+
+8. URUTAN IMPLEMENTASI
+
+A. Backup before-rbac (selesai), lalu branch kerja terpisah.
+B. Migrasi role dan kode aktivasi; uji registrasi Konsumen/Seller/Admin,
+   termasuk replay, expiry, brute-force, dan metadata palsu.
+C. Tracer bullet: Admin melihat satu kiriman lintas akun, Seller hanya
+   miliknya, Konsumen hanya kiriman tertaut; uji RLS dan API langsung.
+D. Seed tiga akun demo dan data tiap role tanpa reset remote.
+E. Navigasi dan landing per role; URL lama tetap berfungsi sesuai izin.
+F. Rescue Loop: antrean, tindak lanjut, riwayat, tiket, notifikasi.
+G. Selaraskan Finance lama, dokumentasi PRD/FRD, dan visual/motion.
+H. QA desktop/mobile, keyboard, reduced motion, kegagalan jaringan, test
+   TypeScript/lint/unit/build, dan pemeriksaan keamanan lintas akun.
+
+9. BATASAN DAN STOP CONDITIONS
+
+Jangan aktifkan Admin publik bila kode bisa ditebak, dipakai ulang, atau
+ditentukan hanya di browser. Jangan mengubah RLS remote sebelum tes migrasi
+lokal dan jalur rollback jelas. Jangan memindahkan 305 kiriman demo dengan
+DELETE/reset. Jangan mengklaim notifikasi terkirim atau kurir menerima instruksi
+tanpa integrasi. Jika schema remote tidak sesuai migrasi repo, hentikan
+penerapan remote dan laporkan selisihnya. Chatbot bebas, ML ETA, booking nyata,
+GPS kurir live, dan integrasi WhatsApp/kurir berbayar bukan bagian fase ini.
+
+10. VERIFIKASI SEBELUM DIANGGAP SELESAI
+
+- Query silang Admin/Seller/Konsumen: data tepat sesuai hak, termasuk akses
+  REST/RPC langsung; percobaan lintas akun ditolak.
+- Sepuluh kode Admin unik; tiap kode hanya bisa dipakai sekali, kedaluwarsa,
+  dan tidak ada plaintext di git atau bundle klien.
+- Akun baru diarahkan ke home role-nya; URL lama tetap hidup dan aman.
+- Tiga demo login dan alur Rescue Loop dapat dipresentasikan ujung ke ujung.
+- FRD tracking dan Finance lama tidak regresi; status outbox jujur.
+- npm run typecheck, npm run lint, npm test, npm run build lulus setelah
+  dependency lokal diperbaiki; visual QA desktop/mobile dan console bersih.
+
+11. FILE AWAL YANG TERDAMPAK
+
+Database: migrasi baru di supabase/migrations/ untuk role, aktivasi, relasi
+penerima, audit, dan kebijakan RLS. supabase/seed.sql tidak dijalankan ulang
+di remote karena menghapus data demo lama; gunakan seed tambahan idempotent.
+
+Autentikasi: lib/auth.ts, app/daftar/sign-up-form.tsx, app/masuk/sign-in-form.tsx,
+lib/validation.ts, serta endpoint aktivasi admin baru. Role dicek dari DB pada
+server, bukan dari metadata klien.
+
+Navigasi: components/ui/nav-links.tsx dan components/ui/site-header.tsx;
+role menentukan menu, namun semua halaman/API tetap melakukan guard server.
+
+Halaman: app/admin/*, app/seller/*, app/akun/* ditambah bertahap; app/lacak/*
+tetap publik, app/pengiriman/* dan Finance tetap mempertahankan URL lama.
+
+Tes: tes unit helper role, tes RLS pada tiga akun, tes registrasi kode valid/
+invalid/replay/expired, dan e2e redirect antar-role.
+
+12. ASUMSI TERBUKA DAN KETENTUAN PENERAPAN
+
+TERVERIFIKASI: schema sekarang memakai user_id dan RLS per akun; daftar publik
+belum mempunyai role; 300 resi tambahan berada pada satu akun demo.
+
+DITETAPKAN UNTUK FASE DEMO: Admin dapat membaca semua shipment dan ringkasan
+finance, tetapi perubahan finance lintas seller tidak dibuka. Seller yang baru
+punya data demo sendiri; Konsumen ditautkan ke beberapa resi lewat seed.
+
+BELUM TERSEDIA: OTP penerima, API kurir, kiriman live, notifikasi eksternal,
+dan data operasi untuk menghitung dampak bisnis. Tanpa itu UI harus memberi
+label demo/menunggu integrasi, bukan mengklaim proses telah terjadi.
+
+Review rencana: kelengkapan 4/5 (detail error per halaman ditetapkan saat
+tracer bullet), kelayakan 4/5 (migrasi belum dijalankan), scope 5/5,
+testabilitas 4/5 (e2e belum dieksekusi), risiko 4/5 (rollback diuji lokal dulu),
+asumsi 5/5. Rencana belum dianggap implementasi selesai.
