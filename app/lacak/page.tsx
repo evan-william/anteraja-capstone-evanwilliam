@@ -3,12 +3,18 @@ import { BellRing, MapPinned, ShieldCheck } from 'lucide-react';
 
 import { PublicHeader } from '@/components/tracking/public-header';
 import { TrackingSearchForm } from '@/components/tracking/tracking-search-form';
+import { serializeJsonLd, trackingApplicationJsonLd } from '@/lib/structured-data';
 
 export const metadata = { title: 'Lacak Kiriman — Anteraja', description: 'Cek posisi paket, kepastian jadwal, dan selesaikan kendala pengiriman dalam satu alur.' };
 
 export default function TrackingLandingPage() {
   return (
     <>
+      <script
+        id="tracking-web-application-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(trackingApplicationJsonLd) }}
+      />
       <PublicHeader />
       <main id="main-content">
         <section className="relative isolate overflow-hidden bg-[#21171d] text-white">
