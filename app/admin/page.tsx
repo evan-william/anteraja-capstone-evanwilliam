@@ -4,7 +4,6 @@ import { requireRole } from '@/lib/auth';
 import { createClient } from '@/lib/supabase/server';
 import { SiteHeader } from '@/components/ui/site-header';
 import { PageHeader } from '@/components/ui/page-header';
-import { OperationsAssistant } from '@/components/admin/operations-assistant';
 
 export const metadata = { title: 'Pusat Operasi — Anteraja' };
 
@@ -47,7 +46,6 @@ export default async function AdminHomePage() {
         {shipments.length >= 500 ? <p className="text-xs text-muted-foreground">Menampilkan 500 kiriman aktif pertama. Filter lanjutan akan tersedia setelah pagination server diterapkan.</p> : null}
       </>}
     </main>
-    <OperationsAssistant />
   </>;
 }
 

@@ -1,6 +1,6 @@
 # Asisten operasi Admin
 
-Asisten tersedia melalui tombol **Asisten operasi** di sudut kanan bawah halaman `/admin`. Hanya akun dengan role Admin yang melihat tombol dan dapat memakai endpoint-nya.
+Tombol **Asisten operasi** tersedia di sudut kanan bawah seluruh halaman Admin: Pusat operasi (`/admin`), Semua kiriman (`/admin/kiriman`), detail kiriman, dan Tiket CS (`/admin/tiket`). Percakapan tetap terbuka saat kamu berpindah halaman melalui navigasi aplikasi. Hanya akun Admin yang dapat melihat tombol dan memakai endpoint-nya; halaman Seller, Konsumen, dan pelacakan publik tidak menampilkannya.
 
 ## Yang dapat dilakukan
 
