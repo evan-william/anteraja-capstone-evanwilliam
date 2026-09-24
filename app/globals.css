@@ -146,6 +146,20 @@
 
 .summary-clean::-webkit-details-marker { display: none; }
 
+.assistant-shell { position: fixed; z-index: 80; right: 1.5rem; bottom: 1.5rem; }
+.assistant-launcher { transition: transform var(--motion-fast) var(--ease-enter), background-color var(--motion-fast) var(--ease-enter); }
+.assistant-launcher:hover { transform: translateY(-2px); }
+.assistant-panel { position: fixed; right: 1.5rem; bottom: 1.5rem; width: min(27rem, calc(100vw - 2rem)); height: min(40rem, calc(100dvh - 3rem)); opacity: 1; transform: translate3d(0, 0, 0); transition: opacity 180ms var(--ease-enter), transform 240ms var(--ease-move); }
+.assistant-panel[data-open="false"] { opacity: 0; transform: translate3d(0, 1rem, 0); pointer-events: none; }
+@media (max-width: 639px) {
+  .assistant-shell { right: 1rem; bottom: 1rem; }
+  .assistant-panel { inset: .75rem; width: auto; height: auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .assistant-panel, .assistant-launcher { transition-duration: 0.01ms; }
+  .assistant-launcher:hover { transform: none; }
+}
+
 @media (max-width: 639px) {
   input, select, textarea { font-size: 16px !important; }
 }

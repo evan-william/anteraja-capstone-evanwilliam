@@ -52,6 +52,9 @@ Resolution harus membuat perubahan status, event, dan pekerjaan integrasi dalam 
 | ADM-01 | Antrean lintas Seller | Admin melihat kiriman aktif berisiko/perlu tindakan dari seluruh Seller tanpa hak mengubah Finance mereka |
 | ADM-02 | Detail kasus | Admin dapat menelusuri event, instruksi penerima, dan tiket CS dari satu resi |
 | ADM-03 | Penanganan tiket | Hanya Admin dapat mengubah tiket dari Baru → Sedang ditangani → Selesai; setiap transisi menyimpan aktor dan waktu |
+| ADM-06 | Asisten operasi | Hanya Admin dapat bertanya tentang ringkasan kiriman, risiko, resi, dan tiket; jawaban berbasis query data saat itu dan hasil dibatasi, bukan salinan seluruh database |
+| ADM-07 | Tindakan dari asisten | Perubahan status tiket memerlukan konfirmasi eksplisit; API memeriksa role dan transisi, lalu memakai RPC audit yang sama dengan halaman tiket |
+| ADM-08 | Gangguan model | Tanpa key, saat kuota habis, atau ketika layanan gagal, pencarian data dasar tetap menjawab dan menyebutkan mode fallback; asisten tidak menghapus data atau membaca CSV Finance Seller |
 | CSM-01 | Paket saya | Konsumen hanya melihat paket yang ditautkan secara terverifikasi ke akunnya melalui proyeksi terbatas |
 | CSM-02 | Pelacakan lain | Paket belum ditautkan tetap bisa dicari dengan resi dan kode akses; kode demo bersama tidak otomatis membuktikan kepemilikan akun |
 

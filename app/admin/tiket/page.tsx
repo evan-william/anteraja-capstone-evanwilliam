@@ -32,7 +32,7 @@ export default async function AdminTicketsPage() {
           </div>
           <ul className="divide-y">
             {tickets.map((ticket) => (
-              <li key={ticket.id} className="grid gap-4 p-5 lg:grid-cols-[1.1fr_1fr_1.6fr_1fr_auto] lg:items-center">
+              <li key={ticket.id} id={`ticket-${ticket.id}`} className="grid scroll-mt-28 gap-4 p-5 lg:grid-cols-[1.1fr_1fr_1.6fr_1fr_auto] lg:items-center">
                 <div><span className="text-xs text-muted-foreground lg:sr-only">Tiket</span><p className="font-semibold">{ticket.ticket_number}</p></div>
                 <div><span className="text-xs text-muted-foreground lg:sr-only">Kiriman</span><p><Link className="font-semibold text-primary underline-offset-4 hover:underline" href={`/admin/pengiriman/${ticket.shipment_id}`}>{ticket.shipments?.tracking_number ?? 'Lihat kiriman'}</Link></p><p className="text-xs text-muted-foreground">{ticket.shipments?.destination_city ?? '—'}</p></div>
                 <div><span className="text-xs text-muted-foreground lg:sr-only">Catatan penerima</span><p className="max-w-prose break-words text-sm leading-6 text-muted-foreground">{ticket.customer_note || 'Tidak ada catatan tambahan.'}</p></div>

@@ -44,6 +44,8 @@ Konsumen yang masuk melihat hanya paket yang telah ditautkan secara terverifikas
 
 Admin mendapat antrean kiriman berisiko lintas Seller, riwayat perjalanan, instruksi penerima, dan tiket CS. Status tiket dapat dipindahkan secara bertahap dengan jejak aktor dan waktu. Admin tidak otomatis boleh mengubah transaksi keuangan Seller.
 
+Di Pusat operasi, asisten kontekstual membantu Admin menemukan tiket dan kiriman serta memahami prioritas dari data yang sedang tersedia. Pertanyaan dapat dijawab melalui Gemini bila dikonfigurasi, atau mode data langsung saat layanan model tidak tersedia. Asisten hanya menawarkan perubahan status tiket yang sudah didukung aplikasi dan meminta konfirmasi sebelum menjalankannya; CSV Finance Seller tetap di luar akses asisten Admin.
+
 ### Seller operations
 
 Seller memakai control tower untuk mencari resi atau penerima, menyaring tingkat risiko, membuka rincian kiriman, dan mengekspor data yang sedang tampil.

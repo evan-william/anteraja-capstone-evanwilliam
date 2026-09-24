@@ -4,6 +4,7 @@ import { requireRole } from '@/lib/auth';
 import { createClient } from '@/lib/supabase/server';
 import { SiteHeader } from '@/components/ui/site-header';
 import { PageHeader } from '@/components/ui/page-header';
+import { OperationsAssistant } from '@/components/admin/operations-assistant';
 
 export const metadata = { title: 'Pusat Operasi — Anteraja' };
 
@@ -20,7 +21,7 @@ export default async function AdminHomePage() {
 
   return <>
     <SiteHeader userName={user.name || user.email} role={user.role} />
-    <main id="main-content" className="app-main page-enter space-y-7">
+    <main id="main-content" className="app-main space-y-7">
       <PageHeader eyebrow="Operasi Anteraja" title="Pusat operasi" description="Semua kiriman aktif yang membutuhkan perhatian, melintasi akun Seller. Mulai dari kendala yang bisa ditangani hari ini." />
       {error ? <p role="alert" className="text-sm text-destructive">Data pengiriman belum dapat dimuat. Periksa koneksi dan migrasi role, lalu muat ulang.</p> : <>
         <section aria-label="Ringkasan operasi" className="grid gap-3 sm:grid-cols-3">
@@ -46,10 +47,11 @@ export default async function AdminHomePage() {
         {shipments.length >= 500 ? <p className="text-xs text-muted-foreground">Menampilkan 500 kiriman aktif pertama. Filter lanjutan akan tersedia setelah pagination server diterapkan.</p> : null}
       </>}
     </main>
+    <OperationsAssistant />
   </>;
 }
 
 function Metric({ label, value, tone }: { label: string; value: number; tone: 'normal' | 'urgent' | 'warning' }) {
-  const appearance = tone === 'urgent' ? 'bg-rose-50 text-rose-900' : tone === 'warning' ? 'bg-amber-50 text-amber-900' : 'bg-[#f1f7f3] text-[#1f6044]';
+  const appearance = tone === 'urgent' ? 'bg-[#f9d6df] text-[#85132c]' : tone === 'warning' ? 'bg-[#ffe8ab] text-[#713d06]' : 'bg-[#d5efe0] text-[#19543a]';
   return <article className={`rounded-xl p-5 ${appearance}`}><h2 className="truncate text-xs font-semibold">{label}</h2><p className="mt-2 text-3xl font-bold tabular-nums">{value}</p></article>;
 }
