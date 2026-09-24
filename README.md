@@ -30,7 +30,7 @@ Detail kiriman kini memiliki [peta perjalanan](docs/prototype/ROUTE_MAP.md) yang
 | Kategori | `/kategori` | Klasifikasi keuangan |
 | Pusat operasi | `/admin` | Prioritas kiriman lintas Seller |
 | Tiket CS | `/admin/tiket` | Penanganan bertahap dengan audit |
-| Finance Admin | `/admin/finance` | Ringkasan settlement lintas Seller, hanya baca |
+| Operasi Admin | `/admin`, `/admin/kiriman`, `/admin/tiket` | Pantau kiriman dan tangani tiket masuk |
 | Ruang Seller | `/seller` | Ringkasan kiriman dan Finance milik akun |
 | Paket saya | `/akun` | Hanya paket Konsumen yang ditautkan |
 | Aktivasi Admin | `/aktivasi-admin` | Tukar kode resmi setelah login |

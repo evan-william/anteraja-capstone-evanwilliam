@@ -131,12 +131,16 @@ Dokumen ini mencakup satu aplikasi dengan tiga ruang kerja, bukan tiga produk te
 
 | Ruang kerja | Halaman yang tersedia | Batas akses dan pekerjaan utama |
 |---|---|---|
-| Publik | `/lacak`, `/lacak/[awb]`, `/masuk`, `/daftar` | Cari resi dengan kode akses, lihat timeline, beri instruksi, dan hubungi CS. Hasil publik memasking data pribadi. |
+| Publik | `/lacak`, `/lacak/[awb]`, `/masuk`, `/daftar` | Cari resi dengan kode akses, lihat timeline, dan beri instruksi. Untuk membuat tiket CS, masuk sebagai Konsumen atau Seller. Hasil publik memasking data pribadi. |
 | Konsumen | `/akun` | Lihat paket yang telah ditautkan ke akun; paket lain tetap memerlukan resi dan kode akses di tracking publik. |
 | Seller | `/seller`, `/pengiriman`, `/pengiriman/[awb]`, `/transaksi`, `/import`, `/kategori` | Pantau kiriman dan dana milik akun sendiri; cari, saring, ekspor, catat transaksi, serta rekonsiliasi. |
-| Admin | `/admin`, `/admin/kiriman`, `/admin/pengiriman/[awb]`, `/admin/tiket`, `/admin/finance` | Baca kiriman lintas Seller, tindak lanjuti tiket dengan audit, dan lihat ringkasan Finance tanpa hak mengubah data keuangan Seller. |
+| Admin | `/admin`, `/admin/kiriman`, `/admin/pengiriman/[awb]`, `/admin/tiket` | Baca kiriman lintas Seller dan tangani tiket masuk dengan jejak audit. Finance adalah ruang kerja Seller. |
 
 Halaman tambahan yang tercatat sebagai usulan dalam `RBAC_ROLE_PLAN.txt`, seperti antrean kasus tersendiri dan pusat notifikasi akun, belum dianggap tersedia sampai diimplementasikan serta diuji. Ketiadaannya tidak menghapus fungsi inti yang sudah berjalan pada halaman di atas.
+
+Navigasi Seller memiliki dua menu utama: Pengiriman (Ringkasan, Pengiriman, Lacak paket) dan Finance (Arus dana, Rekonsiliasi, Kategori). Navigasi Admin memakai menu Operasional (Ringkasan, Pengiriman, Tiket CS, Lacak paket). Konsumen tetap memakai dua tautan langsung. Pada detail paket, timeline tampil sebelum peta; peta dapat dibuka bila dibutuhkan.
+
+Tiket baru dibuat oleh Konsumen yang masuk dan mempunyai resi plus kode akses, atau oleh Seller dari detail kiriman miliknya. Admin menerima dan mengubah status tiket, tetapi tidak membuat tiket baru. Pencarian tracking tanpa login tetap tersedia; pembuatan tiket memerlukan login.
 
 ## Alur ujung ke ujung per role
 

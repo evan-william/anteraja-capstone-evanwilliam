@@ -288,6 +288,7 @@ export type Database = {
       get_public_tracking: { Args: { p_awb: string; p_access_code: string }; Returns: Json };
       submit_tracking_resolution: { Args: { p_awb: string; p_access_code: string; p_resolution_type: string; p_payload: Json }; Returns: Json };
       create_tracking_ticket: { Args: { p_awb: string; p_access_code: string; p_note: string }; Returns: Json };
+      create_seller_ticket: { Args: { p_shipment_id: string; p_note: string }; Returns: Json };
       set_tracking_notifications: { Args: { p_awb: string; p_access_code: string; p_whatsapp: boolean; p_email: boolean; p_push: boolean }; Returns: Json };
     };
     Enums: Record<string, never>;

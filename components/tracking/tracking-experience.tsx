@@ -15,9 +15,10 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import type { ApiResponse } from '@/lib/api';
 import type { PublicTracking, RiskStatus } from '@/lib/tracking/types';
+import type { AccountRole } from '@/lib/supabase/types';
 import { buildJourney } from '@/lib/tracking/journey';
 import { resolveTrackingCityPhoto } from '@/lib/tracking/city-imagery';
-import { JourneyMap } from '@/components/tracking/journey-map';
+import { JourneyMapDisclosure } from '@/components/tracking/journey-map-disclosure';
 import { cn } from '@/lib/utils';
 
 const riskMeta: Record<RiskStatus, { label: string; copy: string; className: string; icon: typeof CheckCircle2 }> = {
@@ -34,7 +35,7 @@ function formatDate(value: string | null, includeTime = true) {
   return new Intl.DateTimeFormat('id-ID', { dateStyle: 'medium', ...(includeTime ? { timeStyle: 'short' } : {}) }).format(date);
 }
 
-export function TrackingExperience({ awb, code }: { awb: string; code: string }) {
+export function TrackingExperience({ awb, code, viewerRole }: { awb: string; code: string; viewerRole: AccountRole | null }) {
   const [tracking, setTracking] = useState<PublicTracking | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -127,8 +128,6 @@ export function TrackingExperience({ awb, code }: { awb: string; code: string })
         </dl>
       </section>
 
-      {journey ? <JourneyMap journey={journey} /> : null}
-
       <div className="mt-5 grid gap-5 lg:grid-cols-[1.4fr_.8fr]">
         <Timeline tracking={tracking} />
         <aside className="space-y-5">
@@ -137,8 +136,10 @@ export function TrackingExperience({ awb, code }: { awb: string; code: string })
         </aside>
       </div>
 
+      {journey ? <JourneyMapDisclosure journey={journey} /> : null}
+
       {tracking.risk_status === 'action_required' ? <ResolutionCard awb={awb} code={code} onSuccess={load} /> : null}
-      <SupportCard awb={awb} code={code} />
+      {viewerRole === 'consumer' || viewerRole === 'seller' ? <SupportCard awb={awb} code={code} /> : <section aria-labelledby="support-access-title" className="mt-5 rounded-xl bg-[#f0edef] p-5 sm:p-6"><h2 id="support-access-title" className="section-title">Butuh bantuan pengiriman?</h2><p className="mt-2 text-sm text-muted-foreground">{viewerRole === 'admin' ? 'Tiket dibuat oleh Konsumen atau Seller. Pantau laporan masuk di ruang Admin.' : 'Masuk sebagai Konsumen atau Seller untuk membuat tiket CS. Resi dan kode akses tetap diperlukan untuk laporan dari halaman ini.'}</p><Link href={viewerRole === 'admin' ? '/admin/tiket' : '/masuk'} className="mt-4 inline-block text-sm font-semibold text-primary underline underline-offset-4">{viewerRole === 'admin' ? 'Lihat tiket masuk →' : 'Masuk untuk membuat tiket →'}</Link></section>}
     </article>
   );
 }

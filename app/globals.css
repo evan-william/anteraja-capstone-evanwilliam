@@ -144,6 +144,8 @@
 .journey-map .leaflet-control-zoom a { color: #241d21; }
 .journey-map .leaflet-interactive:focus-visible { outline: 3px solid var(--primary); }
 
+.summary-clean::-webkit-details-marker { display: none; }
+
 @media (max-width: 639px) {
   input, select, textarea { font-size: 16px !important; }
 }

@@ -28,7 +28,7 @@ Dokumen ini menjadi satu sumber functional requirement untuk tracking, seller op
 | TRK-07 | Penjadwalan ulang | Pengguna dapat memilih tanggal baru dan menambahkan catatan |
 | TRK-08 | Safe drop | Pengguna dapat memilih tempat aman, lokasi penitipan, dan nomor penerima |
 | TRK-09 | Batas tindakan | Satu resi menerima maksimal satu resolution per hari |
-| TRK-10 | Tiket CS | Pengguna dapat membuat tiket dengan catatan maksimal 500 karakter dan target respons dua jam |
+| TRK-10 | Tiket CS | Konsumen yang sudah masuk dan Seller pemilik kiriman dapat membuat tiket dengan catatan maksimal 500 karakter dan target respons dua jam; Admin hanya menangani tiket masuk |
 | TRK-11 | Konteks tiket | Tiket menyimpan nomor resi, exception, lokasi, landmark, dan lima event terbaru |
 | TRK-12 | Preferensi notifikasi | Pengguna dapat opt-in WhatsApp, email, atau push untuk perubahan bermakna |
 
@@ -117,8 +117,8 @@ Relasi lintas entitas milik pengguna harus memakai `user_id` dan composite forei
 3. Pastikan posisi, ETA, status **Perlu tindakan**, dan timeline tampil.
 4. Kirim salah satu resolution dan pastikan status berubah menjadi **Instruksi diterima**.
 5. Aktifkan preferensi notifikasi.
-6. Buat tiket CS dan pastikan nomor tiket tampil.
-7. Masuk sebagai seller, buka `/pengiriman`, lalu uji filter, pencarian, detail, dan ekspor.
+6. Masuk sebagai Konsumen, kembali ke hasil tracking, buat tiket CS, dan pastikan nomor tiket tampil.
+7. Masuk sebagai Seller, buka `/pengiriman`, lalu uji filter, pencarian, detail, ekspor, dan pembuatan tiket dari kiriman sendiri.
 8. Buka `/import`, unggah salah satu CSV pada `docs/data`, periksa preview, simpan, lalu uji pembatalan.
 
 Provider WhatsApp, email, dan push belum production-connected. MVP menyimpan preferensi dan pekerjaan outbox agar integrasi resmi dapat ditambahkan tanpa mengubah kontrak UI atau transaksi utama.
@@ -132,7 +132,7 @@ Tabel ini menambah kriteria terima di atas; tidak mengganti atau mengurangi AUTH
 | AUTH-07 | Submit login aman | Form `/masuk` memakai POST. Password dan email tidak muncul di query URL, termasuk ketika JavaScript belum aktif. Sukses mengarahkan ke halaman awal role dari database. |
 | AUTH-08 | Pemulihan login | Password salah dan layanan autentikasi tidak tersedia menghasilkan pesan berbeda yang tidak membocorkan keberadaan akun; email yang diketik tetap tersedia untuk koreksi. |
 | AUTH-09 | Form kredensial lain | Form `/daftar` dan `/aktivasi-admin` tidak memakai GET untuk mengirim password atau kode. Browser tidak boleh menaruh nilai tersebut di address bar. |
-| ADM-04 | Batas operasi Admin | Halaman `/admin/finance` hanya membaca ringkasan lintas Seller; perubahan transaksi, kategori, atau impor Seller tetap ditolak di API/RLS. |
+| ADM-04 | Batas operasi Admin | Navigasi dan halaman Admin tidak menampilkan Finance; data keuangan tetap berada di ruang kerja Seller. URL lama `/admin/finance` mengarah kembali ke `/admin`. |
 | ADM-05 | Detail kiriman Admin | Dari `/admin/kiriman`, Admin dapat membuka `/admin/pengiriman/[awb]` dan membaca riwayat tanpa mengambil alih kepemilikan Seller. |
 | CSM-03 | Batas paket akun | Halaman `/akun` mengambil hanya paket yang terhubung ke user aktif melalui tautan terverifikasi. Resi/kode publik tidak menambahkan tautan kepemilikan secara otomatis. |
 | OPS-07 | Prioritas Seller | Halaman `/seller` mengarahkan Seller ke daftar pengiriman miliknya; pencarian dan filter di `/pengiriman` tetap mempertahankan batas `user_id`. |
@@ -145,7 +145,8 @@ Tabel ini menambah kriteria terima di atas; tidak mengganti atau mengurangi AUTH
 | `/akun` | Masuk dahulu | Paket tertaut | Ditolak | Ditolak |
 | `/seller`, `/pengiriman`, `/pengiriman/[awb]` | Masuk dahulu | Ditolak | Data sendiri | Ditolak; gunakan rute Admin |
 | `/transaksi`, `/import`, `/kategori` | Masuk dahulu | Ditolak | Data sendiri | Ditolak untuk perubahan |
-| `/admin`, `/admin/kiriman`, `/admin/pengiriman/[awb]`, `/admin/tiket`, `/admin/finance` | Masuk dahulu | Ditolak | Ditolak | Sesuai batas baca/tulis Admin |
+| `/admin`, `/admin/kiriman`, `/admin/pengiriman/[awb]`, `/admin/tiket` | Masuk dahulu | Ditolak | Ditolak | Baca kiriman lintas Seller dan tangani tiket |
+| `/admin/finance` | Masuk dahulu | Ditolak | Ditolak | Dialihkan ke `/admin` |
 
 Pemeriksaan rute hanyalah lapisan pertama. Query data, RPC, dan kebijakan RLS harus menegakkan batas yang sama. Menu tersembunyi bukan mekanisme otorisasi.
 
@@ -158,3 +159,15 @@ Pemeriksaan rute hanyalah lapisan pertama. Query data, RPC, dan kebijakan RLS ha
 5. Dari akun Konsumen, uji paket tertaut dan pencarian paket lain melalui resi plus kode. Pencarian publik tidak otomatis menautkan paket ke akun.
 
 Data demo, peta, dan outbox tidak boleh ditafsirkan sebagai scan kurir, pengiriman pesan, atau pergerakan dana nyata. Bukti operasi nyata memerlukan integrasi resmi dan pengujian terpisah.
+
+## Navigasi, peta, dan pemilik tindakan tiket
+
+| ID | Requirement | Kriteria terima |
+|---|---|---|
+| NAV-01 | Menu Seller | Desktop menyediakan Pengiriman dan Finance dengan submenu; hover, klik, fokus keyboard, serta Escape bekerja. Mobile memakai disclosure yang dapat dibuka dengan keyboard. |
+| NAV-02 | Menu Admin | Operasional memuat Ringkasan, Pengiriman, Tiket CS, dan Lacak paket. Finance tidak muncul. |
+| NAV-03 | Menu Konsumen | Paket saya dan Lacak paket tetap berupa tautan langsung. |
+| TRK-13 | Urutan informasi | Timeline tampil sebelum peta pada detail tracking dan detail Seller. Peta awalnya tertutup; membuka peta tidak memuatnya sebelum diminta. |
+| TKT-01 | Pembuat tiket | Konsumen yang masuk dapat membuat tiket memakai resi dan kode akses; Seller dapat membuat tiket dari kiriman miliknya tanpa kode penerima. Pengunjung anonim dan Admin ditolak di API serta function database. |
+| TKT-02 | Penanganan Admin | Admin melihat tiket masuk dan mengubah status melalui RPC ber-audit; tidak ada form pembuatan tiket di ruang Admin. |
+| TKT-03 | Konteks tiket Seller | Tiket Seller menyertakan resi, alasan kendala, posisi terakhir, dan lima event terbaru; pembuatan tiket serta pekerjaan outbox berjalan dalam satu transaksi. |
