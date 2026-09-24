@@ -2,8 +2,8 @@ import { NextResponse, type NextRequest } from 'next/server';
 
 import { updateSession } from '@/lib/supabase/proxy';
 
-/** Halaman yang boleh dibuka tanpa login. */
-const PUBLIC_ROUTES = ['/masuk', '/daftar', '/ui-preview', '/lacak'];
+/** Halaman kerja yang memang meminta akun; URL lain tetap boleh mencapai 404. */
+const PROTECTED_ROUTES = ['/admin', '/seller', '/akun', '/aktivasi-admin', '/pengiriman', '/transaksi', '/import', '/kategori'];
 
 export async function proxy(request: NextRequest) {
   const { response, user } = await updateSession(request);
@@ -13,11 +13,11 @@ export async function proxy(request: NextRequest) {
   // jadi jangan di-redirect ke halaman login.
   if (pathname.startsWith('/api/')) return response;
 
-  const isPublic = PUBLIC_ROUTES.some(
+  const isProtected = PROTECTED_ROUTES.some(
     (route) => pathname === route || pathname.startsWith(`${route}/`),
   );
 
-  if (!user && !isPublic) {
+  if (!user && isProtected) {
     const url = request.nextUrl.clone();
     url.pathname = '/masuk';
     url.search = '';

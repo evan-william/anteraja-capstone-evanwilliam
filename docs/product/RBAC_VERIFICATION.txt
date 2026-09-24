@@ -1,7 +1,7 @@
 VERIFIKASI RBAC — 23 SEPTEMBER 2026
 
 Database demo: rfkcbmacwlknowskdwbf.
-Branch kerja: 8-rbac. Cadangan kode: before-rbac pada commit 1340c07.
+Branch kerja: 7-prototype. Cadangan kode: before-rbac pada commit 1340c07.
 Salinan data sebelum migrasi: .private/backup-data-*.json (diabaikan Git).
 
 Hasil nyata:

@@ -3,10 +3,10 @@ import Link from 'next/link';
 
 import { cn } from '@/lib/utils';
 
-export function Brand({ compact = false, className, href = '/pengiriman' }: { compact?: boolean; className?: string; href?: string }) {
+export function Brand({ compact = false, className, href = '/pengiriman', label = 'Anteraja — buka ruang kerja' }: { compact?: boolean; className?: string; href?: string; label?: string }) {
   return (
-    <Link href={href} className={cn('inline-flex items-center gap-2.5 rounded-md', className)} aria-label="Anteraja — buka ruang kerja">
-      <Image src="/brand/anteraja-mark.png" alt="" width={42} height={42} className="size-9 scale-[1.65] object-contain" priority />
+    <Link href={href} className={cn('inline-flex items-center gap-2.5 rounded-md', className)} aria-label={label}>
+      <Image src="/brand/anteraja-mark-small.png" alt="" width={42} height={42} unoptimized className="size-9 object-contain" priority />
       {!compact ? (
         <span className="leading-none">
           <span className="block text-[21px] font-bold tracking-[-0.045em] text-primary">anteraja</span>

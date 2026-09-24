@@ -13,9 +13,10 @@ export default async function DaftarPage() {
   if (user) redirect(roleHome(user.role));
   return (
     <main id="main-content" className="grid min-h-screen lg:grid-cols-[.9fr_1.1fr]">
-      <section className="flex items-center justify-center px-5 py-10 sm:px-10">
+      <section className="relative flex items-center justify-center px-5 py-16 sm:px-10">
+        <nav aria-label="Navigasi akun" className="absolute right-5 top-5 text-sm font-semibold sm:right-10"><Link href="/lacak" className="rounded-md text-foreground underline decoration-primary/50 underline-offset-4 hover:decoration-primary">Lacak paket</Link></nav>
         <div className="page-enter w-full max-w-md">
-          <div className="mb-10 flex items-center gap-3"><Image src="/brand/anteraja-mark.png" alt="" width={42} height={42} className="size-9 scale-[1.65]" priority /><span className="text-2xl font-bold tracking-[-.045em] text-primary">anteraja</span></div>
+          <Link href="/lacak" aria-label="Anteraja — lacak paket" className="mb-10 flex w-fit items-center gap-3 rounded-md"><Image src="/brand/anteraja-mark-small.png" alt="" width={42} height={42} unoptimized className="size-9" priority /><span className="text-2xl font-bold tracking-[-.045em] text-primary">anteraja</span></Link>
           <p className="eyebrow">Akun Anteraja</p>
           <h1 className="page-title">Buat akun</h1>
           <p className="page-copy mb-7">Pilih akses yang sesuai: pantau paket sendiri, kelola kiriman toko, atau tangani operasi Anteraja.</p>

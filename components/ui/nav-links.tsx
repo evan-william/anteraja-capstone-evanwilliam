@@ -31,7 +31,7 @@ const links: Record<AccountRole, { href: string; label: string }[]> = {
 
 function NavItem({ href, label, pathname, mobile }: { href: string; label: string; pathname: string; mobile: boolean }) {
   const home = href === '/admin' || href === '/seller' || href === '/akun';
-  const active = pathname === href || (!home && pathname.startsWith(`${href}/`));
+  const active = pathname === href || (!home && pathname.startsWith(`${href}/`)) || (href === '/admin/kiriman' && pathname.startsWith('/admin/pengiriman/'));
   return <Link href={href} aria-current={active ? 'page' : undefined} className={cn('rounded-md px-3 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary', mobile && 'flex min-h-11 items-center', active && 'bg-accent text-accent-foreground underline decoration-primary decoration-2 underline-offset-8')}>{label}</Link>;
 }
 

@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { Pause, Play } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -68,9 +69,11 @@ export function AuthCarousel({ className }: { className?: string }) {
 
       <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 z-[15] h-[80%] bg-[linear-gradient(0deg,rgba(19,15,19,.96)_0%,rgba(19,15,19,.76)_35%,rgba(19,15,19,.36)_72%,transparent_100%)] lg:h-[68%]" />
 
-      <div className="absolute inset-x-0 top-0 z-20 hidden items-center gap-3 p-10 lg:flex xl:p-12">
-        <Image src="/brand/anteraja-favicon.png" alt="" width={46} height={46} className="size-10 object-contain brightness-0 invert" priority />
-        <span className="text-2xl font-bold tracking-[-0.045em]">anteraja</span>
+      <div className="absolute inset-x-0 top-0 z-20 hidden p-10 lg:block xl:p-12">
+        <Link href="/lacak" aria-label="Anteraja — lacak paket" className="inline-flex items-center gap-3 rounded-md">
+          <Image src="/brand/anteraja-mark-small.png" alt="" width={46} height={46} unoptimized className="size-10 object-contain brightness-0 invert" priority />
+          <span className="text-2xl font-bold tracking-[-0.045em]">anteraja</span>
+        </Link>
       </div>
 
       <div className="absolute inset-x-0 bottom-0 z-20 p-5 sm:p-6 lg:p-10 xl:p-12">
