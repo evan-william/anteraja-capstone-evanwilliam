@@ -15,7 +15,7 @@ export function SignInForm() {
   const [state, action, isPending] = useActionState(signIn, initialState);
 
   return (
-    <form id="sign-in-form" action={action} method="post" className="js-sign-in-form space-y-4">
+    <form id="sign-in-form" action={action} className="js-sign-in-form space-y-4">
       {state.error ? <Alert id="sign-in-error" variant="destructive">{state.error}</Alert> : null}
       <div className="space-y-2">
         <Label htmlFor="email">Email</Label>
