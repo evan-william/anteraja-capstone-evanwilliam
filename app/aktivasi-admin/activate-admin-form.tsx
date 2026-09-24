@@ -29,5 +29,5 @@ export function ActivateAdminForm() {
     router.refresh();
   }
 
-  return <form onSubmit={onSubmit} className="space-y-4">{error ? <Alert id="activation-error" variant="destructive">{error}</Alert> : null}<div className="space-y-2"><Label htmlFor="code">Kode aktivasi</Label><Input id="code" name="code" autoComplete="off" required aria-describedby={error ? 'activation-error' : undefined} /></div><Button type="submit" disabled={pending}>{pending ? 'Memeriksa kode…' : 'Aktifkan Admin'}</Button></form>;
+  return <form method="post" onSubmit={onSubmit} className="space-y-4">{error ? <Alert id="activation-error" variant="destructive">{error}</Alert> : null}<div className="space-y-2"><Label htmlFor="code">Kode aktivasi</Label><Input id="code" name="code" autoComplete="off" required aria-describedby={error ? 'activation-error' : undefined} /></div><Button type="submit" disabled={pending}>{pending ? 'Memeriksa kode…' : 'Aktifkan Admin'}</Button></form>;
 }

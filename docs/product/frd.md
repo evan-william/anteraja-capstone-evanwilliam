@@ -122,3 +122,39 @@ Relasi lintas entitas milik pengguna harus memakai `user_id` dan composite forei
 8. Buka `/import`, unggah salah satu CSV pada `docs/data`, periksa preview, simpan, lalu uji pembatalan.
 
 Provider WhatsApp, email, dan push belum production-connected. MVP menyimpan preferensi dan pekerjaan outbox agar integrasi resmi dapat ditambahkan tanpa mengubah kontrak UI atau transaksi utama.
+
+## Persyaratan tambahan untuk implementasi tiga role
+
+Tabel ini menambah kriteria terima di atas; tidak mengganti atau mengurangi AUTH, TRK, OPS, ADM, CSM, maupun FIN yang sudah tercatat.
+
+| ID | Requirement | Kriteria terima |
+|---|---|---|
+| AUTH-07 | Submit login aman | Form `/masuk` memakai POST. Password dan email tidak muncul di query URL, termasuk ketika JavaScript belum aktif. Sukses mengarahkan ke halaman awal role dari database. |
+| AUTH-08 | Pemulihan login | Password salah dan layanan autentikasi tidak tersedia menghasilkan pesan berbeda yang tidak membocorkan keberadaan akun; email yang diketik tetap tersedia untuk koreksi. |
+| AUTH-09 | Form kredensial lain | Form `/daftar` dan `/aktivasi-admin` tidak memakai GET untuk mengirim password atau kode. Browser tidak boleh menaruh nilai tersebut di address bar. |
+| ADM-04 | Batas operasi Admin | Halaman `/admin/finance` hanya membaca ringkasan lintas Seller; perubahan transaksi, kategori, atau impor Seller tetap ditolak di API/RLS. |
+| ADM-05 | Detail kiriman Admin | Dari `/admin/kiriman`, Admin dapat membuka `/admin/pengiriman/[awb]` dan membaca riwayat tanpa mengambil alih kepemilikan Seller. |
+| CSM-03 | Batas paket akun | Halaman `/akun` mengambil hanya paket yang terhubung ke user aktif melalui tautan terverifikasi. Resi/kode publik tidak menambahkan tautan kepemilikan secara otomatis. |
+| OPS-07 | Prioritas Seller | Halaman `/seller` mengarahkan Seller ke daftar pengiriman miliknya; pencarian dan filter di `/pengiriman` tetap mempertahankan batas `user_id`. |
+
+## Matriks rute dan akses
+
+| Rute | Publik | Konsumen | Seller | Admin |
+|---|---|---|---|---|
+| `/lacak`, `/lacak/[awb]` | Resi + kode | Resi + kode | Resi + kode | Resi + kode |
+| `/akun` | Masuk dahulu | Paket tertaut | Ditolak | Ditolak |
+| `/seller`, `/pengiriman`, `/pengiriman/[awb]` | Masuk dahulu | Ditolak | Data sendiri | Ditolak; gunakan rute Admin |
+| `/transaksi`, `/import`, `/kategori` | Masuk dahulu | Ditolak | Data sendiri | Ditolak untuk perubahan |
+| `/admin`, `/admin/kiriman`, `/admin/pengiriman/[awb]`, `/admin/tiket`, `/admin/finance` | Masuk dahulu | Ditolak | Ditolak | Sesuai batas baca/tulis Admin |
+
+Pemeriksaan rute hanyalah lapisan pertama. Query data, RPC, dan kebijakan RLS harus menegakkan batas yang sama. Menu tersembunyi bukan mekanisme otorisasi.
+
+## Skenario verifikasi tambahan
+
+1. Buka `/masuk` dengan JavaScript aktif dan nonaktif. Kirim kredensial demo yang valid; pastikan URL tidak pernah memuat `email`, `password`, atau nilainya, lalu pastikan landing role sesuai akun.
+2. Uji password salah dan jaringan autentikasi gagal. Form tetap menampilkan pesan pemulihan tanpa mengungkap akun dan tanpa mengirim password lewat URL.
+3. Masuk bergantian sebagai Konsumen, Seller, dan Admin. Buka rute role lain secara langsung; pastikan server menolak akses dan tidak mengirim data terlarang.
+4. Dari akun Seller, uji filter, pencarian, detail, dan ekspor. Dari Admin, uji daftar lintas Seller serta perubahan status tiket; pastikan audit aktor dan waktu tercatat.
+5. Dari akun Konsumen, uji paket tertaut dan pencarian paket lain melalui resi plus kode. Pencarian publik tidak otomatis menautkan paket ke akun.
+
+Data demo, peta, dan outbox tidak boleh ditafsirkan sebagai scan kurir, pengiriman pesan, atau pergerakan dana nyata. Bukti operasi nyata memerlukan integrasi resmi dan pengujian terpisah.

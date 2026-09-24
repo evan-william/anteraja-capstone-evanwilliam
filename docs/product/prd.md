@@ -124,3 +124,29 @@ Tracking dan Finance bukan dua produk terpisah. Finance adalah kelanjutan admini
 ## Tahap berikutnya
 
 Tahap lanjutan dapat menghubungkan outbox ke provider notifikasi, CS, dan tracking resmi. Perubahan tersebut memerlukan kontrak API, pengelolaan kegagalan pengiriman, serta observability yang terpisah dari MVP ini.
+
+## Batas produk dan status prototipe
+
+Dokumen ini mencakup satu aplikasi dengan tiga ruang kerja, bukan tiga produk terpisah. Tracking publik tetap dapat dipakai tanpa akun; login membuka ruang kerja sesuai role. Data resi, akun, dan peta dalam lingkungan demo adalah simulasi. Integrasi scan kurir, pengiriman pesan, dan pembayaran nyata belum tersedia. Status pekerjaan di outbox berarti menunggu integrasi, bukan pesan sudah terkirim.
+
+| Ruang kerja | Halaman yang tersedia | Batas akses dan pekerjaan utama |
+|---|---|---|
+| Publik | `/lacak`, `/lacak/[awb]`, `/masuk`, `/daftar` | Cari resi dengan kode akses, lihat timeline, beri instruksi, dan hubungi CS. Hasil publik memasking data pribadi. |
+| Konsumen | `/akun` | Lihat paket yang telah ditautkan ke akun; paket lain tetap memerlukan resi dan kode akses di tracking publik. |
+| Seller | `/seller`, `/pengiriman`, `/pengiriman/[awb]`, `/transaksi`, `/import`, `/kategori` | Pantau kiriman dan dana milik akun sendiri; cari, saring, ekspor, catat transaksi, serta rekonsiliasi. |
+| Admin | `/admin`, `/admin/kiriman`, `/admin/pengiriman/[awb]`, `/admin/tiket`, `/admin/finance` | Baca kiriman lintas Seller, tindak lanjuti tiket dengan audit, dan lihat ringkasan Finance tanpa hak mengubah data keuangan Seller. |
+
+Halaman tambahan yang tercatat sebagai usulan dalam `RBAC_ROLE_PLAN.txt`, seperti antrean kasus tersendiri dan pusat notifikasi akun, belum dianggap tersedia sampai diimplementasikan serta diuji. Ketiadaannya tidak menghapus fungsi inti yang sudah berjalan pada halaman di atas.
+
+## Alur ujung ke ujung per role
+
+1. Penerima memasukkan resi dan kode enam digit. Hasil awal memperlihatkan lokasi terakhir, ETA, risiko, dan tindakan yang relevan. Instruksi penerima atau tiket CS mempertahankan konteks resi.
+2. Seller masuk ke ruang kerjanya, membuka kiriman berisiko, lalu menelusuri detail, settlement, dan mutasi sesuai hak akses. Ekspor mengikuti filter aktif.
+3. Admin melihat prioritas lintas Seller dan menangani tiket secara bertahap. Setiap perubahan status menyimpan petugas dan waktu. Akses baca lintas Seller tidak memberi izin mengubah Finance mereka.
+4. Konsumen yang sudah masuk hanya melihat paket yang ditautkan secara terverifikasi. Nomor resi dan kode demo bersama tidak otomatis menjadi bukti kepemilikan akun.
+
+## Keamanan akun dan keberhasilan operasional
+
+Login harus menggunakan POST dan tidak pernah meletakkan email, password, atau kode aktivasi pada query URL. Login tetap dapat diproses ketika JavaScript belum aktif. Kegagalan autentikasi menampilkan pesan yang dapat dipahami tanpa membocorkan detail akun. Setelah berhasil, pengguna diarahkan ke halaman awal role yang tersimpan di server, bukan role yang dikirim browser. Kode Admin sekali pakai dan pembatasan percobaan tetap berlaku.
+
+Target pada tabel “Ukuran keberhasilan” adalah kriteria desain dan verifikasi prototipe, bukan hasil pengukuran layanan Anteraja. Metrik lapangan seperti keberhasilan antar pertama, waktu penyelesaian kendala, dan penurunan kontak ulang CS memerlukan data operasional nyata sebelum diberi target numerik.

@@ -1,74 +1,30 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { useState, type FormEvent } from 'react';
+import { useActionState } from 'react';
 
 import { Alert } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { createClient } from '@/lib/supabase/client';
-import { roleHome, isAccountRole } from '@/lib/roles';
-import { firstIssueMessage, signInSchema } from '@/lib/validation';
+
+import { signIn, type SignInState } from './actions';
+
+const initialState: SignInState = { error: null, email: '' };
 
 export function SignInForm() {
-  const router = useRouter();
-  const [error, setError] = useState<string | null>(null);
-  const [isPending, setIsPending] = useState(false);
-
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setError(null);
-
-    const formData = new FormData(event.currentTarget);
-    const parsed = signInSchema.safeParse({
-      email: formData.get('email'),
-      password: formData.get('password'),
-    });
-
-    if (!parsed.success) {
-      setError(firstIssueMessage(parsed.error));
-      return;
-    }
-
-    setIsPending(true);
-    const supabase = createClient();
-    const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword(parsed.data);
-
-    if (signInError) {
-      setIsPending(false);
-      setError('Email atau password salah.');
-      return;
-    }
-
-    const { data: accountRole } = await supabase.from('account_roles').select('role').eq('user_id', signInData.user.id).maybeSingle();
-    setIsPending(false);
-    router.push(roleHome(isAccountRole(accountRole?.role) ? accountRole.role : 'consumer'));
-    router.refresh();
-  }
+  const [state, action, isPending] = useActionState(signIn, initialState);
 
   return (
-    <form id="sign-in-form" onSubmit={handleSubmit} className="js-sign-in-form space-y-4">
-      {error ? <Alert id="sign-in-error" variant="destructive">{error}</Alert> : null}
-
+    <form id="sign-in-form" action={action} method="post" className="js-sign-in-form space-y-4">
+      {state.error ? <Alert id="sign-in-error" variant="destructive">{state.error}</Alert> : null}
       <div className="space-y-2">
         <Label htmlFor="email">Email</Label>
-        <Input id="email" name="email" type="email" autoComplete="email" spellCheck={false} aria-invalid={Boolean(error)} aria-describedby={error ? 'sign-in-error' : undefined} required />
+        <Input id="email" name="email" type="email" autoComplete="email" spellCheck={false} defaultValue={state.email} aria-invalid={Boolean(state.error)} aria-describedby={state.error ? 'sign-in-error' : undefined} required />
       </div>
-
       <div className="space-y-2">
         <Label htmlFor="password">Password</Label>
-        <Input
-          id="password"
-          name="password"
-          type="password"
-          autoComplete="current-password"
-          aria-invalid={Boolean(error)}
-          aria-describedby={error ? 'sign-in-error' : undefined}
-          required
-        />
+        <Input id="password" name="password" type="password" autoComplete="current-password" aria-invalid={Boolean(state.error)} aria-describedby={state.error ? 'sign-in-error' : undefined} required />
       </div>
-
       <Button id="sign-in-submit" type="submit" className="js-sign-in-submit w-full" disabled={isPending}>
         {isPending ? 'Memeriksa akun…' : 'Masuk'}
       </Button>

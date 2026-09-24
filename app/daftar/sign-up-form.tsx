@@ -78,7 +78,7 @@ export function SignUpForm() {
   }
 
   return (
-    <form id="sign-up-form" onSubmit={handleSubmit} className="js-sign-up-form space-y-4">
+    <form id="sign-up-form" method="post" onSubmit={handleSubmit} className="js-sign-up-form space-y-4">
       {error ? <Alert id="sign-up-error" variant="destructive">{error}</Alert> : null}
       {notice ? <Alert>{notice} {selectedRole === 'admin' ? <Link href="/aktivasi-admin" className="font-semibold underline underline-offset-4">Buka Aktivasi Admin</Link> : null}</Alert> : null}
 
