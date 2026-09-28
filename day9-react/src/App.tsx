@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { TrackingHeader } from './components/TrackingHeader';
 import { ShipmentForm, type StatusFilter } from './components/ShipmentForm';
 import { ShipmentList } from './components/ShipmentList';
+import { ShippingCalculator } from './components/ShippingCalculator';
 import { demoShipments } from './data/shipments';
 
 export function App() {
@@ -22,5 +23,6 @@ export function App() {
     <section className="hero"><p className="eyebrow">TRACKING & OPERATIONS</p><h1>Tahu posisi paket. Tahu langkah berikutnya.</h1><p>Pantau perjalanan kiriman dengan nomor resi dan temukan paket yang perlu perhatian.</p></section>
     <ShipmentForm draft={draft} status={status} onDraftChange={setDraft} onStatusChange={setStatus} onSearch={() => setQuery(draft)} onReset={resetSearch} />
     <ShipmentList shipments={visibleShipments} />
+    <ShippingCalculator />
   </main></>;
 }
