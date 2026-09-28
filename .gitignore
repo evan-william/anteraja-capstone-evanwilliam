@@ -22,6 +22,7 @@
 /out/
 /build
 /day9-react/dist/
+/day9-react/node_modules/
 .next
 next-env.d.ts
 
