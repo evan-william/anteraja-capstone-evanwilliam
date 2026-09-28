@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "node ../node_modules/vite/bin/vite.js --host 127.0.0.1",
+    "typecheck": "node ../node_modules/typescript/bin/tsc --noEmit -p tsconfig.json",
     "build": "node ../node_modules/vite/bin/vite.js build",
     "preview": "node ../node_modules/vite/bin/vite.js preview --host 127.0.0.1"
   }
