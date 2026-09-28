@@ -11,6 +11,8 @@ const eslintConfig = defineConfig([
     ".next/**",
     "out/**",
     "build/**",
+    // Vite emits bundled dependencies here; lint the source, not generated output.
+    "day9-react/dist/**",
     "next-env.d.ts",
   ]),
 ]);
