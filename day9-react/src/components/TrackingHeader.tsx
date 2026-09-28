@@ -1,8 +1,10 @@
+import { Link, NavLink } from 'react-router-dom';
+
 export function TrackingHeader() {
   return <header className="site-header">
     <div className="header-inner">
-      <a className="brand" href="#beranda" aria-label="Anteraja, ke awal halaman" />
-      <nav aria-label="Navigasi utama"><a href="#cari">Lacak paket</a><a href="#daftar">Riwayat pengiriman</a><a href="#ongkir">Cek ongkir</a></nav>
+      <Link className="brand" to="/" aria-label="Anteraja, ke beranda" />
+      <nav aria-label="Navigasi utama"><NavLink to="/" end>Beranda</NavLink><NavLink to="/shipments">Daftar kiriman</NavLink><NavLink to="/ongkir">Cek ongkir</NavLink></nav>
     </div>
   </header>;
 }
