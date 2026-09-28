@@ -1,4 +1,5 @@
 import { createContext, useContext, useMemo, useState, type ReactNode } from 'react';
+import { demoShipments, type Shipment } from '../data/shipments';
 import type { PostalPlace, Region } from '../services/locationApi';
 
 type ShipmentLocation = {
@@ -10,6 +11,7 @@ type ShipmentLocation = {
 };
 
 type ShipmentContextValue = ShipmentLocation & {
+  shipments: readonly Shipment[];
   setOriginProvince: (value: Region | null) => void;
   setOriginRegency: (value: Region | null) => void;
   setDestinationProvince: (value: Region | null) => void;
@@ -29,6 +31,7 @@ export function ShipmentProvider({ children }: { children: ReactNode }) {
   // Parent selection clears children so old city/postal values cannot survive a route change.
   const value = useMemo<ShipmentContextValue>(() => ({
     ...location,
+    shipments: demoShipments,
     setOriginProvince: (originProvince) => setLocation((current) => ({ ...current, originProvince, originRegency: null })),
     setOriginRegency: (originRegency) => setLocation((current) => ({ ...current, originRegency })),
     setDestinationProvince: (destinationProvince) => setLocation((current) => ({ ...current, destinationProvince, destinationRegency: null, postalPlace: null })),
