@@ -14,9 +14,7 @@ button, input, select { font: inherit; }
 
 .site-header { background: #fff; border-bottom: 1px solid #e9e4e7; }
 .header-inner { width: min(1120px, calc(100% - 40px)); min-height: 78px; margin: auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-.brand { display: inline-flex; align-items: center; gap: 8px; color: #e9007f; font-size: 25px; font-weight: 800; letter-spacing: -.055em; text-decoration: none; }
-.brand img { display: block; width: 162px; height: auto; }
-.brand-mark { width: 35px; height: 35px; display: grid; place-items: center; border-radius: 50%; background: #e9007f; color: #fff; font-size: 25px; line-height: 1; }
+.brand { display: block; width: 162px; height: 56px; background: url('/brand/anteraja-wordmark.png') center / contain no-repeat; }
 .site-header nav { display: flex; flex-wrap: wrap; gap: 26px; }
 .site-header nav a { color: #4b4248; text-decoration: none; font-size: 14px; font-weight: 700; }
 .site-header nav a:hover { color: #c00069; }
