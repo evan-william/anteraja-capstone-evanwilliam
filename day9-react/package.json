@@ -8,6 +8,7 @@
     "typecheck": "node ../node_modules/typescript/bin/tsc --noEmit -p tsconfig.json",
     "build": "node ../node_modules/vite/bin/vite.js build",
     "preview": "node ../node_modules/vite/bin/vite.js preview --host 127.0.0.1",
-    "test:day10": "node tests/day10-browser.mjs"
+    "test:day10": "node tests/day10-browser.mjs",
+    "test:day11": "node tests/day11-browser.mjs"
   }
 }
