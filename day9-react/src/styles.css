@@ -38,6 +38,25 @@ h1, h2, h3, p { margin-top: 0; }
 .button-text { padding: 0 10px; border: 0; background: transparent; color: #705d67; }
 .button-text:hover { color: #c7006d; }
 
+.location-fields { grid-column: 1 / -1; margin-top: 6px; padding-top: 24px; border-top: 1px solid #eee8ec; }
+.location-heading { display: flex; justify-content: space-between; align-items: end; gap: 24px; margin-bottom: 22px; }
+.location-heading h2 { margin: 0; font-size: 23px; letter-spacing: -.035em; }
+.location-heading > p { max-width: 340px; margin: 0; color: #726970; font-size: 12px; line-height: 1.5; }
+.location-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.location-grid select:disabled, .postal-search input:disabled { background: #f3f0f2; color: #7c747a; cursor: not-allowed; }
+.postal-search { display: grid; grid-template-columns: minmax(220px, 1fr) 1fr; gap: 20px; align-items: end; margin-top: 22px; }
+.postal-search > p { margin: 0 0 4px; color: #726970; font-size: 12px; line-height: 1.5; }
+.async-message { margin: 12px 0; color: #245270; font-size: 13px; }
+.async-message.error { color: #a31b45; }
+.async-message button { border: 0; background: none; color: inherit; font-weight: 800; text-decoration: underline; cursor: pointer; }
+.postal-results { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 14px; }
+.postal-results button { display: flex; gap: 12px; align-items: baseline; padding: 12px 14px; border: 1px solid #e4dce1; border-radius: 8px; background: #fff; color: #2b2328; text-align: left; cursor: pointer; }
+.postal-results button:hover, .postal-results button.selected { border-color: #c50070; background: #fff5fa; }
+.postal-results button strong { color: #b00061; }
+.postal-results button span { color: #635960; font-size: 12px; }
+.postal-results > p { grid-column: 1 / -1; margin: 0; padding: 14px; color: #726970; font-size: 13px; }
+.postal-picked { margin: 12px 0 0; color: #315947; font-size: 13px; }
+
 .list-section { margin-top: 52px; }
 .section-heading { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 10px; margin-bottom: 18px; }
 .section-heading h2, .calculator h2 { margin: 0; font-size: clamp(24px, 3vw, 31px); letter-spacing: -.035em; }
@@ -60,7 +79,8 @@ h1, h2, h3, p { margin-top: 0; }
 .calculator { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 36px; margin-top: 52px; padding: 28px; border-radius: 16px; background: #2a1c26; color: #fff; }
 .calculator .eyebrow { color: #ff83bf; }
 .calculator p:not(.eyebrow, .estimate) { max-width: 440px; margin: 12px 0 0; color: #d0c2cb; line-height: 1.55; }
-.calculator-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.calculator p.calculator-route { color: #fff; font-weight: 700; }
+.calculator-fields { display: grid; grid-template-columns: 1fr; gap: 12px; }
 .calculator .field label { color: #eee4ea; }
 .estimate { grid-column: 1 / -1; margin: 0; padding-top: 20px; border-top: 1px solid #6a5663; }
 .estimate strong { color: #ff9aca; font-size: 24px; }
@@ -69,13 +89,14 @@ h1, h2, h3, p { margin-top: 0; }
   .search-panel { grid-template-columns: 1fr 1fr; }
   .calculator { grid-template-columns: 1fr; }
   .estimate { grid-column: auto; }
+  .location-heading { align-items: start; flex-direction: column; gap: 8px; }
 }
 
 @media (max-width: 560px) {
   .header-inner { align-items: flex-start; flex-direction: column; gap: 8px; padding: 16px 0; }
   .site-header nav { gap: 14px; }
   .page-shell { padding-top: 30px; }
-  .search-panel, .calculator-fields { grid-template-columns: 1fr; }
+  .search-panel, .calculator-fields, .location-grid, .postal-search, .postal-results { grid-template-columns: 1fr; }
   .shipment-row { flex-direction: column; }
   .shipment-secondary { align-items: flex-start; text-align: left; }
 }

@@ -17,8 +17,6 @@ export function useLocationData(kind: Kind, provinceId = '') {
     let active = true;
     let timedOut = false;
     const timeout = window.setTimeout(() => { timedOut = true; controller.abort(); }, 12000);
-    setState({ key, data: [], isLoading: true, error: null });
-
     const request = kind === 'provinces' ? getProvinces(controller.signal) : getRegencies(provinceId, controller.signal);
     request.then((data) => {
       if (active) setState({ key, data, isLoading: false, error: null });

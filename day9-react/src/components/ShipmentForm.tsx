@@ -1,4 +1,5 @@
 import type { ShipmentStatus } from '../data/shipments';
+import { LocationFields } from './LocationFields';
 
 export type StatusFilter = 'all' | ShipmentStatus;
 
@@ -17,5 +18,6 @@ export function ShipmentForm({ draft, status, onDraftChange, onStatusChange, onS
     <div className="field"><label htmlFor="status">Status pengiriman</label><select id="status" value={status} onChange={(event) => onStatusChange(event.target.value as StatusFilter)}><option value="all">Semua status</option><option value="in_transit">Dalam perjalanan</option><option value="delivered">Terkirim</option><option value="action_required">Perlu tindakan</option></select></div>
     <button className="button-primary" type="submit">Cari kiriman</button>
     <button className="button-text" type="button" onClick={onReset}>Reset</button>
+    <LocationFields />
   </form>;
 }

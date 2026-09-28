@@ -16,8 +16,6 @@ export function usePostalSearch(query: string) {
     let active = true;
     let timedOut = false;
     let timeout: number | undefined;
-    setState({ key, data: [], isLoading: true, error: null });
-
     // Debounce avoids one network request per keystroke. Cleanup cancels stale requests.
     const debounce = window.setTimeout(() => {
       timeout = window.setTimeout(() => { timedOut = true; controller.abort(); }, 12000);
