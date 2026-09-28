@@ -1,8 +1,8 @@
-# Day 9 — pelacakan paket dengan React dan Vite
+# Latihan React + Vite — Day 9 dan Day 10
 
-Latihan ini mengubah contoh halaman tracking menjadi komponen React. Kode berada di repository **Final Project Full**, branch `8-react`, pada folder `day9-react/`. Aplikasi operasional utama tetap berada di root repository dan tetap memakai Next.js; latihan Vite ini **tidak** menggantikan login, Supabase, atau fitur produksi. Data delapan kiriman berasal dari `src/data/shipments.ts` dan hanya untuk demonstrasi props/state.
+Folder `day9-react/` adalah latihan komponen React pada branch `8-react`. Aplikasi utama di root repository tetap memakai Next.js dan Supabase. Latihan ini tidak mengganti autentikasi atau database aplikasi utama. Daftar delapan kiriman pada `src/data/shipments.ts` adalah data contoh; pilihan wilayah dan kode pos Day 10 berasal dari dua API publik yang terpisah.
 
-## Jalankan
+## Jalankan dan uji
 
 Dari root repository, jalankan `npm ci` satu kali. Lalu:
 
@@ -11,32 +11,53 @@ cd day9-react
 npm run dev
 ```
 
-Buka alamat Vite yang ditampilkan (umumnya `http://127.0.0.1:5173`). Untuk memeriksa kode, jalankan `npm run typecheck` dan `npm run build` dari folder yang sama. Perintah Vite memakai dependensi root agar tidak ada dua `node_modules` dan dua lockfile untuk latihan ini.
+Buka alamat yang ditampilkan Vite, biasanya `http://127.0.0.1:5173`. Pemeriksaan kode dan build dijalankan dari folder yang sama:
 
-## Susunan komponen
+```powershell
+npm run typecheck
+npm run build
+```
+
+Untuk uji browser otomatis, jalankan `node ../node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 4173` pada terminal pertama, lalu `npm run test:day10` pada terminal kedua. Uji ini memerlukan internet karena memakai kedua API publik sungguhan. Tangkapan layar akan tersimpan di `evidence/`.
+
+## Pohon komponen dan aliran data
 
 ```text
 main.tsx
-└── App.tsx (pemilik state pencarian dan filter)
-    ├── TrackingHeader
-    ├── ShipmentForm
-    ├── ShipmentList
-    │   └── ShipmentCard × jumlah hasil
-    └── ShippingCalculator (state wilayah dan berat miliknya sendiri)
+└── ShipmentProvider (Context: wilayah asal, tujuan, kode pos)
+    └── App (state pencarian resi dan filter status; dataset contoh)
+        ├── TrackingHeader
+        ├── ShipmentForm (props dari App + Context)
+        │   └── LocationFields (Context + useLocationData + usePostalSearch)
+        ├── ShipmentList (props daftar hasil)
+        │   └── ShipmentCard × jumlah hasil (props satu kiriman)
+        └── ShippingCalculator (Context + state berat lokal)
 ```
 
-`App` membaca `demoShipments` lalu meneruskan array hasil filter ke `ShipmentList` lewat props `shipments`. `ShipmentList` membuat satu `ShipmentCard` per kiriman dengan `shipments.map(...)` dan `key={shipment.id}`. `ShipmentCard` menerima satu objek `shipment` dan hanya menampilkan datanya; tidak ada props yang diubah oleh komponen anak.
+`App` memiliki `draft`, `query`, dan `status` melalui `useState`. `ShipmentForm` menerima nilai dan callback melalui props. Input resi adalah controlled component: `value={draft}` dan `onChange` mengubah state induk. `App` meneruskan hasil filter ke `ShipmentList`; komponen ini merender `ShipmentCard` dengan `.map()` dan `key={shipment.id}`. Bila daftar kosong, ia menampilkan empty state. Props tidak dimutasi.
 
-`ShipmentForm` menerima `draft`, `status`, dan callback dari `App`. Input resi adalah controlled component: `value={draft}` dan `onChange` memanggil `setDraft`. Klik **Cari kiriman** menyalin draft ke `query`; perubahan `query` atau `status` menghasilkan daftar baru. Klik **Reset** mengembalikan semua state ke awal. Bila hasil filter kosong, `ShipmentList` merender pesan “Tidak ada kiriman yang cocok” sebagai pengganti daftar. Status pada setiap kartu berasal dari kondisi `shipment.status` dan selalu mempunyai label teks.
+Day 10 menambah `ShipmentProvider` melalui `createContext` dan `useContext`. `LocationFields` (di dalam form) menyimpan provinsi/kota asal, provinsi/kota tujuan, dan kode pos terpilih lewat `useShipmentContext`. `ShippingCalculator` membaca pilihan rute yang sama tanpa props berantai. Berat tetap state lokal kalkulator. Mengganti provinsi membersihkan kota terkait; mengganti kota tujuan juga membersihkan kode pos lama. `ShipmentContext.displayName = 'ShipmentContext'` memudahkan identifikasi Provider di React DevTools.
 
-`ShippingCalculator` memakai dua `useState` lokal untuk wilayah dan berat. Hasilnya berubah saat input berubah. Angka tarif adalah **contoh latihan, bukan tarif resmi Anteraja**.
+## API publik dan custom hooks
+
+| Sumber | Kegunaan | Berkas |
+| --- | --- | --- |
+| [API Wilayah Indonesia v2](https://github.com/emsifa/api-wilayah-indonesia) | Daftar provinsi dan kota/kabupaten untuk asal dan tujuan | `src/services/locationApi.ts`, `src/hooks/useLocationData.ts` |
+| [API Kodepos](https://github.com/sooluh/kodepos) | Cari kode pos dengan nama kecamatan/kelurahan | `src/services/locationApi.ts`, `src/hooks/usePostalSearch.ts` |
+
+`locationApi.ts` mengubah respons HTTP menjadi data bertipe dan menolak respons yang tidak sesuai format. `useLocationData(kind, provinceId?)` memuat provinsi atau kota. `usePostalSearch(keyword)` menunggu 400 ms setelah pengguna berhenti mengetik dan hanya mencari bila panjang kueri minimal tiga karakter. Kedua hook memakai `useEffect` dengan dependency yang spesifik, `AbortController`, dan cleanup untuk membatalkan request lama saat pilihan berubah atau komponen dilepas. Masing-masing mengembalikan `data`, `isLoading`, `isError`, `error`, dan `retry`. Pesan loading/error serta tombol **Coba lagi** terlihat pada UI.
+
+Hasil kode pos disaring agar cocok dengan kota tujuan yang dipilih. Karena penyedia API memakai variasi penulisan nama (misalnya DKI Jakarta dan Daerah Khusus Ibukota Jakarta), komponen menormalisasi nama sebelum membandingkan. API Kodepos publik ini digunakan untuk latihan; jangan menganggap ketersediaan atau akurasinya sebagai jaminan produksi.
+
+Kalkulator membaca rute bersama dan memperbarui angka contoh saat berat atau wilayah berubah. **Tarif tersebut simulasi pembelajaran, bukan tarif resmi Anteraja dan tidak melakukan booking pengiriman.**
 
 ## Coba saat presentasi
 
-1. Buka halaman: delapan kiriman tampil dari satu dataset induk.
-2. Cari `ANT-100015`, klik **Cari kiriman**: tersisa satu kiriman.
-3. Cari `ANT-999999`: muncul empty state.
-4. Klik **Reset**, lalu pilih status **Terkirim**: tampil dua kiriman.
-5. Ubah berat ongkir menjadi `2.5`: simulasi menjadi `Rp 27.000` untuk Jabodetabek.
+1. Cari resi `ANT-100015`, lalu coba `ANT-999999` untuk melihat empty state; gunakan **Reset**.
+2. Pilih provinsi asal **Daerah Khusus Ibukota Jakarta**, kota **Jakarta Pusat**; pilih tujuan provinsi yang sama, kota **Jakarta Selatan**.
+3. Ketik **Cilandak** pada pencarian kode pos, lalu pilih **12430 — Cilandak Barat**. Pilihan ini langsung muncul pada kalkulator tanpa dikirim sebagai props.
+4. Isi berat `2.5` kg. Nilai simulasi untuk rute dalam satu provinsi adalah `Rp 27.000`.
+5. Pada React DevTools, buka tab **Components**, pilih **ShipmentProvider**, lalu lihat nilai Context berubah saat wilayah diganti.
+6. Untuk melihat penanganan error, putuskan jaringan di tab Network, muat ulang, lalu sambungkan kembali dan klik **Coba lagi**.
 
-Semua aksi di atas memperbarui tampilan lewat state React; kode tidak memakai jQuery atau manipulasi DOM langsung. Bukti screenshot ada di `evidence/`.
+`tests/day10-browser.mjs` memeriksa kedua API nyata, perubahan Context lintas komponen, loading, error/retry, pembatalan respons lama, hasil kalkulator, tampilan mobile tanpa overflow horizontal, dan error JavaScript di browser. Screenshot otomatis ada di `evidence/day10-*.png`.
