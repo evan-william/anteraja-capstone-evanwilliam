@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { searchPostalPlaces, type PostalPlace } from '../services/locationApi';
+import { describeLocationError, searchPostalPlaces, type PostalPlace } from '../services/locationApi';
 
 type State = { key: string; data: PostalPlace[]; isLoading: boolean; error: string | null };
 
@@ -24,7 +24,7 @@ export function usePostalSearch(query: string) {
       }).catch((error: unknown) => {
         if (!active) return;
         if (timedOut) setState({ key, data: [], isLoading: false, error: 'Pencarian kode pos terlalu lama. Coba lagi.' });
-        else if (!controller.signal.aborted) setState({ key, data: [], isLoading: false, error: error instanceof Error ? error.message : 'Kode pos belum dapat dicari.' });
+        else if (!controller.signal.aborted) setState({ key, data: [], isLoading: false, error: describeLocationError(error) });
       }).finally(() => window.clearTimeout(timeout));
     }, 400);
 

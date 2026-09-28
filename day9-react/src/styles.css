@@ -47,6 +47,7 @@ h1, h2, h3, p { margin-top: 0; }
 .postal-search { display: grid; grid-template-columns: minmax(220px, 1fr) 1fr; gap: 20px; align-items: end; margin-top: 22px; }
 .postal-search > p { margin: 0 0 4px; color: #726970; font-size: 12px; line-height: 1.5; }
 .async-message { margin: 12px 0; color: #245270; font-size: 13px; }
+.async-message:not(.error)::before { content: ''; display: inline-block; width: 11px; height: 11px; margin-right: 8px; border: 2px solid #b1cfdd; border-top-color: #245270; border-radius: 50%; vertical-align: -2px; animation: spin .75s linear infinite; }
 .async-message.error { color: #a31b45; }
 .async-message button { border: 0; background: none; color: inherit; font-weight: 800; text-decoration: underline; cursor: pointer; }
 .postal-results { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 14px; }
@@ -102,3 +103,5 @@ h1, h2, h3, p { margin-top: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+@media (prefers-reduced-motion: reduce) { .async-message:not(.error)::before { animation: none; } }
+@keyframes spin { to { transform: rotate(360deg); } }

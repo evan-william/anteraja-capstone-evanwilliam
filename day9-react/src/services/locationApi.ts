@@ -13,8 +13,14 @@ export type PostalPlace = {
 
 async function fetchJson(url: string, signal: AbortSignal): Promise<unknown> {
   const response = await fetch(url, { signal, headers: { Accept: 'application/json' } });
-  if (!response.ok) throw new Error(`Layanan wilayah merespons HTTP ${response.status}.`);
+  if (response.status === 429) throw new Error('Layanan publik sedang membatasi permintaan. Tunggu sebentar lalu coba lagi.');
+  if (!response.ok) throw new Error(`Layanan publik merespons HTTP ${response.status}. Coba lagi nanti.`);
   return response.json() as Promise<unknown>;
+}
+
+export function describeLocationError(error: unknown): string {
+  if (error instanceof TypeError) return 'Koneksi ke layanan publik gagal. Periksa internet lalu coba lagi.';
+  return error instanceof Error ? error.message : 'Data wilayah belum dapat dimuat. Coba lagi.';
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

@@ -5,7 +5,7 @@ import { usePostalSearch } from '../hooks/usePostalSearch';
 import type { Region } from '../services/locationApi';
 
 function comparable(value: string) {
-  return value.toLowerCase().replace(/\b(kota|kabupaten|administrasi)\b/g, '').replace(/\s+/g, ' ').trim();
+  return value.toLowerCase().replace(/daerah khusus ibukota|daerah istimewa|\bdki\b|\bdi\b/g, '').replace(/\b(kota|kabupaten|administrasi)\b/g, '').replace(/\s+/g, ' ').trim();
 }
 
 export function LocationFields() {

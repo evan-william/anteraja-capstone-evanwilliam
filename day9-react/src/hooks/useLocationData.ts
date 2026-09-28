@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getProvinces, getRegencies, type Region } from '../services/locationApi';
+import { describeLocationError, getProvinces, getRegencies, type Region } from '../services/locationApi';
 
 type Kind = 'provinces' | 'regencies';
 type State = { key: string; data: Region[]; isLoading: boolean; error: string | null };
@@ -23,7 +23,7 @@ export function useLocationData(kind: Kind, provinceId = '') {
     }).catch((error: unknown) => {
       if (!active) return;
       if (timedOut) setState({ key, data: [], isLoading: false, error: 'Layanan wilayah terlalu lama merespons. Coba lagi.' });
-      else if (!controller.signal.aborted) setState({ key, data: [], isLoading: false, error: error instanceof Error ? error.message : 'Wilayah belum dapat dimuat.' });
+      else if (!controller.signal.aborted) setState({ key, data: [], isLoading: false, error: describeLocationError(error) });
     }).finally(() => window.clearTimeout(timeout));
 
     return () => { active = false; window.clearTimeout(timeout); controller.abort(); };
