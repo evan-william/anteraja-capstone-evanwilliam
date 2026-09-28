@@ -21,6 +21,7 @@
 /.next-dev-verify/
 /out/
 /build
+/day9-react/dist/
 .next
 next-env.d.ts
 

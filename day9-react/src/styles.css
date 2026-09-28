@@ -1,0 +1,4 @@
+@font-face { font-family: OpenSans; src: url('/fonts/open-sans-latin.woff2') format('woff2'); font-display: swap; }
+:root { font-family: OpenSans, Arial, sans-serif; color: #251d22; background: #f8f6f5; }
+* { box-sizing: border-box; }
+body { margin: 0; }
