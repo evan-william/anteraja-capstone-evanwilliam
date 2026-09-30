@@ -1,10 +1,10 @@
 import { LogOut } from 'lucide-react';
 
-import { signOut } from '@/app/actions';
+import { signOut } from '@/frontend/compat/actions';
 import { Brand } from '@/components/ui/brand';
 import { Button } from '@/components/ui/button';
 import { NavLinks } from '@/components/ui/nav-links';
-import type { AccountRole } from '@/lib/supabase/types';
+import type { AccountRole } from '@/lib/database-types';
 import { roleHome } from '@/lib/roles';
 
 export function SiteHeader({ userName, role }: { userName: string; role: AccountRole }) {
@@ -18,7 +18,7 @@ export function SiteHeader({ userName, role }: { userName: string; role: Account
 
         <div className="flex items-center gap-3">
           <span className="hidden max-w-44 truncate text-sm text-muted-foreground lg:inline">{userName}</span>
-          <form action={signOut}>
+          <form onSubmit={(event) => { event.preventDefault(); void signOut(); }}>
             <Button type="submit" variant="ghost" size="sm" className="gap-2">
               <LogOut className="size-4" /> <span className="hidden sm:inline">Keluar</span>
             </Button>

@@ -23,7 +23,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 
-import type { CategoryType } from '@/lib/supabase/types';
+import type { CategoryType } from '@/lib/database-types';
 
 /**
  * Warna identitas kategori.

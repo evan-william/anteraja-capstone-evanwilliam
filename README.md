@@ -1,20 +1,20 @@
 # Anteraja Tracking & Operations
 
-Latihan React + Vite Day 9–11 ada di [day9-react/README.md](day9-react/README.md). Daftar kiriman memakai data contoh, pilihan wilayah/kode pos Day 10 memakai dua API publik, dan Day 11 menambahkan routing SPA. Aplikasi utama di root tetap memakai Next.js dan Supabase.
+Salinan ini memakai React + Vite untuk antarmuka dan PHP murni untuk API, sesi, autentikasi, validasi, impor bank, tracking, dan asisten Admin. Database tetap PostgreSQL/Supabase yang sama; skema dan RLS tidak diubah. Proyek `Final Project Full` asli tetap terpisah dan tidak ditimpa.
 
 Capstone ini mengubah tracking dari daftar status pasif menjadi alur yang memberi kepastian dan jalan keluar. Penerima dapat memahami risiko, memperbarui petunjuk alamat, mengatur jadwal atau safe drop, membuat tiket CS berkonteks, dan memilih notifikasi. Seller mendapat control tower; Finance/Rekonsiliasi FRD-06 tetap tersedia sebagai modul pendukung yang menghubungkan resi, COD, settlement, dan mutasi bank.
 
 ## Jalankan
 
-```bash
+Di PowerShell, buka folder ini lalu jalankan:
+
+```powershell
 npm install
-cp .env.example .env.local
-npx supabase link --project-ref <PROJECT_REF>
-npx supabase db push
+if (-not (Test-Path .env.local)) { Copy-Item .env.example .env.local }
 npm run dev
 ```
 
-Isi `.env.local` dengan `NEXT_PUBLIC_SUPABASE_URL` dan `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. Jangan commit credential.
+Isi `.env.local` dengan `SUPABASE_URL` dan `SUPABASE_PUBLISHABLE_KEY` dari proyek Supabase yang sudah memiliki migrasi. Salinan lokal dengan nama variabel lama `NEXT_PUBLIC_…` juga masih dibaca agar konfigurasi yang ada tidak putus. Jangan commit credential. Panduan lengkap: [PHP_RUN.md](PHP_RUN.md).
 
 Demo: buka `http://localhost:3000/lacak`, gunakan resi `ANT-100015` dan kode `260926`. Ruang Seller memakai akun demo lama. Untuk tiga akun demo, peran, dan kode aktivasi lihat [panduan RBAC](docs/product/RBAC_GUIDE.txt). Jangan menjalankan `db reset` pada project remote: perintah itu menghapus data.
 
@@ -38,7 +38,11 @@ Detail kiriman kini memiliki [peta perjalanan](docs/prototype/ROUTE_MAP.md) yang
 | Paket saya | `/akun` | Hanya paket Konsumen yang ditautkan |
 | Aktivasi Admin | `/aktivasi-admin` | Tukar kode resmi setelah login |
 
-Next.js menangani UI/API. Supabase menyediakan Auth, PostgreSQL, RLS, dan RPC atomik. Tracking publik memeriksa kode akses, memasking PII, dan dibatasi 10 request/IP/menit. Action menulis resolution, event, dan integration outbox dalam satu transaksi. Outbox menjadi batas aman untuk integrasi kurir, CS, WhatsApp, email, atau push; demo tidak mengklaim memakai API internal Anteraja.
+PHP menangani seluruh rute `/api/*`; React + Vite menangani halaman dan state UI. Supabase menyediakan Auth, PostgreSQL, RLS, dan RPC atomik. Tracking publik memeriksa kode akses, menyamarkan data penerima, dan memakai pembatasan request. RPC database menulis resolution, event, dan integration outbox dalam satu transaksi. Demo tidak memakai API internal Anteraja.
+
+Kode aplikasi berada di `frontend/`, `components/`, dan `server/`. `npm run dev`, `npm run build`, dan `npm run start` memakai Vite untuk frontend dan PHP untuk backend. Sumber API dan halaman Next.js lama sudah dihapus dari salinan ini; dokumen tugas historis tetap disimpan sebagai arsip proyek.
+
+Penyesuaian dari modul PHP mentor, termasuk logika ETA di PHP dan foto bukti tiket CS, dijelaskan di [panduan penerapan PHP](docs/PHP_MENTOR_GUIDE.md).
 
 ## Pemeriksaan
 

@@ -1,4 +1,4 @@
-import type { CategoryType } from '@/lib/supabase/types';
+import type { CategoryType } from '@/lib/database-types';
 
 export type BankFormat = 'bank_a' | 'bank_b';
 export type ImportRowStatus = 'new' | 'matched' | 'error';

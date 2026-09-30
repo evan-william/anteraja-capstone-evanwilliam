@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import type { ApiResponse } from '@/lib/api';
-import type { CategoryRow } from '@/lib/supabase/types';
+import type { CategoryRow } from '@/lib/database-types';
 
 type CategoryListProps = {
   categories: CategoryRow[];

@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import Link from 'next/link';
+import Link from '@/frontend/compat/Link';
 import { AlertTriangle, ArrowUpRight, Download, Search } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';

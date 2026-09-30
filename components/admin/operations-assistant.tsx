@@ -1,8 +1,8 @@
 'use client';
 
-import Link from 'next/link';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import Link from '@/frontend/compat/Link';
+import Image from '@/frontend/compat/Image';
+import { useRouter } from '@/frontend/compat/navigation';
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { ArrowUp, MessageCircleMore, X } from 'lucide-react';
 

@@ -1,11 +1,11 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/frontend/compat/navigation';
 import { useState } from 'react';
 
 import { Alert } from '@/components/ui/alert';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import type { CategoryRow } from '@/lib/supabase/types';
+import type { CategoryRow } from '@/lib/database-types';
 
 import { CategoryForm } from './category-form';
 import { CategoryList } from './category-list';

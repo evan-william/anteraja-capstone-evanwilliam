@@ -1,7 +1,7 @@
 'use client';
 
 import { FormEvent, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/frontend/compat/navigation';
 import { ArrowRight, LockKeyhole, PackageSearch } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';

@@ -1,11 +1,11 @@
 'use client';
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import Link from '@/frontend/compat/Link';
+import { usePathname } from '@/frontend/compat/navigation';
 import { useRef, useState } from 'react';
 import { ChevronDown, Menu } from 'lucide-react';
 
-import type { AccountRole } from '@/lib/supabase/types';
+import type { AccountRole } from '@/lib/database-types';
 import { cn } from '@/lib/utils';
 
 type NavLink = { href: string; label: string };

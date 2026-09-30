@@ -1,11 +1,12 @@
-import Link from 'next/link';
+import Link from '@/frontend/compat/Link';
 import { ArrowRight } from 'lucide-react';
 
 import { Brand } from '@/components/ui/brand';
-import { getCurrentUser, roleHome } from '@/lib/auth';
+import { roleHome } from '@/lib/roles';
+import { useAuth } from '@/frontend/api';
 
-export async function PublicHeader() {
-  const user = await getCurrentUser();
+export function PublicHeader() {
+  const { user } = useAuth();
   return (
     <header className="relative z-30 border-b border-white/10 bg-[#21171d]/90 text-white backdrop-blur-xl">
       <div className="app-container flex min-h-18 items-center justify-between gap-4 py-3">

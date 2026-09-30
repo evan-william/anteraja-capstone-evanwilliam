@@ -36,6 +36,7 @@ export type PublicTracking = {
   current_location: string | null;
   events: TrackingEvent[];
   available_actions: string[];
+  timeliness?: { code: string; label: string; message: string };
 };
 
 export type SellerShipment = {

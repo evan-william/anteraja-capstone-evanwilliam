@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import type { ApiResponse } from '@/lib/api';
-import { parseBankStatementFile } from '@/lib/import/parser';
 import type {
   BankFormat,
   ImportCategory,
@@ -62,16 +61,17 @@ export function ImportManager({
     setMessage(null);
     setRows([]);
     try {
-      const parsed = await parseBankStatementFile(file);
-      const response = await fetch('/api/v1/imports/preview', {
+      if (file.size > 10 * 1024 * 1024) throw new Error('Ukuran file maksimal 10 MB.');
+      const form = new FormData();
+      form.set('file', file);
+      const response = await fetch('/api/v1/imports/preview-file', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ rows: parsed.rows }),
+        body: form,
       });
-      const body = await readResponse<PreviewResponse>(response);
+      const body = await readResponse<PreviewResponse & { bank: BankFormat }>(response);
       if (!body.success) throw new Error(body.error.message);
       setFileName(file.name);
-      setBank(parsed.bank);
+      setBank(body.data.bank);
       setRows(body.data.rows);
       setCategories(body.data.categories);
       setPage(1);

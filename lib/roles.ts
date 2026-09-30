@@ -1,4 +1,4 @@
-import type { AccountRole } from './supabase/types';
+import type { AccountRole } from './database-types';
 
 export function roleHome(role: AccountRole): string {
   if (role === 'admin') return '/admin';

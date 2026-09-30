@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select } from '@/components/ui/select';
 import type { ApiResponse } from '@/lib/api';
-import type { CategoryRow, CategoryType } from '@/lib/supabase/types';
+import type { CategoryRow, CategoryType } from '@/lib/database-types';
 import { createCategorySchema, firstIssueMessage } from '@/lib/validation';
 
 type CategoryFormProps = {

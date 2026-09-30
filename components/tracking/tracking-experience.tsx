@@ -1,8 +1,8 @@
 'use client';
 
 import { FormEvent, useEffect, useState } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
+import Link from '@/frontend/compat/Link';
+import Image from '@/frontend/compat/Image';
 import {
   AlertTriangle, ArrowLeft, BellRing, CalendarClock, Check, CheckCircle2,
   ChevronDown, ChevronRight, Circle, Clock3, Copy, Headphones, MapPin,
@@ -15,7 +15,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import type { ApiResponse } from '@/lib/api';
 import type { PublicTracking, RiskStatus } from '@/lib/tracking/types';
-import type { AccountRole } from '@/lib/supabase/types';
+import type { AccountRole } from '@/lib/database-types';
 import { buildJourney } from '@/lib/tracking/journey';
 import { resolveTrackingCityPhoto } from '@/lib/tracking/city-imagery';
 import { JourneyMapDisclosure } from '@/components/tracking/journey-map-disclosure';
@@ -122,7 +122,7 @@ export function TrackingExperience({ awb, code, viewerRole }: { awb: string; cod
           {cityImage ? <a href={cityImage.photo.source} target="_blank" rel="noopener noreferrer" className="absolute bottom-3 right-4 max-w-[75%] rounded-sm bg-[#181416]/75 px-2 py-1 text-right text-[10px] leading-4 text-white/90 underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">Foto {cityImage.photo.city}: {cityImage.photo.author} · {cityImage.photo.license}</a> : null}
         </div>
         <dl className="grid grid-cols-2 content-center gap-x-6 gap-y-5 p-6 sm:gap-x-9 sm:p-9">
-          <div className="min-w-0"><dt className="text-xs text-white/65">Estimasi tiba</dt><dd className="mt-1 font-semibold tabular">{formatDate(tracking.estimated_delivery_at, false)}</dd></div>
+          <div className="min-w-0"><dt className="text-xs text-white/65">Estimasi tiba</dt><dd className="mt-1 font-semibold tabular">{formatDate(tracking.estimated_delivery_at, false)}</dd>{tracking.timeliness ? <p className="mt-1 text-xs font-semibold text-white/85">{tracking.timeliness.label}</p> : null}</div>
           <div className="min-w-0"><dt className="text-xs text-white/65">Penerima</dt><dd className="mt-1 break-words font-semibold">{tracking.recipient_name ?? '—'}</dd></div>
           <div className="col-span-2 border-t border-white/15 pt-4"><dt className="text-xs text-white/65">Posisi terakhir</dt><dd className="mt-1 font-semibold">{tracking.current_location ?? 'Belum tersedia'}</dd></div>
         </dl>
@@ -171,7 +171,7 @@ function ShipmentSummary({ tracking }: { tracking: PublicTracking }) {
   ];
   return <section className="surface p-5 sm:p-6"><h2 className="section-title">Ringkasan</h2><dl className="mt-5 space-y-4 text-sm">
     {rows.map(([Icon, label, value]) => <div key={label} className="flex gap-3"><Icon className="mt-0.5 size-4 shrink-0 text-primary" /><div><dt className="text-xs text-muted-foreground">{label}</dt><dd className="mt-0.5 font-semibold">{value || 'Belum tersedia'}</dd></div></div>)}
-  </dl></section>;
+  </dl>{tracking.timeliness ? <p className="mt-5 border-t pt-4 text-sm text-muted-foreground"><strong className="text-foreground">{tracking.timeliness.label}.</strong> {tracking.timeliness.message}</p> : null}</section>;
 }
 
 function ResolutionCard({ awb, code, onSuccess }: { awb: string; code: string; onSuccess: () => Promise<void> }) {
@@ -223,17 +223,19 @@ function NotificationCard({ awb, code }: { awb: string; code: string }) {
 }
 
 function SupportCard({ awb, code }: { awb: string; code: string }) {
-  const [open, setOpen] = useState(false); const [busy, setBusy] = useState(false); const [message, setMessage] = useState(''); const [note, setNote] = useState('');
+  const [open, setOpen] = useState(false); const [busy, setBusy] = useState(false); const [message, setMessage] = useState(''); const [note, setNote] = useState(''); const [photo, setPhoto] = useState<File | null>(null);
   async function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault(); setBusy(true); setMessage(''); const note = new FormData(event.currentTarget).get('note');
+    event.preventDefault(); const formElement = event.currentTarget; setBusy(true); setMessage(''); const note = new FormData(formElement).get('note');
     try {
-      const response = await fetch(`/api/v1/tracking/${encodeURIComponent(awb)}/escalate`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-tracking-code': code }, body: JSON.stringify({ note }) });
-      const body = await response.json() as ApiResponse<{ ticket_number: string }>;
-      setMessage(body.success ? `Tiket ${body.data.ticket_number} dibuat. Konteks perjalanan sudah dilampirkan.` : body.error.message);
+      const form = new FormData(); form.set('note', String(note ?? '')); if (photo) form.set('foto', photo);
+      const response = await fetch(`/api/v1/tracking/${encodeURIComponent(awb)}/escalate`, { method: 'POST', headers: { 'x-tracking-code': code }, body: form });
+      const body = await response.json() as ApiResponse<{ ticket_number: string; proof_attached?: boolean; proof_warning?: string }>;
+      setMessage(body.success ? `Tiket ${body.data.ticket_number} dibuat. Konteks perjalanan dilampirkan.${body.data.proof_warning ? ` ${body.data.proof_warning}` : photo ? ' Foto bukti juga tersimpan.' : ''}` : body.error.message);
+      if (body.success) { setNote(''); setPhoto(null); formElement.reset(); }
     } catch { setMessage('Koneksi terputus. Coba kirim lagi.'); }
     finally { setBusy(false); }
   }
-  return <section aria-labelledby="support-title" className="mt-5 rounded-2xl bg-[#f0edef] p-5 sm:p-6"><header className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between"><div className="flex min-w-0 gap-4"><div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white text-primary"><Headphones className="size-5" /></div><div className="min-w-0"><h2 id="support-title" className="text-lg font-semibold">Masih butuh bantuan?</h2><p className="mt-1 max-w-[70ch] text-base text-pretty text-muted-foreground sm:text-sm">Tiket otomatis membawa resi, timeline, kendala, dan lokasi terakhir. Kamu cukup menambahkan detail yang belum tercatat.</p></div></div>{!open ? <Button type="button" variant="outline" className="w-full shrink-0 bg-white sm:w-auto" onClick={() => setOpen(true)}>Tulis laporan</Button> : null}</header>{open ? <form onSubmit={submit} className="mt-6 grid gap-4"><label htmlFor="support-note" className="grid gap-2 text-base font-semibold sm:text-sm">Ceritakan kendalanya<Textarea id="support-note" name="note" value={note} onChange={(event) => setNote(event.target.value)} placeholder="Contoh: Kurir belum menemukan gang rumah. Patokannya minimarket di seberang jalan, lalu masuk sekitar 50 meter." maxLength={500} rows={6} aria-describedby="support-note-help" /></label><div id="support-note-help" className="flex flex-col gap-1 text-base text-muted-foreground sm:flex-row sm:items-center sm:justify-between sm:text-sm"><p>Maksimal 500 karakter. Data paket dan lima perjalanan terakhir otomatis dilampirkan.</p><p className="shrink-0 tabular">{note.length}/500</p></div><div className="flex flex-col gap-3 sm:flex-row sm:items-center"><Button type="submit" disabled={busy}>{busy ? 'Membuat…' : 'Kirim laporan ke CS'}</Button><p className="text-base font-semibold text-emerald-700 sm:text-sm" aria-live="polite">{message}</p></div></form> : null}</section>;
+  return <section aria-labelledby="support-title" className="mt-5 rounded-2xl bg-[#f0edef] p-5 sm:p-6"><header className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between"><div className="flex min-w-0 gap-4"><div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white text-primary"><Headphones className="size-5" /></div><div className="min-w-0"><h2 id="support-title" className="text-lg font-semibold">Masih butuh bantuan?</h2><p className="mt-1 max-w-[70ch] text-base text-pretty text-muted-foreground sm:text-sm">Tiket otomatis membawa resi, timeline, kendala, dan lokasi terakhir. Kamu cukup menambahkan detail yang belum tercatat.</p></div></div>{!open ? <Button type="button" variant="outline" className="w-full shrink-0 bg-white sm:w-auto" onClick={() => setOpen(true)}>Tulis laporan</Button> : null}</header>{open ? <form onSubmit={submit} className="mt-6 grid gap-4"><label htmlFor="support-note" className="grid gap-2 text-base font-semibold sm:text-sm">Ceritakan kendalanya<Textarea id="support-note" name="note" value={note} onChange={(event) => setNote(event.target.value)} placeholder="Contoh: Kurir belum menemukan gang rumah. Patokannya minimarket di seberang jalan, lalu masuk sekitar 50 meter." maxLength={500} rows={6} aria-describedby="support-note-help" /></label><div id="support-note-help" className="flex flex-col gap-1 text-base text-muted-foreground sm:flex-row sm:items-center sm:justify-between sm:text-sm"><p>Maksimal 500 karakter. Data paket dan lima perjalanan terakhir otomatis dilampirkan.</p><p className="shrink-0 tabular">{note.length}/500</p></div><label htmlFor="support-photo" className="grid gap-2 text-sm font-semibold">Foto bukti (opsional, JPG/PNG maksimal 2 MB)<Input id="support-photo" type="file" accept="image/jpeg,image/png" onChange={(event) => setPhoto(event.target.files?.[0] ?? null)} /></label><div className="flex flex-col gap-3 sm:flex-row sm:items-center"><Button type="submit" disabled={busy}>{busy ? 'Membuat…' : 'Kirim laporan ke CS'}</Button><p className="text-base font-semibold text-emerald-700 sm:text-sm" aria-live="polite">{message}</p></div></form> : null}</section>;
 }
 
 function TrackingSkeleton() {

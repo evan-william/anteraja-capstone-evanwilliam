@@ -10,7 +10,7 @@ import { Select } from '@/components/ui/select';
 import { todayInJakarta } from '@/lib/date';
 import { formatAmountInput, parseRupiah } from '@/lib/format';
 import type { ApiResponse } from '@/lib/api';
-import type { CategoryRow, TransactionRow } from '@/lib/supabase/types';
+import type { CategoryRow, TransactionRow } from '@/lib/database-types';
 import { createTransactionSchema, firstIssueMessage } from '@/lib/validation';
 
 export type TransactionDraft = {

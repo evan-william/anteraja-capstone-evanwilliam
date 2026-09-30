@@ -1,0 +1,14 @@
+Run All:
+cd "D:\Work & Organization\Work\Maxy Academy\Modules\Final Project Full - PHP"
+npm run dev
+
+Run Individual:
+PHP ->
+cd "D:\Work & Organization\Work\Maxy Academy\Modules\Final Project Full - PHP"
+$uploadTemp = (Join-Path (Get-Location) ".private\php-uploads").Replace('\', '/')
+New-Item -ItemType Directory -Force ".private\php-uploads" | Out-Null
+& "C:\xampp\php\php.exe" -d "upload_tmp_dir=`"$uploadTemp`"" -d display_errors=0 -d upload_max_filesize=11M -d post_max_size=12M -S 127.0.0.1:8089 server/router.php
+
+React/Vite ->
+cd "D:\Work & Organization\Work\Maxy Academy\Modules\Final Project Full - PHP"
+node node_modules/vite/bin/vite.js --host 127.0.0.1 --port 3000

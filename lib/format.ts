@@ -9,7 +9,7 @@ const rupiahFormatter = new Intl.NumberFormat('id-ID', {
  * 1250000 -> "Rp1.250.000"
  */
 export function formatRupiah(amount: number): string {
-  return rupiahFormatter.format(Math.trunc(amount)).replace(/ /g, '');
+  return rupiahFormatter.format(Math.trunc(amount)).replace(/\u00a0/g, '');
 }
 
 /**

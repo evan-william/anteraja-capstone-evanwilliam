@@ -15,16 +15,8 @@
 /blob-report
 /playwright/.cache
 
-# next.js
-/.next/
-/.next-verify/
-/.next-dev-verify/
-/out/
-/build
-/day9-react/dist/
-/day9-react/node_modules/
-.next
-next-env.d.ts
+# build output
+/dist/
 
 # misc
 .DS_Store
@@ -43,14 +35,13 @@ dev-server*.log
 .env.*
 !.env.example
 /.private/
+/PASS ROLE.txt
+/roles_password.txt
 
 # local MCP client configuration (may contain account/project metadata)
 /.vscode/mcp.json
 /.mcp.json
 /.agents/mcp_config.json
-
-# vercel
-.vercel
 
 # supabase
 /supabase/.temp

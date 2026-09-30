@@ -1,12 +1,12 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/frontend/compat/navigation';
 import { useRef, useState } from 'react';
 
 import { Alert } from '@/components/ui/alert';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { ApiResponse } from '@/lib/api';
-import type { CategoryRow, TransactionRow } from '@/lib/supabase/types';
+import type { CategoryRow, TransactionRow } from '@/lib/database-types';
 
 import { TransactionForm } from './transaction-form';
 import { TransactionList, type TransactionDayGroup } from './transaction-list';

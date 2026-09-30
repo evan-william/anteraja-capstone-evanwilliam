@@ -1,7 +1,7 @@
 'use client';
 
-import Image from 'next/image';
-import Link from 'next/link';
+import Image from '@/frontend/compat/Image';
+import Link from '@/frontend/compat/Link';
 import { Pause, Play } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
