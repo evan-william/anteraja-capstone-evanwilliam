@@ -35,6 +35,13 @@ table { width: 100%; border-collapse: collapse; text-align: left; }
 caption { text-align: left; color: #696067; padding-bottom: 16px; }
 th, td { padding: 16px 12px; border-bottom: 1px solid #e5dddd; overflow-wrap: anywhere; }
 footer { color: #696067; font-size: 13px; }
+.actions { display: flex; align-items: center; gap: 16px; }
+.text-button { padding: 0; margin: 0; color: #9c0055; background: transparent; text-decoration: underline; text-underline-offset: 5px; }
+.text-button:hover { background: transparent; color: #620036; }
+.form-panel { max-width: 680px; }
+select { width: 100%; padding: 14px; border: 1px solid #b7aeb5; border-radius: 8px; font: inherit; background: white; }
+.error { background: #fff0ed; color: #8b2c21; }
+.summary > .button { align-self: center; }
 @media (max-width: 700px) {
   header { align-items: flex-start; flex-direction: column; }
   .columns { grid-template-columns: 1fr; }
