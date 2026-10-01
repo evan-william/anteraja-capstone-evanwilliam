@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="id">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Permintaan pengiriman</title><link rel="stylesheet" href="style.css"></head>
+<body>
+  <header><a href="shipment-form.html">anteraja <small>latihan pengiriman</small></a><nav><a href="shipment-form.html" aria-current="page">Buat permintaan</a><a href="request-history.php">Riwayat</a></nav></header>
+  <main>
+    <p class="eyebrow">Permintaan pengiriman</p><h1>Satu paket.<br>Biaya yang jelas.</h1>
+    <p class="intro">Server menghitung tarif dan menyimpan permintaan pada sesi browser ini.</p>
+    <div class="columns">
+      <section class="panel"><h2>Data kiriman</h2>
+        <form action="submit-request.php" method="POST">
+          <label for="tracking">Nomor resi</label><input id="tracking" name="tracking_number" placeholder="ANT-100015" maxlength="80" required>
+          <label for="weight">Berat (kg)</label><input id="weight" name="weight_kg" type="number" min="0.001" max="1000000" step="any" required>
+          <label for="distance">Jarak (km)</label><input id="distance" name="distance_km" type="number" min="0.001" max="1000000" step="any" required>
+          <button type="submit">Hitung & simpan permintaan</button>
+        </form>
+      </section>
+      <aside class="panel muted"><h2>Tarif latihan</h2><dl><dt>Hingga 1 kg</dt><dd>Rp10.000</dd><dt>Di atas 1–3 kg</dt><dd>Rp17.000</dd><dt>Di atas 3–5 kg</dt><dd>Rp25.000</dd></dl><p>Di atas 5 kg: Rp5.000/kg tambahan. Di atas 10 km: Rp1.250/km tambahan. Kelebihan dibulatkan ke atas.</p><p>Riwayat sesi bukan penyimpanan database permanen.</p></aside>
+    </div>
+  </main><footer>Simulasi belajar · bukan tarif resmi Anteraja</footer>
+</body></html>
