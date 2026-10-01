@@ -1,4 +1,5 @@
 'use client';
+import { appFetch } from '@/frontend/http';
 
 import Link from '@/frontend/compat/Link';
 import Image from '@/frontend/compat/Image';
@@ -49,7 +50,7 @@ export function OperationsAssistant() {
     setMessages((current) => [...current, { id: nextId.current++, role: 'user', text: message }]);
     setDraft(''); setBusy(true); setConfirmAction(null); setActionError('');
     try {
-      const response = await fetch('/api/v1/admin/assistant', {
+      const response = await appFetch('/api/v1/admin/assistant', {
         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message, history }),
       });
       const body = await response.json() as ApiResponse<AssistantReply>;
@@ -65,7 +66,7 @@ export function OperationsAssistant() {
     if (!confirmAction || busy) return;
     setBusy(true); setActionError('');
     try {
-      const response = await fetch('/api/v1/admin/assistant/action', {
+      const response = await appFetch('/api/v1/admin/assistant/action', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ticketId: confirmAction.ticketId, status: confirmAction.status }),
       });

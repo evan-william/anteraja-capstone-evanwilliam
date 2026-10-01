@@ -1,4 +1,5 @@
 'use client';
+import { appFetch } from '@/frontend/http';
 
 import { useMemo, useState } from 'react';
 import { Check, FileSpreadsheet, RotateCcw } from 'lucide-react';
@@ -64,7 +65,7 @@ export function ImportManager({
       if (file.size > 10 * 1024 * 1024) throw new Error('Ukuran file maksimal 10 MB.');
       const form = new FormData();
       form.set('file', file);
-      const response = await fetch('/api/v1/imports/preview-file', {
+      const response = await appFetch('/api/v1/imports/preview-file', {
         method: 'POST',
         body: form,
       });
@@ -91,7 +92,7 @@ export function ImportManager({
   }
 
   async function refreshHistory() {
-    const response = await fetch('/api/v1/imports');
+    const response = await appFetch('/api/v1/imports');
     const body = await readResponse<ImportHistory[]>(response);
     if (body.success) setHistory(body.data);
   }
@@ -116,7 +117,7 @@ export function ImportManager({
     setBusy(true);
     setError(null);
     setMessage(null);
-    const response = await fetch('/api/v1/imports', {
+    const response = await appFetch('/api/v1/imports', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ file_name: fileName, bank, rows, rules }),
@@ -140,7 +141,7 @@ export function ImportManager({
     if (!window.confirm('Batalkan impor ini? Hanya transaksi yang dibuat oleh impor akan dihapus.')) return;
     setBusy(true);
     setError(null);
-    const response = await fetch(`/api/v1/imports/${id}/cancel`, { method: 'POST' });
+    const response = await appFetch(`/api/v1/imports/${id}/cancel`, { method: 'POST' });
     const body = await readResponse<{ cancelled_transactions: number; already_cancelled: boolean }>(
       response,
     );

@@ -1,0 +1,29 @@
+PASS tracking Supabase valid
+PASS tracking invalid code
+PASS private routes reject anonymous
+PASS OSRM real road geometry
+PASS tracking responsive 375/768/1440
+PASS admin login Supabase + Laravel session
+PASS admin API admin
+PASS admin API admin-shipments
+PASS admin API tickets
+PASS admin denied seller Finance
+PASS admin session persists
+PASS admin dashboard browser
+PASS admin logout
+PASS seller login Supabase + Laravel session
+PASS seller API seller
+PASS seller API seller-shipments
+PASS seller API import
+PASS seller finance API
+PASS seller multipart CSV reconciliation preview
+PASS seller session persists
+PASS seller dashboard browser
+PASS seller logout
+PASS consumer login Supabase + Laravel session
+PASS consumer API consumer
+PASS consumer denied admin
+PASS consumer session persists
+PASS consumer dashboard browser
+PASS consumer logout
+PASS browser no new page errors

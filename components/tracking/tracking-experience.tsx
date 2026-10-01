@@ -1,4 +1,5 @@
 'use client';
+import { appFetch } from '@/frontend/http';
 
 import { FormEvent, useEffect, useState } from 'react';
 import Link from '@/frontend/compat/Link';
@@ -44,7 +45,7 @@ export function TrackingExperience({ awb, code, viewerRole }: { awb: string; cod
   async function load() {
     setLoading(true); setError('');
     try {
-      const response = await fetch(`/api/v1/tracking/${encodeURIComponent(awb)}?code=${encodeURIComponent(code)}`, { cache: 'no-store' });
+      const response = await appFetch(`/api/v1/tracking/${encodeURIComponent(awb)}?code=${encodeURIComponent(code)}`, { cache: 'no-store' });
       const body = await response.json() as ApiResponse<PublicTracking>;
       if (!body.success) throw new Error(body.error.message);
       setTracking(body.data);
@@ -55,7 +56,7 @@ export function TrackingExperience({ awb, code, viewerRole }: { awb: string; cod
 
   useEffect(() => {
     let active = true;
-    fetch(`/api/v1/tracking/${encodeURIComponent(awb)}?code=${encodeURIComponent(code)}`, { cache: 'no-store' })
+    appFetch(`/api/v1/tracking/${encodeURIComponent(awb)}?code=${encodeURIComponent(code)}`, { cache: 'no-store' })
       .then((response) => response.json() as Promise<ApiResponse<PublicTracking>>)
       .then((body) => {
         if (!active) return;
@@ -186,7 +187,7 @@ function ResolutionCard({ awb, code, onSuccess }: { awb: string; code: string; o
         ? { type, delivery_date: form.get('delivery_date'), note: form.get('note') }
         : { type, landmark: form.get('landmark'), phone: form.get('phone') };
     try {
-      const response = await fetch(`/api/v1/tracking/${encodeURIComponent(awb)}/resolution`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-tracking-code': code }, body: JSON.stringify(payload) });
+      const response = await appFetch(`/api/v1/tracking/${encodeURIComponent(awb)}/resolution`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-tracking-code': code }, body: JSON.stringify(payload) });
       const body = await response.json() as ApiResponse<{ message: string }>;
       if (!body.success) throw new Error(body.error.message);
       setMessage(body.data.message); await onSuccess();
@@ -213,7 +214,7 @@ function NotificationCard({ awb, code }: { awb: string; code: string }) {
   async function toggle() {
     const next = !enabled; setBusy(true); setSaved('');
     try {
-      const response = await fetch(`/api/v1/tracking/${encodeURIComponent(awb)}/notifications`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-tracking-code': code }, body: JSON.stringify({ whatsapp: next, email: false, push: false }) });
+      const response = await appFetch(`/api/v1/tracking/${encodeURIComponent(awb)}/notifications`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-tracking-code': code }, body: JSON.stringify({ whatsapp: next, email: false, push: false }) });
       const body = await response.json() as ApiResponse<unknown>;
       if (body.success) { setEnabled(next); setSaved(next ? 'Notifikasi aktif' : 'Notifikasi dimatikan'); } else setSaved(body.error.message);
     } catch { setSaved('Koneksi terputus. Coba simpan lagi.'); }
@@ -228,7 +229,7 @@ function SupportCard({ awb, code }: { awb: string; code: string }) {
     event.preventDefault(); const formElement = event.currentTarget; setBusy(true); setMessage(''); const note = new FormData(formElement).get('note');
     try {
       const form = new FormData(); form.set('note', String(note ?? '')); if (photo) form.set('foto', photo);
-      const response = await fetch(`/api/v1/tracking/${encodeURIComponent(awb)}/escalate`, { method: 'POST', headers: { 'x-tracking-code': code }, body: form });
+      const response = await appFetch(`/api/v1/tracking/${encodeURIComponent(awb)}/escalate`, { method: 'POST', headers: { 'x-tracking-code': code }, body: form });
       const body = await response.json() as ApiResponse<{ ticket_number: string; proof_attached?: boolean; proof_warning?: string }>;
       setMessage(body.success ? `Tiket ${body.data.ticket_number} dibuat. Konteks perjalanan dilampirkan.${body.data.proof_warning ? ` ${body.data.proof_warning}` : photo ? ' Foto bukti juga tersimpan.' : ''}` : body.error.message);
       if (body.success) { setNote(''); setPhoto(null); formElement.reset(); }

@@ -1,4 +1,5 @@
 'use client';
+import { appFetch } from '@/frontend/http';
 
 import { useState, type FormEvent } from 'react';
 
@@ -58,7 +59,7 @@ export function TransactionForm({
     }
 
     setIsPending(true);
-    const response = await fetch(
+    const response = await appFetch(
       initial ? `/api/v1/transactions/${initial.id}` : '/api/v1/transactions',
       {
         method: initial ? 'PATCH' : 'POST',

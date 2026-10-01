@@ -9,7 +9,7 @@ const php = process.env.PHP_BIN || (existsSync('C:\\xampp\\php\\php.exe') ? 'C:\
 const available = spawnSync(php, ['-v'], { encoding: 'utf8' }).status === 0;
 
 function point(value: string) {
-  const result = spawnSync(php, ['-r', "require 'server/src/RoadRoute.php'; echo json_encode(road_point($argv[1]));", '--', value], { cwd: root, encoding: 'utf8' });
+  const result = spawnSync(php, ['-r', "require 'backend/app/Domain/RoadRoute.php'; echo json_encode(road_point($argv[1]));", '--', value], { cwd: root, encoding: 'utf8' });
   expect(result.status, result.stderr).toBe(0);
   return JSON.parse(result.stdout);
 }
@@ -26,7 +26,7 @@ describe.skipIf(!available)('PHP road route validation', () => {
   });
 
   it('returns an error before contacting a route provider for invalid coordinates', () => {
-    const code = "require 'server/src/RoadRoute.php'; $_GET=['from'=>'40,106','to'=>'-7,112']; road_route();";
+    const code = "require 'backend/vendor/autoload.php'; $app=require 'backend/bootstrap/app.php'; $app->make(Illuminate\\Contracts\\Console\\Kernel::class)->bootstrap(); $_GET=['from'=>'40,106','to'=>'-7,112']; try { road_route(); } catch (Illuminate\\Http\\Exceptions\\HttpResponseException $e) { echo $e->getResponse()->getContent(); }";
     const result = spawnSync(php, ['-r', code], { cwd: root, encoding: 'utf8' });
     expect(result.status, result.stderr).toBe(0);
     expect(JSON.parse(result.stdout)).toEqual({ error: 'Titik rute tidak valid.' });

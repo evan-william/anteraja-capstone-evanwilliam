@@ -1,4 +1,5 @@
 'use client';
+import { appFetch } from '@/frontend/http';
 
 import { useState, type FormEvent } from 'react';
 
@@ -32,7 +33,7 @@ export function CategoryForm({ onCreated }: CategoryFormProps) {
     }
 
     setIsPending(true);
-    const response = await fetch('/api/v1/categories', {
+    const response = await appFetch('/api/v1/categories', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(parsed.data),

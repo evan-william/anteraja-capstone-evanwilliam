@@ -1,6 +1,6 @@
 # Anteraja Tracking & Operations
 
-Salinan ini memakai React + Vite untuk antarmuka dan PHP murni untuk API, sesi, autentikasi, validasi, impor bank, tracking, dan asisten Admin. Database tetap PostgreSQL/Supabase yang sama; skema dan RLS tidak diubah. Proyek `Final Project Full` asli tetap terpisah dan tidak ditimpa.
+Salinan ini memakai React + Vite untuk antarmuka dan Laravel 12 untuk API, sesi, autentikasi, validasi, impor bank, tracking, dan asisten Admin. Database tetap PostgreSQL/Supabase yang sama; skema dan RLS tidak diubah. Versi React + PHP tetap terpisah dan tidak ditimpa. Panduan runtime saat ini: [LARAVEL_RUN.md](LARAVEL_RUN.md).
 
 Capstone ini mengubah tracking dari daftar status pasif menjadi alur yang memberi kepastian dan jalan keluar. Penerima dapat memahami risiko, memperbarui petunjuk alamat, mengatur jadwal atau safe drop, membuat tiket CS berkonteks, dan memilih notifikasi. Seller mendapat control tower; Finance/Rekonsiliasi FRD-06 tetap tersedia sebagai modul pendukung yang menghubungkan resi, COD, settlement, dan mutasi bank.
 
@@ -14,7 +14,7 @@ if (-not (Test-Path .env.local)) { Copy-Item .env.example .env.local }
 npm run dev
 ```
 
-Isi `.env.local` dengan `SUPABASE_URL` dan `SUPABASE_PUBLISHABLE_KEY` dari proyek Supabase yang sudah memiliki migrasi. Salinan lokal dengan nama variabel lama `NEXT_PUBLIC_…` juga masih dibaca agar konfigurasi yang ada tidak putus. Jangan commit credential. Panduan lengkap: [PHP_RUN.md](PHP_RUN.md).
+Isi `.env.local` dengan `SUPABASE_URL` dan `SUPABASE_PUBLISHABLE_KEY` dari proyek Supabase yang sudah memiliki migrasi. Konfigurasi lama `NEXT_PUBLIC_…` masih kompatibel. Di backend jalankan `composer install`, salin `.env.example` menjadi `.env`, lalu `php artisan key:generate`. Jangan commit credential. Panduan lengkap: [LARAVEL_RUN.md](LARAVEL_RUN.md).
 
 Demo: buka `http://localhost:3000/lacak`, gunakan resi `ANT-100015` dan kode `260926`. Ruang Seller memakai akun demo lama. Untuk tiga akun demo, peran, dan kode aktivasi lihat [panduan RBAC](docs/product/RBAC_GUIDE.txt). Jangan menjalankan `db reset` pada project remote: perintah itu menghapus data.
 

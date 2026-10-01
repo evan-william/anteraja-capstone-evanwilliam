@@ -10,10 +10,12 @@ export default defineConfig({
       { find: '@', replacement: path.resolve('.') },
     ],
   },
+  optimizeDeps: { include: ['leaflet'] },
   server: {
     port: 3000,
     strictPort: true,
-    proxy: { '/api': { target: 'http://127.0.0.1:8089', changeOrigin: false } },
+    fs: { deny: ['.env', '.env.*', '*.{crt,pem}', '**/.git/**', '**/.private/**', '**/backend/**', '**/roles_password.txt'] },
+    proxy: { '/api': { target: `http://127.0.0.1:${process.env.API_PORT || 8089}`, changeOrigin: false } },
   },
   publicDir: 'public',
 });

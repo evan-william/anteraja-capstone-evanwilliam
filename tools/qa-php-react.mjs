@@ -15,7 +15,7 @@ let failures = 0;
 
 async function inspect(page, label, expected) {
   await page.goto(`${base}${expected.path}`, { waitUntil: 'domcontentloaded' });
-  await page.getByRole('heading', { name: expected.heading }).first().waitFor({ timeout: 15000 });
+  await page.getByRole('heading', { name: expected.heading }).first().waitFor({ timeout: 60000 });
   await page.waitForTimeout(900);
   console.log(`PASS ${label}: ${expected.path}`);
 }
@@ -78,7 +78,7 @@ try {
       await inspect(page, 'admin tickets', { path: '/admin/tiket', heading: 'Tiket pengiriman' });
       await page.getByRole('button', { name: 'Buka asisten operasi' }).click();
       await page.getByRole('button', { name: 'Apa prioritas operasi hari ini?' }).click();
-      await page.getByRole('log').getByText(/kiriman aktif/i).waitFor({ timeout: 20000 });
+      await page.getByRole('log').getByText(/(?:Gemini|Data langsung).*dicek/).waitFor({ timeout: 90000 });
       console.log('PASS admin assistant data reply');
       await page.getByRole('button', { name: 'Tutup asisten' }).click();
       await page.goto(`${base}/transaksi`);

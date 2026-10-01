@@ -1,0 +1,57 @@
+REACT + LARAVEL - QA, 1 OCTOBER 2026
+
+Runtime: React 19 + Vite 7 frontend; Laravel 12 backend; PHP 8.2.
+Database bisnis: PostgreSQL/Supabase existing. Schema, RLS, migrations dan dataset tidak diubah/reset.
+Source PHP asli: Modules/Final Project Full - React + PHP, tidak ditimpa.
+Backup source/config/Git: Modules/Archives/Laravel Backup - before migration - 2026-10-01.
+Runtime standalone lama pada salinan Laravel dipindahkan ke backup/retired-runtime.
+
+QUALITY GATES AKTUAL
+- TypeScript: lulus.
+- ESLint: lulus, 0 error.
+- Vitest: 53 test, 10 file, semuanya lulus.
+- PHPUnit Laravel: 10 test, 55 assertions, semuanya lulus.
+- PHP syntax lint: seluruh app/Domain, controller, middleware, provider, support lulus.
+- Production build: lulus. Ada 2 warning annotation PURE pada dependency Zod, bukan error aplikasi.
+- Laravel route:list: 26 route API termasuk fallback; route cache dan config cache berhasil.
+
+SUPABASE DAN API NYATA
+- Tracking kode valid: lulus; kode salah: 404.
+- Peta: OSRM mengembalikan geometri jalan nyata; fallback titik kota dipertahankan.
+- Tiga role: login, session persistence, logout lulus.
+- Admin: overview, semua kiriman, tiket; Finance Seller ditolak 403.
+- Seller: overview, kiriman, Finance kategori/transaksi, multipart preview CSV lulus.
+- Konsumen: daftar paket akun sendiri; Admin ditolak 403.
+- Supabase JWT dan RLS tetap per pengguna; tidak memakai service-role key.
+
+BROWSER PRODUKSI http://127.0.0.1:3003
+- Tracking publik, detail, timeline, invalid code: lulus.
+- Admin login, kiriman, detail, tiket, asisten jawaban/opsi: lulus.
+- Seller login, daftar/detail, arus dana, rekonsiliasi, preview CSV, kategori: lulus.
+- Konsumen login dan penolakan akses Admin: lulus.
+- Tracking 375/768/1440 px: tidak overflow; screenshot disimpan lokal.
+- Tidak ada pageerror baru pada alur yang diuji.
+- Semua aset build disajikan lewat document root Laravel public.
+
+TEMUAN DAN PERBAIKAN
+- Per-port cookie Laravel default dapat bertabrakan dengan aplikasi latihan: nama cookie dipisahkan.
+- Repeated current_user dalam request membuat beberapa lookup identitas: cache hanya selama satu request.
+- Cache role dibersihkan setelah aktivasi Admin; regression test memastikan role baru langsung dikembalikan.
+- Domain echo/exit membuat Laravel tidak menyimpan session: diubah ke JsonResponse/response exception dan download response.
+- Fetch lama tidak membawa header boundary: seluruh API memakai appFetch.
+- Native PHP router/session lama diganti lifecycle Laravel; URL dan aturan domain dipertahankan.
+- QA dev timeout saat layanan eksternal lambat/StrictMode replay: uji API langsung dipisahkan,
+  lalu seluruh smoke browser diulang terhadap build produksi dan lulus.
+
+BATAS VERIFIKASI
+- QA tidak membuat akun Supabase baru atau mengubah resi produksi untuk menguji mutasi destruktif.
+- Impor save/cancel atomik tetap RPC yang sama; parser dan preview diuji, tidak reset data remote.
+- Tarif/ETA, CSV matching, status, role, geometri dan gambar kota memiliki unit tests.
+- External Gemini/OSRM/Supabase dapat timeout atau rate-limit. Fallback tetap ada; tidak menjamin uptime provider.
+- Ini bukan penetration test/certification keamanan. Produksi wajib HTTPS, Secure cookie, key privat,
+  document root backend/public, APP_DEBUG=false, runtime PHP patch terbaru dan backup/monitoring.
+
+GIT
+- Branch lokal salinan Laravel: 8-react-and-laravel; tidak dipush tanpa instruksi khusus untuk branch ini.
+- Branch tugas OOP/CRUD dipush terpisah; review/merge partner ditunda atas permintaan pemilik.
+- Credential/env/session/log tidak di-commit. Supabase/database diff kosong.

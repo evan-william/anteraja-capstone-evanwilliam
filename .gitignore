@@ -37,6 +37,23 @@ dev-server*.log
 /.private/
 /PASS ROLE.txt
 /roles_password.txt
+/backend/vendor/
+/backend/.env
+/backend/database/*.sqlite*
+/backend/storage/logs/*
+/backend/storage/framework/sessions/*
+/backend/storage/framework/views/*
+/backend/storage/framework/cache/data/*
+/backend/storage/app/private/*
+/backend/bootstrap/cache/*.php
+/backend/.phpunit.result.cache
+/backend/public/assets/
+/backend/public/brand/
+/backend/public/fonts/
+/backend/public/images/
+/backend/public/auth/
+/backend/public/tracking-cities/
+/output/laravel-qa/*.png
 
 # local MCP client configuration (may contain account/project metadata)
 /.vscode/mcp.json

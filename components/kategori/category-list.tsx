@@ -1,4 +1,5 @@
 'use client';
+import { appFetch } from '@/frontend/http';
 
 import { useState } from 'react';
 
@@ -20,7 +21,7 @@ export function CategoryList({ categories, onChanged, onError }: CategoryListPro
 
   async function patchCategory(id: string, payload: Record<string, unknown>) {
     setPendingId(id);
-    const response = await fetch(`/api/v1/categories/${id}`, {
+    const response = await appFetch(`/api/v1/categories/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),

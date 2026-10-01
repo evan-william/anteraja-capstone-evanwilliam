@@ -6,15 +6,15 @@ Proyek ini mengikuti pola inti modul mentor: React + Vite menangani tampilan, se
 
 | Konsep dalam modul | Implementasi di proyek |
 | --- | --- |
-| `statusKetepatan()` dan `pesanKendala()` | `server/src/ShipmentStatus.php` menghitung label, pesan, dan kondisi ETA dari data kiriman. |
-| `TiketCS` dan upload foto | `server/src/TicketProof.php` memvalidasi JPG/PNG maksimal 2 MB, menyimpan file di `.private/ticket-proofs/`, dan hanya mengizinkan Admin mengunduhnya setelah pemeriksaan akses. |
+| `statusKetepatan()` dan `pesanKendala()` | `backend/app/Domain/ShipmentStatus.php` menghitung label, pesan, dan kondisi ETA dari data kiriman. |
+| `TiketCS` dan upload foto | `backend/app/Domain/TicketProof.php` memvalidasi JPG/PNG maksimal 2 MB, menyimpan file di `.private/ticket-proofs/`, dan hanya mengizinkan Admin mengunduhnya setelah pemeriksaan akses. |
 | Endpoint GET tracking yang mengembalikan JSON | `GET /api/v1/tracking/{resi}?code={kode}` menambahkan objek `timeliness` pada respons yang sudah ada. |
 | Endpoint POST laporan | Route tiket Konsumen dan Seller tetap menerima JSON lama; jika ada foto, form mengirim `multipart/form-data`. |
 | React `fetch()` dan `FormData` | `components/tracking/tracking-experience.tsx` dan `components/tracking/seller-ticket-form.tsx`. |
 | Konfigurasi API terpusat | `frontend/api.tsx` dan route `/api/v1/*` yang diproksikan Vite pada saat pengembangan. |
 | Database | PostgreSQL Supabase yang sudah digunakan proyek; tidak dibuat database MySQL latihan yang terpisah. |
 
-Modul memakai `php-api/hari1.php`, `php-api/hari2.php`, dan XAMPP Apache untuk menjelaskan konsep. Proyek ini sudah punya router PHP dan kontrak URL yang digunakan UI serta pengujian. Memindahkan endpoint ke nama file latihan akan memutus alur yang ada. PHP tetap bisa dijalankan dari instalasi XAMPP melalui `C:\xampp\php\php.exe`, tanpa Laravel dan tanpa menjalankan MySQL XAMPP.
+Modul memakai `php-api/hari1.php`, `php-api/hari2.php`, dan XAMPP Apache untuk menjelaskan konsep. Proyek ini sekarang memakai routing Laravel dan kontrak URL yang digunakan UI serta pengujian. Memindahkan endpoint ke nama file latihan akan memutus alur yang ada. PHP tetap bisa dijalankan dari instalasi XAMPP melalui `C:\xampp\php\php.exe`, melalui Laravel tanpa menjalankan MySQL XAMPP.
 
 Contoh data `AJ001`/`AJ002`, database MySQL `anteraja_training`, dan contoh kunci service-role tidak disalin ke aplikasi. Mereka hanya menjelaskan teknik; menambahkannya akan membuat dua sumber data dan dapat melewati RLS yang sudah ada. Tantangan opsional seperti pengiriman WhatsApp massal, tautan `wa.me`, dan unduhan ringkasan tiket juga tidak diaktifkan tanpa kebijakan pengiriman/notifikasi dan persetujuan penerima yang jelas. Preferensi notifikasi yang sudah ada tetap bekerja seperti sebelumnya.
 
@@ -50,4 +50,4 @@ Buka `http://127.0.0.1:3000/lacak`. Untuk memeriksa logika status tanpa database
 & 'C:\xampp\php\php.exe' server/tests/shipment-status.php
 ```
 
-Untuk pengujian lengkap, jalankan `npm run typecheck`, `npm run lint`, `npm test`, dan `npm run build`. Lihat [PHP_RUN.md](../PHP_RUN.md) untuk persiapan konfigurasi Supabase dan port.
+Untuk pengujian lengkap, jalankan `npm run typecheck`, `npm run lint`, `npm test`, dan `npm run build`. Lihat [LARAVEL_RUN.md](../LARAVEL_RUN.md) untuk persiapan konfigurasi Supabase dan port.

@@ -1,3 +1,4 @@
+import { appFetch } from '@/frontend/http';
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 
 export type Role = 'admin' | 'seller' | 'consumer';
@@ -5,7 +6,8 @@ export type User = { id: string; email: string; name: string; role: Role };
 type Envelope<T> = { success: true; data: T } | { success: false; error: { code: string; message: string } };
 
 export async function api<T>(path: string, options?: RequestInit): Promise<T> {
-  const response = await fetch(path, { credentials: 'same-origin', cache: 'no-store', ...options });
+  const response = await appFetch(path, { credentials: 'same-origin', cache: 'no-store', ...options,
+    headers: { ...Object.fromEntries(new Headers(options?.headers)), 'X-Requested-With': 'XMLHttpRequest' } });
   const body = await response.json() as Envelope<T>;
   if (!body.success) throw new Error(body.error.message);
   return body.data;
@@ -54,7 +56,7 @@ export function useData<T>(path: string): { data: T | null; error: string; loadi
   }, []);
   useEffect(() => {
     const controller = new AbortController();
-    fetch(path, { signal: controller.signal, credentials: 'same-origin', cache: 'no-store' })
+    appFetch(path, { signal: controller.signal, credentials: 'same-origin', cache: 'no-store' })
       .then((response) => response.json() as Promise<Envelope<T>>)
       .then((body) => { if (body.success) setState({ key, data: body.data, error: '' }); else throw new Error(body.error.message); })
       .catch((caught) => { if (!controller.signal.aborted) setState({ key, data: null, error: caught instanceof Error ? caught.message : 'Data belum dapat dimuat.' }); });

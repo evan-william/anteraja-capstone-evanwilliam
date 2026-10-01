@@ -135,7 +135,7 @@
   .surface-lift:hover { transform: translateY(-1px); box-shadow: 0 12px 28px rgba(32, 27, 30, 0.065); }
 }
 
-.auth-progress { width: 100%; transform-origin: left; animation: auth-progress 5.5s linear both; }
+.auth-progress { width: 100%; transform-origin: left; animation: auth-progress 4s linear both; }
 .auth-progress-paused { animation-play-state: paused; }
 @keyframes auth-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 

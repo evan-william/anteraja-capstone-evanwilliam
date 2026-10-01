@@ -1,4 +1,5 @@
 'use client';
+import { appFetch } from '@/frontend/http';
 
 import { useEffect, useRef, useState } from 'react';
 import { MapPin, Route } from 'lucide-react';
@@ -8,7 +9,7 @@ type RouteResult = { path?: number[][]; error?: string };
 
 async function roadBetween(from: JourneyPoint, to: JourneyPoint): Promise<[number, number][]> {
   const query = new URLSearchParams({ from: `${from.lat},${from.lng}`, to: `${to.lat},${to.lng}` });
-  const response = await fetch(`/api/v1/road-route?${query}`, { cache: 'force-cache' });
+  const response = await appFetch(`/api/v1/road-route?${query}`, { cache: 'force-cache' });
   const body = await response.json() as RouteResult;
   if (!response.ok || !Array.isArray(body.path)) throw new Error(body.error || 'Jalur jalan belum tersedia.');
   return body.path.map(([lat, lng]) => [lat, lng]);

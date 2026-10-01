@@ -1,4 +1,5 @@
 'use client';
+import { appFetch } from '@/frontend/http';
 
 import { useState, type FormEvent } from 'react';
 import { useRouter } from '@/frontend/compat/navigation';
@@ -22,7 +23,7 @@ export function SellerTicketForm({ awb }: { awb: string }) {
     setPending(true); setResult(''); setFailed(false);
     try {
       const form = new FormData(); form.set('note', note); if (photo) form.set('foto', photo);
-      const response = await fetch(`/api/v1/seller/shipments/${encodeURIComponent(awb)}/tickets`, { method: 'POST', body: form });
+      const response = await appFetch(`/api/v1/seller/shipments/${encodeURIComponent(awb)}/tickets`, { method: 'POST', body: form });
       const body = await response.json() as ApiResponse<{ ticket_number: string; proof_warning?: string }>;
       if (!body.success) throw new Error(body.error.message);
       setResult(`Tiket ${body.data.ticket_number} dibuat. Tim Admin dapat melihat laporan ini.${body.data.proof_warning ? ` ${body.data.proof_warning}` : photo ? ' Foto bukti tersimpan.' : ''}`);

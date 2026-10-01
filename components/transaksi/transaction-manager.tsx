@@ -1,4 +1,5 @@
 'use client';
+import { appFetch } from '@/frontend/http';
 
 import { useRouter } from '@/frontend/compat/navigation';
 import { useRef, useState } from 'react';
@@ -36,7 +37,7 @@ export function TransactionManager({ transactions, categories }: TransactionMana
 
   async function handleDelete(id: string) {
     setPendingId(id);
-    const response = await fetch(`/api/v1/transactions/${id}`, { method: 'DELETE' });
+    const response = await appFetch(`/api/v1/transactions/${id}`, { method: 'DELETE' });
     const body = (await response.json()) as ApiResponse<{ id: string }>;
     setPendingId(null);
 

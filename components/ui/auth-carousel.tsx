@@ -46,7 +46,7 @@ export function AuthCarousel({ className }: { className?: string }) {
 
   useEffect(() => {
     if (paused || reduceMotion) return;
-    const timer = window.setInterval(() => setActive((index) => (index + 1) % slides.length), 5500);
+    const timer = window.setInterval(() => setActive((index) => (index + 1) % slides.length), 4000);
     return () => window.clearInterval(timer);
   }, [active, paused, reduceMotion]);
 
@@ -61,7 +61,7 @@ export function AuthCarousel({ className }: { className?: string }) {
     >
       {slides.map((slide, index) => (
         <div key={slide.image} className={cn('absolute inset-0 transition-opacity duration-700 [transition-timing-function:var(--ease-enter)]', index === active ? 'z-10 opacity-100' : 'z-0 opacity-0')} aria-hidden={index !== active}>
-          <Image src={slide.image} alt="" fill priority={index === 0} quality={82} sizes="(max-width: 1023px) 100vw, 55vw" className={cn('object-cover transition-transform duration-[5500ms] ease-linear', index === active && !reduceMotion ? 'scale-[1.025]' : 'scale-100')} />
+          <Image src={slide.image} alt="" fill priority={index === 0} quality={82} sizes="(max-width: 1023px) 100vw, 55vw" className={cn('object-cover transition-transform duration-[4000ms] ease-linear', index === active && !reduceMotion ? 'scale-[1.025]' : 'scale-100')} />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(20,15,19,.36),transparent_32%,transparent_48%,rgba(20,15,19,.22)_100%)]" />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(20,14,18,.46),transparent_80%)]" />
         </div>
