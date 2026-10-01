@@ -1,0 +1,43 @@
+:root {
+  font-family: system-ui, sans-serif;
+  color: #292329;
+  background: #faf8f7;
+  line-height: 1.6;
+  --brand: #df0079;
+}
+* { box-sizing: border-box; }
+body { margin: 0; }
+header, main, footer { max-width: 1100px; margin: auto; padding: 24px; }
+header { display: flex; align-items: center; justify-content: space-between; gap: 24px; border-bottom: 1px solid #e5dddd; }
+header > a { font-size: 26px; font-weight: 800; text-decoration: none; color: var(--brand); }
+small { display: block; color: #696067; font-size: 12px; font-weight: 500; }
+nav { display: flex; gap: 24px; flex-wrap: wrap; }
+a { color: #9c0055; text-underline-offset: 5px; }
+main { padding-block: 48px; }
+h1 { font-size: clamp(32px, 5vw, 56px); line-height: 1.12; letter-spacing: -.04em; margin: 16px 0; }
+h2 { font-size: 22px; margin-top: 0; }
+.eyebrow { color: #9c0055; font-weight: 700; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; }
+.intro { max-width: 660px; color: #696067; }
+.columns { display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px; margin-top: 32px; }
+.panel { background: white; border: 1px solid #e5dddd; border-radius: 16px; padding: 32px; }
+.muted { background: #f1edeb; }
+label { display: block; font-weight: 600; margin: 16px 0 8px; }
+input { width: 100%; padding: 14px; border: 1px solid #b7aeb5; border-radius: 8px; font: inherit; }
+button, .button { display: inline-block; border: 0; background: var(--brand); color: white; border-radius: 8px; padding: 14px 20px; font: inherit; font-weight: 600; cursor: pointer; text-decoration: none; margin-top: 24px; }
+button:hover, .button:hover { background: #b90064; }
+:focus-visible { outline: 3px solid #9c0055; outline-offset: 4px; }
+dl { display: grid; grid-template-columns: 1fr auto; gap: 12px; }
+dd { margin: 0; font-weight: 700; }
+.notice { background: #e4f4e9; color: #24533a; padding: 16px; border-radius: 8px; }
+.summary { display: flex; gap: 16px; justify-content: space-between; flex-wrap: wrap; }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; text-align: left; }
+caption { text-align: left; color: #696067; padding-bottom: 16px; }
+th, td { padding: 16px 12px; border-bottom: 1px solid #e5dddd; overflow-wrap: anywhere; }
+footer { color: #696067; font-size: 13px; }
+@media (max-width: 700px) {
+  header { align-items: flex-start; flex-direction: column; }
+  .columns { grid-template-columns: 1fr; }
+  .panel { padding: 24px; }
+  main { padding-block: 24px; }
+}
