@@ -54,3 +54,16 @@ npm run build
 ```
 
 Dokumen: [PRD terpadu](docs/product/prd.md), [FRD terpadu](docs/product/frd.md), [keputusan produk](docs/product/decisions.md), [desain UI](docs/design/ui-design.md), [dokumentasi prototype](docs/prototype/README.md), [pemetaan halaman ke FRD](docs/prototype/PAGE_FRD_MAPPING.md), [selector JavaScript/jQuery](docs/prototype/SELECTOR_REFERENCE.md), [setup database](database/DATABASE_RUN.md), dan [ERD](database/ERD.md).
+
+## SQL: analisis data pengiriman
+
+Latihan di `exercises/sql-analysis` memakai PDO SQLite dan SQL mentah, tanpa Eloquent.
+Database latihan terpisah berisi 5 kurir dan 20 kiriman; database capstone tidak berubah.
+
+```powershell
+& C:\xampp\php\php.exe exercises/sql-analysis/run.php
+```
+
+Hasil aktual: 8 query dan 40 pemeriksaan lulus. Lihat [query beserta hasil eksekusi](docs/sql-queries.md)
+dan [cara menjalankan](exercises/sql-analysis/HOW_TO_RUN.txt).
+Branch tugas: `feature/sql-analysis`; review/merge belum diklaim selesai.
