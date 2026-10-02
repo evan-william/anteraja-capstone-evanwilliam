@@ -1,0 +1,483 @@
+{
+    "metadata": {
+        "generated_at_utc": "2026-10-02T06:51:46Z",
+        "sqlite_version": "3.39.2",
+        "month_start_utc": "2026-10-01 00:00:00",
+        "next_month_start_utc": "2026-11-01 00:00:00",
+        "couriers": 5,
+        "shipments": 20,
+        "tests_passed": 40
+    },
+    "queries": {
+        "Q01": {
+            "title": "Dalam perjalanan, terberat dahulu",
+            "sql": "SELECT id, tracking_number, weight_kg, status, courier_id\nFROM shipments\nWHERE status = 'in_transit'\nORDER BY weight_kg DESC, id ASC;",
+            "rows": [
+                {
+                    "id": 12,
+                    "tracking_number": "ANT-SQL-0012",
+                    "weight_kg": 12,
+                    "status": "in_transit",
+                    "courier_id": 3
+                },
+                {
+                    "id": 10,
+                    "tracking_number": "ANT-SQL-0010",
+                    "weight_kg": 8,
+                    "status": "in_transit",
+                    "courier_id": 2
+                },
+                {
+                    "id": 4,
+                    "tracking_number": "ANT-SQL-0004",
+                    "weight_kg": 5,
+                    "status": "in_transit",
+                    "courier_id": 1
+                },
+                {
+                    "id": 7,
+                    "tracking_number": "ANT-SQL-0007",
+                    "weight_kg": 2.5,
+                    "status": "in_transit",
+                    "courier_id": 2
+                },
+                {
+                    "id": 16,
+                    "tracking_number": "ANT-SQL-0016",
+                    "weight_kg": 1.25,
+                    "status": "in_transit",
+                    "courier_id": 1
+                },
+                {
+                    "id": 2,
+                    "tracking_number": "ANT-SQL-0002",
+                    "weight_kg": 1,
+                    "status": "in_transit",
+                    "courier_id": 1
+                },
+                {
+                    "id": 14,
+                    "tracking_number": "ANT-SQL-0014",
+                    "weight_kg": 0.999,
+                    "status": "in_transit",
+                    "courier_id": 4
+                },
+                {
+                    "id": 19,
+                    "tracking_number": "ANT-SQL-0019",
+                    "weight_kg": 0.6,
+                    "status": "in_transit",
+                    "courier_id": 3
+                }
+            ]
+        },
+        "Q02": {
+            "title": "Kategori ukuran menggunakan CASE",
+            "sql": "SELECT id, tracking_number, weight_kg,\n    CASE\n        WHEN weight_kg <= 1 THEN 'Small'\n        WHEN weight_kg <= 5 THEN 'Medium'\n        ELSE 'Large'\n    END AS size_category\nFROM shipments\nORDER BY id ASC;",
+            "rows": [
+                {
+                    "id": 1,
+                    "tracking_number": "ANT-SQL-0001",
+                    "weight_kg": 0.5,
+                    "size_category": "Small"
+                },
+                {
+                    "id": 2,
+                    "tracking_number": "ANT-SQL-0002",
+                    "weight_kg": 1,
+                    "size_category": "Small"
+                },
+                {
+                    "id": 3,
+                    "tracking_number": "ANT-SQL-0003",
+                    "weight_kg": 1.001,
+                    "size_category": "Medium"
+                },
+                {
+                    "id": 4,
+                    "tracking_number": "ANT-SQL-0004",
+                    "weight_kg": 5,
+                    "size_category": "Medium"
+                },
+                {
+                    "id": 5,
+                    "tracking_number": "ANT-SQL-0005",
+                    "weight_kg": 5.001,
+                    "size_category": "Large"
+                },
+                {
+                    "id": 6,
+                    "tracking_number": "ANT-SQL-0006",
+                    "weight_kg": 10,
+                    "size_category": "Large"
+                },
+                {
+                    "id": 7,
+                    "tracking_number": "ANT-SQL-0007",
+                    "weight_kg": 2.5,
+                    "size_category": "Medium"
+                },
+                {
+                    "id": 8,
+                    "tracking_number": "ANT-SQL-0008",
+                    "weight_kg": 0.75,
+                    "size_category": "Small"
+                },
+                {
+                    "id": 9,
+                    "tracking_number": "ANT-SQL-0009",
+                    "weight_kg": 3,
+                    "size_category": "Medium"
+                },
+                {
+                    "id": 10,
+                    "tracking_number": "ANT-SQL-0010",
+                    "weight_kg": 8,
+                    "size_category": "Large"
+                },
+                {
+                    "id": 11,
+                    "tracking_number": "ANT-SQL-0011",
+                    "weight_kg": 0.25,
+                    "size_category": "Small"
+                },
+                {
+                    "id": 12,
+                    "tracking_number": "ANT-SQL-0012",
+                    "weight_kg": 12,
+                    "size_category": "Large"
+                },
+                {
+                    "id": 13,
+                    "tracking_number": "ANT-SQL-0013",
+                    "weight_kg": 4,
+                    "size_category": "Medium"
+                },
+                {
+                    "id": 14,
+                    "tracking_number": "ANT-SQL-0014",
+                    "weight_kg": 0.999,
+                    "size_category": "Small"
+                },
+                {
+                    "id": 15,
+                    "tracking_number": "ANT-SQL-0015",
+                    "weight_kg": 6,
+                    "size_category": "Large"
+                },
+                {
+                    "id": 16,
+                    "tracking_number": "ANT-SQL-0016",
+                    "weight_kg": 1.25,
+                    "size_category": "Medium"
+                },
+                {
+                    "id": 17,
+                    "tracking_number": "ANT-SQL-0017",
+                    "weight_kg": 2,
+                    "size_category": "Medium"
+                },
+                {
+                    "id": 18,
+                    "tracking_number": "ANT-SQL-0018",
+                    "weight_kg": 7,
+                    "size_category": "Large"
+                },
+                {
+                    "id": 19,
+                    "tracking_number": "ANT-SQL-0019",
+                    "weight_kg": 0.6,
+                    "size_category": "Small"
+                },
+                {
+                    "id": 20,
+                    "tracking_number": "ANT-SQL-0020",
+                    "weight_kg": 5,
+                    "size_category": "Medium"
+                }
+            ]
+        },
+        "Q03": {
+            "title": "Total pengiriman per kurir bulan ini",
+            "sql": "SELECT c.id AS courier_id, c.name AS courier_name,\n    COUNT(s.id) AS total_shipments_this_month\nFROM couriers AS c\nLEFT JOIN shipments AS s\n    ON s.courier_id = c.id\n    AND s.created_at >= datetime('now', 'start of month')\n    AND s.created_at < datetime('now', 'start of month', '+1 month')\nGROUP BY c.id, c.name\nORDER BY total_shipments_this_month DESC, c.id ASC;",
+            "rows": [
+                {
+                    "courier_id": 1,
+                    "courier_name": "Dimas Pratama",
+                    "total_shipments_this_month": 6
+                },
+                {
+                    "courier_id": 2,
+                    "courier_name": "Ayu Lestari",
+                    "total_shipments_this_month": 4
+                },
+                {
+                    "courier_id": 3,
+                    "courier_name": "Rizky Saputra",
+                    "total_shipments_this_month": 3
+                },
+                {
+                    "courier_id": 4,
+                    "courier_name": "Nadia Putri",
+                    "total_shipments_this_month": 2
+                },
+                {
+                    "courier_id": 5,
+                    "courier_name": "Bima Santoso",
+                    "total_shipments_this_month": 0
+                }
+            ]
+        },
+        "Q04": {
+            "title": "Rata-rata berat per status",
+            "sql": "SELECT status, COUNT(*) AS total_shipments,\n    ROUND(AVG(weight_kg), 3) AS average_weight_kg\nFROM shipments\nGROUP BY status\nORDER BY status ASC;",
+            "rows": [
+                {
+                    "status": "delivered",
+                    "total_shipments": 7,
+                    "average_weight_kg": 2.857
+                },
+                {
+                    "status": "in_transit",
+                    "total_shipments": 8,
+                    "average_weight_kg": 3.919
+                },
+                {
+                    "status": "pending",
+                    "total_shipments": 5,
+                    "average_weight_kg": 4.9
+                }
+            ]
+        },
+        "Q05": {
+            "title": "Kurir dengan lebih dari N pengiriman",
+            "sql": "WITH parameters(n) AS (VALUES (4))\nSELECT c.id AS courier_id, c.name AS courier_name,\n    COUNT(s.id) AS total_shipments\nFROM couriers AS c\nINNER JOIN shipments AS s ON s.courier_id = c.id\nGROUP BY c.id, c.name\nHAVING COUNT(s.id) > (SELECT n FROM parameters)\nORDER BY total_shipments DESC, c.id ASC;",
+            "rows": [
+                {
+                    "courier_id": 1,
+                    "courier_name": "Dimas Pratama",
+                    "total_shipments": 7
+                },
+                {
+                    "courier_id": 2,
+                    "courier_name": "Ayu Lestari",
+                    "total_shipments": 6
+                },
+                {
+                    "courier_id": 3,
+                    "courier_name": "Rizky Saputra",
+                    "total_shipments": 5
+                }
+            ]
+        },
+        "Q06": {
+            "title": "Semua kurir termasuk yang belum memiliki kiriman",
+            "sql": "SELECT c.id AS courier_id, c.name AS courier_name,\n    COUNT(s.id) AS total_shipments\nFROM couriers AS c\nLEFT JOIN shipments AS s ON s.courier_id = c.id\nGROUP BY c.id, c.name\nORDER BY c.id ASC;",
+            "rows": [
+                {
+                    "courier_id": 1,
+                    "courier_name": "Dimas Pratama",
+                    "total_shipments": 7
+                },
+                {
+                    "courier_id": 2,
+                    "courier_name": "Ayu Lestari",
+                    "total_shipments": 6
+                },
+                {
+                    "courier_id": 3,
+                    "courier_name": "Rizky Saputra",
+                    "total_shipments": 5
+                },
+                {
+                    "courier_id": 4,
+                    "courier_name": "Nadia Putri",
+                    "total_shipments": 2
+                },
+                {
+                    "courier_id": 5,
+                    "courier_name": "Bima Santoso",
+                    "total_shipments": 0
+                }
+            ]
+        },
+        "Q07": {
+            "title": "Detail kiriman beserta nama kurir melalui INNER JOIN",
+            "sql": "SELECT s.tracking_number, s.weight_kg, s.status,\n    c.name AS courier_name\nFROM shipments AS s\nINNER JOIN couriers AS c ON c.id = s.courier_id\nORDER BY s.id ASC;",
+            "rows": [
+                {
+                    "tracking_number": "ANT-SQL-0001",
+                    "weight_kg": 0.5,
+                    "status": "pending",
+                    "courier_name": "Dimas Pratama"
+                },
+                {
+                    "tracking_number": "ANT-SQL-0002",
+                    "weight_kg": 1,
+                    "status": "in_transit",
+                    "courier_name": "Dimas Pratama"
+                },
+                {
+                    "tracking_number": "ANT-SQL-0003",
+                    "weight_kg": 1.001,
+                    "status": "delivered",
+                    "courier_name": "Dimas Pratama"
+                },
+                {
+                    "tracking_number": "ANT-SQL-0004",
+                    "weight_kg": 5,
+                    "status": "in_transit",
+                    "courier_name": "Dimas Pratama"
+                },
+                {
+                    "tracking_number": "ANT-SQL-0005",
+                    "weight_kg": 5.001,
+                    "status": "delivered",
+                    "courier_name": "Dimas Pratama"
+                },
+                {
+                    "tracking_number": "ANT-SQL-0006",
+                    "weight_kg": 10,
+                    "status": "pending",
+                    "courier_name": "Dimas Pratama"
+                },
+                {
+                    "tracking_number": "ANT-SQL-0007",
+                    "weight_kg": 2.5,
+                    "status": "in_transit",
+                    "courier_name": "Ayu Lestari"
+                },
+                {
+                    "tracking_number": "ANT-SQL-0008",
+                    "weight_kg": 0.75,
+                    "status": "delivered",
+                    "courier_name": "Ayu Lestari"
+                },
+                {
+                    "tracking_number": "ANT-SQL-0009",
+                    "weight_kg": 3,
+                    "status": "pending",
+                    "courier_name": "Ayu Lestari"
+                },
+                {
+                    "tracking_number": "ANT-SQL-0010",
+                    "weight_kg": 8,
+                    "status": "in_transit",
+                    "courier_name": "Ayu Lestari"
+                },
+                {
+                    "tracking_number": "ANT-SQL-0011",
+                    "weight_kg": 0.25,
+                    "status": "delivered",
+                    "courier_name": "Rizky Saputra"
+                },
+                {
+                    "tracking_number": "ANT-SQL-0012",
+                    "weight_kg": 12,
+                    "status": "in_transit",
+                    "courier_name": "Rizky Saputra"
+                },
+                {
+                    "tracking_number": "ANT-SQL-0013",
+                    "weight_kg": 4,
+                    "status": "pending",
+                    "courier_name": "Rizky Saputra"
+                },
+                {
+                    "tracking_number": "ANT-SQL-0014",
+                    "weight_kg": 0.999,
+                    "status": "in_transit",
+                    "courier_name": "Nadia Putri"
+                },
+                {
+                    "tracking_number": "ANT-SQL-0015",
+                    "weight_kg": 6,
+                    "status": "delivered",
+                    "courier_name": "Nadia Putri"
+                },
+                {
+                    "tracking_number": "ANT-SQL-0016",
+                    "weight_kg": 1.25,
+                    "status": "in_transit",
+                    "courier_name": "Dimas Pratama"
+                },
+                {
+                    "tracking_number": "ANT-SQL-0017",
+                    "weight_kg": 2,
+                    "status": "delivered",
+                    "courier_name": "Ayu Lestari"
+                },
+                {
+                    "tracking_number": "ANT-SQL-0018",
+                    "weight_kg": 7,
+                    "status": "pending",
+                    "courier_name": "Ayu Lestari"
+                },
+                {
+                    "tracking_number": "ANT-SQL-0019",
+                    "weight_kg": 0.6,
+                    "status": "in_transit",
+                    "courier_name": "Rizky Saputra"
+                },
+                {
+                    "tracking_number": "ANT-SQL-0020",
+                    "weight_kg": 5,
+                    "status": "delivered",
+                    "courier_name": "Rizky Saputra"
+                }
+            ]
+        },
+        "Q08": {
+            "title": "Kurir yang belum menerima kiriman melalui NOT EXISTS",
+            "sql": "SELECT c.id AS courier_id, c.name AS courier_name\nFROM couriers AS c\nWHERE NOT EXISTS (\n    SELECT 1 FROM shipments AS s WHERE s.courier_id = c.id\n)\nORDER BY c.id ASC;",
+            "rows": [
+                {
+                    "courier_id": 5,
+                    "courier_name": "Bima Santoso"
+                }
+            ]
+        }
+    },
+    "tests": [
+        "PASS: 20 shipment dummy",
+        "PASS: 5 courier dummy",
+        "PASS: foreign key aktif",
+        "PASS: tidak ada orphan foreign key",
+        "PASS: integritas SQLite",
+        "PASS: Q01 hanya 8 in_transit",
+        "PASS: Q01 status tepat",
+        "PASS: Q01 berat descending",
+        "PASS: Q02 seluruh shipment",
+        "PASS: CASE batas 1 kg Small",
+        "PASS: CASE 1.001 kg Medium",
+        "PASS: CASE batas 5 kg Medium",
+        "PASS: CASE 5.001 kg Large",
+        "PASS: CASE distribusi 6\/8\/6",
+        "PASS: Q03 jumlah bulan ini 6\/4\/3\/2\/0",
+        "PASS: Q03 total bulan ini 15",
+        "PASS: bulan mencakup tepat batas awal",
+        "PASS: bulan menolak satu detik sebelum awal",
+        "PASS: bulan menolak tepat awal bulan depan",
+        "PASS: bulan tidak mencampur bulan sebelumnya\/depan",
+        "PASS: Q04 tiga status",
+        "PASS: Q04 count pending",
+        "PASS: Q04 AVG pending",
+        "PASS: Q04 count in_transit",
+        "PASS: Q04 AVG in_transit",
+        "PASS: Q04 count delivered",
+        "PASS: Q04 AVG delivered",
+        "PASS: HAVING N=4 menghasilkan 3 kurir",
+        "PASS: HAVING lebih dari 6, bukan lebih dari atau sama",
+        "PASS: HAVING N=20 hasil kosong yang valid",
+        "PASS: LEFT JOIN 7\/6\/5\/2\/0",
+        "PASS: LEFT JOIN total sama dengan jumlah shipment",
+        "PASS: INNER JOIN memuat seluruh 20 shipment",
+        "PASS: INNER JOIN relasi kurir tepat",
+        "PASS: NOT EXISTS kurir kosong tepat",
+        "PASS: courier invalid ditolak",
+        "PASS: tracking number duplikat ditolak",
+        "PASS: berat nol ditolak",
+        "PASS: status di luar kontrak ditolak",
+        "PASS: kurir terpakai tidak dapat dihapus"
+    ]
+}

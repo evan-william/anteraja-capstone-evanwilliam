@@ -1,0 +1,57 @@
+SQL ANALYSIS - CARA JALANKAN
+
+Prasyarat: PHP 8.2+ dengan PDO SQLite. Tidak perlu server web, Laravel,
+Composer, npm, Eloquent, internet, atau credential Supabase untuk query ini.
+
+1. Jalankan seluruh query dan pemeriksaan dari terminal PowerShell:
+
+cd "D:\Work & Organization\Work\Maxy Academy\Modules\Daily Module\Day 15\repository"
+& C:\xampp\php\php.exe exercises/sql-analysis/run.php
+
+Hasil sukses: 8 query berjalan; 40 pemeriksaan PASS.
+Hasil lengkap: docs/sql-queries.md dan exercises/sql-analysis/results/.
+Script menulis ulang hasil laporan, bukan database aplikasi; salin laporan lama
+dahulu jika ingin mempertahankan bukti eksekusi pada tanggal sebelumnya.
+Perubahan bulan dapat mengubah tanggal batas, tetapi fixture relatif menjaga
+jumlah 15 bulan ini / 4 bulan sebelumnya / 1 bulan depan.
+
+2. Untuk menyimpan database latihan pada checkout baru:
+
+& C:\xampp\php\php.exe exercises/sql-analysis/run.php --save-db
+
+File: exercises/sql-analysis/analysis.sqlite.
+File yang sudah ada tidak ditimpa. Jika sudah tersedia, cukup gunakan langkah 1.
+Database dalam paket ini dibuat saat pengujian; tanggalnya adalah snapshot,
+jadi query bulan ini pada snapshot lama akan berubah saat bulan berganti.
+Jangan menjalankan schema.sql/seed.sql ulang pada database yang sudah terisi.
+
+3. Untuk menjalankan query satu per satu secara visual:
+
+Buka analysis.sqlite dengan aplikasi SQLite yang kamu miliki, misalnya
+DB Browser for SQLite -> Open Database -> tab Execute SQL.
+Salin SATU blok query dari queries.sql (Q01 sampai Q08), kemudian Run.
+Pada aplikasi lain, gunakan editor SQL dan koneksi SQLite yang setara.
+Penggunaan GUI opsional; output teks nyata sudah memenuhi instruksi hasil query.
+
+Schema dan seed juga bisa diimpor manual ke database SQLite BARU/kosong:
+- Jalankan schema.sql dahulu (aktifkan PRAGMA foreign_keys=ON per koneksi).
+- Jalankan seed.sql.
+- Jalankan queries.sql.
+Jangan arahkan proses impor ke Supabase atau database Laravel lama.
+
+4. Penjelasan singkat untuk presentasi:
+
+Q01: WHERE memilih in_transit, ORDER BY mengurutkan dari berat terbesar.
+Q02: CASE mengubah berat menjadi label Small/Medium/Large tanpa mengubah data.
+Q03: GROUP BY menghitung per kurir, tanggal dibatasi bulan kalender UTC.
+Q04: AVG menghitung berat rata-rata per status; COUNT mengecek ukuran grup.
+Q05: HAVING memilih grup yang totalnya > N; N berada pada VALUES (4).
+Q06: LEFT JOIN mempertahankan Bima yang belum punya shipment, count-nya nol.
+Q07: INNER JOIN mengambil shipment bersama nama kurir yang terkait.
+Q08: NOT EXISTS mencari kurir yang sama sekali belum memiliki shipment.
+
+WHERE bekerja sebelum pengelompokan; HAVING sesudah pengelompokan.
+COUNT(s.id), bukan COUNT(*), agar kurir kosong pada LEFT JOIN dihitung nol.
+SQL tanggal yang digunakan adalah dialek SQLite; bukan PostgreSQL/MySQL.
+Eloquent hanya dibahas sebagai perbandingan di dokumentasi, bukan dipakai
+untuk menjalankan query tugas ini.
