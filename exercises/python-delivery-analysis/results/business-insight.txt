@@ -1,0 +1,1 @@
+Pada dataset simulasi ini, delay >2 jam terjadi pada 24/24 kiriman >50 km (100.0%) dan 5/54 kiriman <10 km (9.3%), atau 10.80 kali rate kelompok dekat; prioritaskan audit kapasitas dan ketepatan janji pada rute jauh.

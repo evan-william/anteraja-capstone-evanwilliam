@@ -1,0 +1,2 @@
+# Preserve the assignment CSV bytes and its documented SHA-256 across platforms.
+shipments.csv -text

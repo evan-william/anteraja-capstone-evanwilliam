@@ -1,0 +1,3 @@
+group,shipments,late_count,late_rate_pct,over_2h_count,over_2h_rate_pct
+Jauh (>50 km),24,24,100.0,24,100.0
+Dekat (<10 km),54,47,87.03703703703704,5,9.25925925925926
