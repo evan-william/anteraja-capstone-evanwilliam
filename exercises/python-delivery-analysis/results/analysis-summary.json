@@ -1,0 +1,87 @@
+{
+  "dataset_source": "Original assignment Google Drive CSV",
+  "dataset_sha256": "0592817a2a2138fdd8e7905e20fff9c9809c87a88871f8d9b2b9b5537128ab17",
+  "cleaning": {
+    "rows_before": 220,
+    "original_columns": 7,
+    "removed_missing_or_unparseable": 0,
+    "removed_duplicates": 0,
+    "removed_invalid_ranges": 0,
+    "rows_after": 220
+  },
+  "statistics": {
+    "min_hours": 0.0,
+    "median_hours": 3.05,
+    "mean_hours": 4.145,
+    "std_sample_hours": 3.807025768953955,
+    "std_population_hours": 3.7983635830566445
+  },
+  "worst_couriers": [
+    "Citra"
+  ],
+  "correlations": {
+    "distance_km": 0.7101420189939082,
+    "weight_kg": 0.21976094221531065
+  },
+  "model": {
+    "features": [
+      "distance_km",
+      "weight_kg"
+    ],
+    "seed": 42,
+    "train_rows": 176,
+    "test_rows": 44,
+    "scores": {
+      "MAE_hours": 1.077434264161093,
+      "RMSE_hours": 2.4487505502957725,
+      "R2": 0.5247530530348459
+    },
+    "baseline_scores": {
+      "MAE_hours": 2.8866735537190085,
+      "RMSE_hours": 3.5586878345567645,
+      "R2": -0.003714110821999128
+    },
+    "clipped_scores": {
+      "MAE_hours": 1.077434264161093,
+      "RMSE_hours": 2.4487505502957725,
+      "R2": 0.5247530530348459
+    },
+    "intercept": -0.3240818285385272,
+    "coefficients": {
+      "distance_km": 0.16635231240529272,
+      "weight_kg": 0.23570568953771454
+    }
+  },
+  "distance": [
+    {
+      "group": "Jauh (>50 km)",
+      "shipments": 24,
+      "late_count": 24,
+      "late_rate_pct": 100.0,
+      "over_2h_count": 24,
+      "over_2h_rate_pct": 100.0
+    },
+    {
+      "group": "Dekat (<10 km)",
+      "shipments": 54,
+      "late_count": 47,
+      "late_rate_pct": 87.03703703703704,
+      "over_2h_count": 5,
+      "over_2h_rate_pct": 9.25925925925926
+    }
+  ],
+  "ratio_over_2h": 10.799999999999999,
+  "insight": "Pada dataset simulasi ini, delay >2 jam terjadi pada 24/24 kiriman >50 km (100.0%) dan 5/54 kiriman <10 km (9.3%), atau 10.80 kali rate kelompok dekat; prioritaskan audit kapasitas dan ketepatan janji pada rute jauh.",
+  "checks": {
+    "no_missing": true,
+    "no_duplicates": true,
+    "unique_tracking": true,
+    "finite_values": true,
+    "nonnegative_delay": true,
+    "loop_equals_groupby": true,
+    "train_test_disjoint": true,
+    "cleaning_fixture": true,
+    "strict_distance_boundaries": true,
+    "empty_group_guard": true
+  }
+}
