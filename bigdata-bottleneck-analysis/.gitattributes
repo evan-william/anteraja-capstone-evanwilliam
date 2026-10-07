@@ -1,1 +1,1 @@
-data/scan_events.csv -text
+data/scan_events.csv -text whitespace=cr-at-eol
