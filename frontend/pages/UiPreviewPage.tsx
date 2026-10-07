@@ -15,7 +15,7 @@ import {
   Upload,
   WalletCards,
 } from 'lucide-react';
-import Image from '@/frontend/compat/Image';
+import Image from '@/compat/Image';
 import { useSearchParams } from 'react-router-dom';
 
 type Screen = 'dashboard' | 'upload' | 'preview' | 'history' | 'shipment';

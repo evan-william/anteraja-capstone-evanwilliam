@@ -52,10 +52,11 @@ function finance_categories(string $method): never
     $token = current_token();
     if ($method === 'GET') {
         $query = ['select' => CATEGORY_FIELDS, 'user_id' => 'eq.' . $user['id'], 'order' => 'type.asc,name.asc'];
-        $status = $_GET['status'] ?? '';
+        $status = request()->query('status', '');
         if ($status === 'active') $query['is_archived'] = 'eq.false';
         if ($status === 'archived') $query['is_archived'] = 'eq.true';
-        $result = supabase_table('categories', $query, $token);
+        $result = app(\App\Support\OperationsCache::class)->categories($user['id'], $query,
+            fn () => supabase_table('categories', $query, $token));
         if ($result['status'] !== 200) api_fail('INTERNAL_ERROR', 'Gagal mengambil daftar kategori.', 500);
         api_ok($result['data']);
     }
@@ -64,6 +65,7 @@ function finance_categories(string $method): never
         $result = supabase_mutate('POST', 'categories', ['select' => CATEGORY_FIELDS], ['user_id' => $user['id'], ...$input], $token);
         category_conflict($result);
         $row = single_result($result, 'Gagal membuat kategori.', 'Kategori tidak ditemukan.');
+        app(\App\Support\OperationsCache::class)->invalidateCategories($user['id']);
         app_log('finance.category_created', ['outcome' => 'success']);
         api_ok($row, 201);
     }
@@ -81,6 +83,7 @@ function finance_category(string $method, string $id): never
         $result = supabase_mutate('PATCH', 'categories', [...$query, 'select' => CATEGORY_FIELDS], $input, $token);
         category_conflict($result);
         $row = single_result($result, 'Gagal mengubah kategori.', 'Kategori tidak ditemukan.');
+        app(\App\Support\OperationsCache::class)->invalidateCategories($user['id']);
         app_log('finance.category_updated', ['outcome' => 'success']);
         api_ok($row);
     }
@@ -90,6 +93,7 @@ function finance_category(string $method, string $id): never
         if (($used['data'] ?? []) !== []) api_fail('CONFLICT', 'Kategori ini sudah dipakai transaksi. Arsipkan saja, jangan dihapus.', 409);
         $result = supabase_mutate('DELETE', 'categories', [...$query, 'select' => 'id'], null, $token);
         $row = single_result($result, 'Gagal menghapus kategori.', 'Kategori tidak ditemukan.');
+        app(\App\Support\OperationsCache::class)->invalidateCategories($user['id']);
         app_log('finance.category_deleted', ['outcome' => 'success']);
         api_ok(['id' => $row['id']]);
     }
@@ -137,7 +141,7 @@ function finance_transactions(string $method): never
     $user = require_user(['seller']);
     $token = current_token();
     if ($method === 'GET') {
-        $limit = filter_var($_GET['limit'] ?? 50, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]) ?: 50;
+        $limit = filter_var(request()->query('limit', 50), FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]) ?: 50;
         $result = supabase_table('transactions', ['select' => TRANSACTION_FIELDS . ',categories(id,name,type)', 'user_id' => 'eq.' . $user['id'], 'is_deleted' => 'eq.false', 'order' => 'transaction_date.desc,created_at.desc', 'limit' => min($limit, 200)], $token);
         if ($result['status'] !== 200) api_fail('INTERNAL_ERROR', 'Gagal mengambil daftar transaksi.', 500);
         api_ok($result['data']);

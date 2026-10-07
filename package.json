@@ -6,11 +6,12 @@
     "dev": "node tools/dev-laravel-react.mjs",
     "build": "node node_modules/typescript/bin/tsc -p tsconfig.json --noEmit && node node_modules/vite/bin/vite.js build",
     "start": "node tools/serve-laravel-react.mjs",
-    "lint": "node node_modules/eslint/bin/eslint.js frontend components lib/tracking lib/import lib/format.ts lib/roles.ts",
+    "lint": "node node_modules/eslint/bin/eslint.js frontend",
     "typecheck": "node node_modules/typescript/bin/tsc -p tsconfig.json --noEmit",
     "test": "node node_modules/vitest/vitest.mjs run",
     "test:watch": "node node_modules/vitest/vitest.mjs",
-    "test:e2e": "node tools/qa-php-react.mjs"
+    "test:e2e": "node tools/qa-laravel-react.mjs",
+    "audit:usage": "node tools/audit-project.mjs --check"
   },
   "dependencies": {
     "@radix-ui/react-label": "^2.1.7",

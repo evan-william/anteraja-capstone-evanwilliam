@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('api')->middleware(OperationsSession::class)->group(function () {
     Route::get('health',[C::class,'health']);
     Route::prefix('v1')->group(function () {
+        Route::get('bootstrap',[C::class,'bootstrap']);
         Route::get('road-route',[C::class,'roadRoute']);
         Route::get('auth/me',[C::class,'me']);
         Route::post('auth/login',[C::class,'login'])->middleware('throttle:20,1');

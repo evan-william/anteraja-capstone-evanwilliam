@@ -40,9 +40,13 @@ Detail kiriman kini memiliki [peta perjalanan](docs/prototype/ROUTE_MAP.md) yang
 
 PHP menangani seluruh rute `/api/*`; React + Vite menangani halaman dan state UI. Supabase menyediakan Auth, PostgreSQL, RLS, dan RPC atomik. Tracking publik memeriksa kode akses, menyamarkan data penerima, dan memakai pembatasan request. RPC database menulis resolution, event, dan integration outbox dalam satu transaksi. Demo tidak memakai API internal Anteraja.
 
-Kode aplikasi berada di `frontend/`, `components/`, dan `server/`. `npm run dev`, `npm run build`, dan `npm run start` memakai Vite untuk frontend dan PHP untuk backend. Sumber API dan halaman Next.js lama sudah dihapus dari salinan ini; dokumen tugas historis tetap disimpan sebagai arsip proyek.
+Seluruh kode antarmuka berada di `frontend/`: halaman di `pages/`, komponen di `components/`, dan helper/type di `lib/`. Backend berada di `backend/app/` dengan endpoint di `backend/routes/operations.php`. Alias `@/` menunjuk ke `frontend/`. `npm run dev`, `npm run build`, dan `npm run start` memakai satu build Vite dan backend Laravel; tidak ada build Vite kedua di backend.
 
-Penyesuaian dari modul PHP mentor, termasuk logika ETA di PHP dan foto bukti tiket CS, dijelaskan di [panduan penerapan PHP](docs/PHP_MENTOR_GUIDE.md).
+Untuk mencari file yang perlu diedit, baca [peta struktur proyek](docs/architecture/PROJECT_STRUCTURE.md). [Indeks dokumentasi](docs/README.md) memisahkan panduan runtime, requirement produk, dan bukti tugas historis.
+
+Tugas Python/Data Mining dan Big Data berada di folder `Daily Module/Day 17` dan `Daily Module/Day 18`, pada branch tugas masing-masing. Notebook latihan tersebut **belum menjadi fitur prediksi pada aplikasi ini**. Jangan menganggap tugas yang selesai otomatis terintegrasi ke runtime.
+
+Penyesuaian dari modul PHP mentor, termasuk logika ETA di PHP dan foto bukti tiket CS, dijelaskan di [panduan penerapan PHP](docs/runtime/PHP_MENTOR_GUIDE.md).
 
 ## Pemeriksaan
 
@@ -51,6 +55,7 @@ npm run typecheck
 npm run lint
 npm test
 npm run build
+npm run audit:usage
 ```
 
 Dokumen: [PRD terpadu](docs/product/prd.md), [FRD terpadu](docs/product/frd.md), [keputusan produk](docs/product/decisions.md), [desain UI](docs/design/ui-design.md), [dokumentasi prototype](docs/prototype/README.md), [pemetaan halaman ke FRD](docs/prototype/PAGE_FRD_MAPPING.md), [selector JavaScript/jQuery](docs/prototype/SELECTOR_REFERENCE.md), [setup database](database/DATABASE_RUN.md), dan [ERD](database/ERD.md).

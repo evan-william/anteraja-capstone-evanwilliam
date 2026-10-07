@@ -22,11 +22,17 @@ function view_all_rows(string $table, array $query, string $token): array
 
 function shipment_related(string $id, string $token): array
 {
-    return [
-        'events' => view_rows('shipment_events', ['select' => '*', 'shipment_id' => 'eq.' . $id, 'order' => 'occurred_at.desc', 'limit' => '50'], $token),
-        'resolutions' => view_rows('shipment_resolutions', ['select' => '*', 'shipment_id' => 'eq.' . $id, 'order' => 'submitted_at.desc', 'limit' => '20'], $token),
-        'tickets' => view_rows('support_tickets', ['select' => '*', 'shipment_id' => 'eq.' . $id, 'order' => 'created_at.desc', 'limit' => '20'], $token),
-    ];
+    $results = supabase_read_many([
+        'events' => ['table' => 'shipment_events', 'query' => ['select' => '*', 'shipment_id' => 'eq.' . $id, 'order' => 'occurred_at.desc', 'limit' => '50']],
+        'resolutions' => ['table' => 'shipment_resolutions', 'query' => ['select' => '*', 'shipment_id' => 'eq.' . $id, 'order' => 'submitted_at.desc', 'limit' => '20']],
+        'tickets' => ['table' => 'support_tickets', 'query' => ['select' => '*', 'shipment_id' => 'eq.' . $id, 'order' => 'created_at.desc', 'limit' => '20']],
+    ], $token);
+    $rows = [];
+    foreach ($results as $key => $result) {
+        if ($result['status'] !== 200 || !is_array($result['data'])) api_fail('INTERNAL_ERROR', 'Data belum dapat dimuat. Periksa koneksi lalu coba lagi.', 500);
+        $rows[$key] = $result['data'];
+    }
+    return $rows;
 }
 
 function page_data(string $page): never
@@ -57,16 +63,17 @@ function page_data(string $page): never
     if ($page === 'admin-shipments') {
         require_user(['admin']);
         $query = ['select' => 'id,tracking_number,service_type,delivery_status,risk_status,recipient_name,destination_city,current_location,estimated_delivery_at', 'order' => 'created_at.desc'];
-        $risk = (string) ($_GET['risiko'] ?? 'all');
+        $risk = (string) request()->query('risiko', 'all');
         if (in_array($risk, ['action_required', 'at_risk', 'on_track', 'resolved'], true)) $query['risk_status'] = 'eq.' . $risk;
-        $q = preg_replace('/[^a-zA-Z0-9\s-]/', '', (string) ($_GET['q'] ?? ''));
+        $q = preg_replace('/[^a-zA-Z0-9\s-]/', '', (string) request()->query('q', ''));
         $q = trim(substr($q ?? '', 0, 40));
         if ($q !== '') $query['or'] = '(tracking_number.ilike.*' . $q . '*,recipient_name.ilike.*' . $q . '*,destination_city.ilike.*' . $q . '*)';
-        $number = min(max((int) ($_GET['halaman'] ?? 1), 1), 1000);
-        $countFilters = $query;
-        unset($countFilters['select'], $countFilters['order']);
-        $count = supabase_count('shipments', $countFilters, $token);
-        $rows = view_rows('shipments', [...$query, 'limit' => '25', 'offset' => (string) (($number - 1) * 25)], $token);
+        $number = min(max((int) request()->query('halaman', 1), 1), 1000);
+        $pageQuery = [...$query, 'limit' => '25', 'offset' => (string) (($number - 1) * 25)];
+        $result = supabase_request('GET', '/rest/v1/shipments?' . http_build_query($pageQuery, '', '&', PHP_QUERY_RFC3986), null, ['Prefer: count=exact'], $token);
+        if (!in_array($result['status'], [200, 206], true) || !is_array($result['data'])) api_fail('INTERNAL_ERROR', 'Data belum dapat dimuat. Periksa koneksi lalu coba lagi.', 500);
+        $count = supabase_result_count($result);
+        $rows = $result['data'];
         api_ok(['shipments' => $rows, 'count' => $count, 'page' => $number]);
     }
     if ($page === 'tickets') {

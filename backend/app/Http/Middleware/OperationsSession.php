@@ -25,6 +25,7 @@ class OperationsSession
         } catch (HttpResponseException $exception) {
             $response = $exception->getResponse();
         } finally {
+            \App\Support\SupabaseConnection::release();
             $request->session()->put('operations', SessionState::$data);
             SessionState::$data = [];
             SessionState::$user = null;

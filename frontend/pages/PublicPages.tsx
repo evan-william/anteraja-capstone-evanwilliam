@@ -1,4 +1,4 @@
-import Image from '@/frontend/compat/Image';
+import Image from '@/compat/Image';
 import { BellRing, MapPinned, ShieldCheck } from 'lucide-react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { PublicHeader } from '@/components/tracking/public-header';

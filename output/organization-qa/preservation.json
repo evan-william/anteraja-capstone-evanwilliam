@@ -1,0 +1,16 @@
+{
+  "checked": {
+    "frontend": 57,
+    "backend": 47,
+    "sql": 21,
+    "requirements": 2,
+    "assets": 15,
+    "archivedAssets": 6
+  },
+  "failures": [],
+  "backupFolder": "React-Laravel-before-organization-2026-10-07",
+  "allowedFrontendDifferences": [
+    "Import prefix @/frontend/ normalized to @/.",
+    "One relative class on seller table scroller fixes mobile overflow."
+  ]
+}

@@ -1,0 +1,18 @@
+PASS public tracking: /lacak
+PASS public detail: /lacak/ANT-100015?code=260926
+PASS tracking invalid access code
+PASS admin login
+PASS admin shipments: /admin/kiriman
+PASS admin shipment detail
+PASS admin tickets: /admin/tiket
+PASS admin assistant data reply
+PASS admin denied seller finance
+PASS seller login
+PASS seller shipments: /pengiriman
+PASS seller shipment detail
+PASS seller finance: /transaksi
+PASS seller import: /import
+PASS seller CSV preview through PHP
+PASS seller categories: /kategori
+PASS consumer login
+PASS consumer denied admin

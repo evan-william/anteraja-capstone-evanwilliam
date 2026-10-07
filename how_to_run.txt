@@ -1,12 +1,89 @@
-Run All:
-cd "D:\Work & Organization\Work\Maxy Academy\Modules\Final Project Full - React + Laravel"
-npm run dev
+REACT + LARAVEL — CARA RUN DI TERMINAL POWERSHELL VS CODE
 
-Run Individual:
-Laravel ->
-cd "D:\Work & Organization\Work\Maxy Academy\Modules\Final Project Full - React + Laravel\backend"
-& C:\xampp\php\php.exe artisan serve --host=127.0.0.1 --port=8089
+CARA PALING PRAKTIS: klik dua kali run.bat di folder proyek ini.
+Launcher menyalakan React + Laravel dan membuka browser setelah server siap.
+Jika port default terpakai, launcher memilih port kosong dan menampilkan URL-nya.
+Biarkan jendela run.bat terbuka; tutup jendelanya untuk menghentikan kedua server.
+Menutup tab browser saja TIDAK menghentikan server. Server lain tidak dihentikan.
+Launcher tidak menginstal dependency atau mengubah database/environment file.
+Launcher memakai router resmi Laravel pada server PHP lokal dan mengaktifkan
+OPcache bila tersedia. Tidak mengubah php.ini XAMPP global. Edit PHP tetap langsung
+terbaca; cache kode ini bukan cache data akun atau database.
 
-React/Vite ->
+1. RUN KEDUANYA SEKALIGUS (DIREKOMENDASIKAN)
+
+Salin satu baris ini ke terminal:
+
+cd "D:\Work & Organization\Work\Maxy Academy\Modules\Final Project Full - React + Laravel"; $env:PORT='3000'; $env:API_PORT='8089'; npm run dev
+
+Buka aplikasi: http://127.0.0.1:3000
+Cek backend: http://127.0.0.1:8089/api/health
+
+Command ini menyalakan React/Vite dan Laravel sekaligus. Biarkan terminal
+tetap terbuka. Tekan Ctrl+C di terminal untuk menghentikan server.
+Buka UI lewat port React, bukan port API Laravel.
+
+2. JIKA PORT 3000 ATAU 8089 SEDANG DIPAKAI
+
+Hentikan server lama di terminalnya dengan Ctrl+C, atau pakai port alternatif:
+
+cd "D:\Work & Organization\Work\Maxy Academy\Modules\Final Project Full - React + Laravel"; $env:PORT='3002'; $env:API_PORT='8090'; npm run dev
+
+Buka aplikasi: http://127.0.0.1:3002
+Cek backend: http://127.0.0.1:8090/api/health
+
+Jangan menjalankan mode gabungan dan dua terminal bersamaan pada port yang sama.
+Variabel PORT/API_PORT berlaku di terminal itu sampai kamu menggantinya
+atau menutup terminal. Command bagian 1 mengatur ulang ke port default.
+
+3. RUN TERPISAH — DUA TERMINAL
+
+Terminal pertama: Laravel API
+
+cd "D:\Work & Organization\Work\Maxy Academy\Modules\Final Project Full - React + Laravel\backend\public"
+& C:\xampp\php\php.exe -d upload_max_filesize=11M -d post_max_size=12M -d memory_limit=512M -S 127.0.0.1:8089 -t . ../vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php
+
+Terminal kedua: React/Vite
+
 cd "D:\Work & Organization\Work\Maxy Academy\Modules\Final Project Full - React + Laravel"
+$env:API_PORT='8089'
 node node_modules/vite/bin/vite.js --host 127.0.0.1 --port 3000
+
+Buka http://127.0.0.1:3000. Vite meneruskan request /api ke Laravel.
+Jika mengganti port Laravel, samakan API_PORT di terminal React sebelum run.
+Mode gabungan bagian 1 direkomendasikan karena mengaktifkan OPcache otomatis.
+
+4. MENJALANKAN HASIL BUILD UNTUK DEMO LOKAL
+
+Dari root proyek, setelah menghentikan server yang memakai port 3000:
+
+npm run build
+$env:PORT='3000'
+npm start
+
+Buka http://127.0.0.1:3000. Mode ini memakai satu server Laravel untuk
+menyajikan hasil build React dan API; tidak perlu menyalakan Vite terpisah.
+Jalankan build ulang setelah mengubah kode frontend. Ini server demo lokal,
+bukan konfigurasi web server produksi.
+
+5. KONFIGURASI YANG HARUS TETAP ADA
+
+- Node.js dan PHP 8.2+ harus tersedia. Launcher otomatis memakai
+  C:\xampp\php\php.exe jika tersedia; alternatifnya PHP_BIN atau PHP di PATH.
+- node_modules di root dan backend\vendor harus sudah terpasang.
+- .env.local di ROOT proyek menyimpan konfigurasi Supabase dan Gemini.
+- backend\.env menyimpan konfigurasi Laravel, termasuk APP_KEY dan session.
+- Database bisnis dan login tetap menggunakan Supabase. Internet diperlukan.
+- Jangan mengganti APP_KEY yang sudah ada, membagikan file .env, atau menjalankan
+  artisan migrate/migrate:fresh ke database Supabase untuk sekadar menyalakan UI.
+
+Panduan instalasi checkout baru: LARAVEL_RUN.md.
+Optimasi tidak mengubah cara run. Akun demo lokal ada di roles_password.txt;
+jangan unggah file kredensial tersebut ke GitHub.
+REDIS CACHE (TANPA DOCKER)
+-------------------------
+npm run dev / run.bat sekarang juga menjalankan cache Redis lokal bila tersedia.
+Memurai hanya bind 127.0.0.1:6379, dibatasi 64 MB, bukan service Windows.
+Periksa koneksi dari folder backend:
+C:\xampp\php\php.exe artisan operations:cache-check
+Panduan konfigurasi, TTL, invalidasi, dan fallback: docs/runtime/REDIS.md.

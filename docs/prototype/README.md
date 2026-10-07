@@ -1,5 +1,7 @@
 # Dokumentasi Prototype Anteraja
 
+> Arsip prototype awal: bagian Next.js dan nama file lama merekam versi saat tugas dibuat. Runtime aktif sekarang React/Vite + Laravel. Gunakan [panduan run terbaru](../../LARAVEL_RUN.md) dan [peta folder terbaru](../architecture/PROJECT_STRUCTURE.md) untuk mengedit aplikasi sekarang. Requirement FR tetap dipertahankan.
+
 Prototype ini mengubah rancangan UI menjadi halaman Next.js yang saling terhubung. Tracking menjadi alur publik utama. Setelah masuk, seller dapat membuka Pengiriman, Arus Dana, Rekonsiliasi, dan Kategori melalui navigasi yang sama.
 
 ## Menjalankan prototype

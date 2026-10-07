@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 class OperationsController extends Controller
 {
     public function health() { api_ok(['status'=>'ok','runtime'=>'laravel']); }
+    public function bootstrap() { \App\Support\PageBootstrap::respond(); }
     public function roadRoute() { road_route(); }
     public function me() { api_ok(current_user()); }
     public function login() { sign_in(raw_json()); }

@@ -1,4 +1,4 @@
-import Link from '@/frontend/compat/Link';
+import Link from '@/compat/Link';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { CalendarClock, MapPin, ShieldAlert } from 'lucide-react';
 import { useState } from 'react';

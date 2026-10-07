@@ -11,6 +11,9 @@ npm run dev
 ```
 
 Frontend http://127.0.0.1:3000; Laravel http://127.0.0.1:8089/api/health.
+Launcher memakai server PHP lokal dengan router resmi Laravel dan mengaktifkan OPcache jika tersedia.
+Seluruh request tetap melewati `backend/public/index.php` dan lifecycle Laravel.
+Tidak mengubah konfigurasi XAMPP global; edit PHP tetap diperiksa setiap request.
 Jika server versi PHP masih memakai port itu, hentikan server lama dengan Ctrl+C atau:
 
 ```powershell
@@ -59,5 +62,7 @@ Logging operasional tetap di root .private/logs; tidak merekam raw body/password
 `npm run typecheck`, `npm run lint`, `npm test`, `npm run build`.
 Backend: `php artisan test`, `php artisan route:list --path=api`.
 Produksi lokal: build dahulu lalu `npm start` (menyalin aset build ke public, Laravel menyajikan SPA).
+Ini server demo lokal satu proses, bukan server produksi multi-worker.
+Pengukuran total alur API dan batas target: `docs/runtime/PERFORMANCE.md`.
 Daftar endpoint dan kontrak sebelumnya dipertahankan, termasuk upload foto tiket dan export frontend.
 Token session versi PHP tidak dibawa ke Laravel: login sekali lagi di salinan baru.

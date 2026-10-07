@@ -1,0 +1,468 @@
+PANDUAN TEST KECEPATAN SELURUH API — REACT + LARAVEL
+Tanggal panduan: 2 Oktober 2026
+
+TUJUAN
+Ukur seluruh request API yang diperlukan untuk SATU tindakan pengguna sampai
+semua respons selesai. Ulangi untuk SEMUA fitur, bukan cuma dashboard.
+Panduan ini tidak menyatakan semua fitur sudah di bawah satu detik.
+
+Contoh: klik Login -> autentikasi -> redirect -> data dashboard selesai.
+Semua request dalam rantai itu masuk pengukuran "login sampai dashboard".
+Jangan mengukur login saja lalu menyimpulkan seluruh alurnya cepat.
+
+Bedakan tiga angka:
+1. per request: durasi satu endpoint.
+2. total alur API: akhir respons terakhir - mulai request pertama.
+3. waktu pengguna: klik -> hasil benar-benar terlihat dan dapat dipakai.
+
+Contoh request paralel 400 ms dan 600 ms: total alur bisa sekitar 600 ms,
+bukan otomatis 1.000 ms. Jika berurutan dengan jeda, total dapat lebih besar.
+Menjumlahkan kolom Time bukan cara mengukur total alur paralel.
+Menjumlahkan semua aktivitas sepanjang sesi satu jam juga bukan SLA satu detik.
+"Semua API" berarti seluruh endpoint/alur tercakup dalam daftar pengujian;
+target <1.000 ms diuji per alur, bukan seluruh pekerjaan aplikasi selamanya.
+
+
+1. SIAPKAN APLIKASI
+
+Gunakan Chrome atau Edge dan hasil build, bukan Vite dev untuk angka final.
+Tutup pengujian lain agar tidak berebut server PHP lokal satu proses.
+
+Terminal PowerShell VS Code, dari folder proyek:
+
+cd "D:\Work & Organization\Work\Maxy Academy\Modules\Final Project Full - React + Laravel"
+npm run build
+$env:PORT='3063'; npm start
+
+Buka http://127.0.0.1:3063 dan biarkan terminal server terbuka.
+Jika port terpakai, pilih port kosong dan gunakan port yang sama di semua tes.
+Jangan berganti localhost/127.0.0.1 di tengah tes: sesi cookie bisa berbeda.
+Gunakan akun demo lokal dari roles_password.txt; jangan salin password ke laporan.
+Internet tetap diperlukan untuk Supabase, penyedia peta, dan Gemini.
+Tidak perlu reset database, mengubah RLS, atau menjalankan migrate:fresh.
+
+Untuk cek fitur saat mengedit, run.bat boleh dipakai. Catat hasilnya sebagai DEV,
+jangan campur dengan hasil BUILD. Bangun ulang build setelah edit frontend.
+
+
+2. CARA PALING MUDAH: F12 -> NETWORK
+
+1. Buka F12 -> Network. Pastikan tombol Record menyala.
+2. Pilih No throttling untuk baseline internet normal.
+3. Aktifkan Preserve log jika alur mungkin berpindah halaman/reload.
+4. Centang Disable cache untuk tes tanpa cache BROWSER (DevTools harus terbuka).
+   Ini TIDAK menghapus cache OPcache PHP atau cache rute di server.
+5. Pilih Fetch/XHR dan isi kotak Filter dengan /api/.
+   Untuk gambar bukti tiket, gunakan All + filter /api/ jika Fetch/XHR tidak
+   menampilkannya. Request gambar dapat menggunakan tipe Img.
+6. Klik Clear sebelum SATU skenario. Tunggu background request sebelumnya selesai.
+7. Lakukan satu tindakan: login, buka kiriman, cari resi, simpan kategori, dll.
+8. Tunggu data final tampil DAN tidak ada request relevan berstatus Pending.
+9. Catat URL tanpa query rahasia, Method, Status, Time, dan jumlah request.
+10. Klik request -> Timing untuk melihat pembagian waktunya.
+11. Cek Response/Preview: status 200 saja tidak menjamin data benar.
+12. Simpan screenshot tabel Network + hasil UI. Sembunyikan data pribadi.
+
+Cara membaca Timing:
+- Queueing/Stalled: browser/antrean/koneksi, bukan otomatis query database lambat.
+- Waiting for server response (TTFB): menunggu respons pertama; termasuk jaringan
+  dan kerja server, bukan waktu database murni.
+- Content Download: waktu menerima isi respons.
+- Time: durasi request browser, bukan total semua request satu alur.
+
+Waterfall memperlihatkan request berjalan bersama atau berurutan.
+Ambil rentang dari awal API pertama sampai akhir API terakhir.
+Angka Finish/Load di bawah Network dapat mencakup gambar, script, dan asset lain;
+jangan langsung menganggapnya total API saja. Gunakan helper pada bagian 3 untuk
+angka API yang presisi. Untuk waktu klik sampai UI siap, gunakan Performance:
+rekam sebelum klik, berhenti sesudah UI siap, lihat screenshot/timeline render.
+
+Jangan mengukur hanya /api/health: health tidak membuktikan login/database cepat.
+Browser melihat request ke Laravel. Call Laravel -> Supabase/Gemini tidak muncul
+sebagai baris browser terpisah; waktunya tetap termasuk dalam respons Laravel.
+Gunakan log server pada bagian 7 untuk menelusuri call internal.
+
+
+3. HITUNG TOTAL OTOMATIS DI CONSOLE, TANPA MENGUBAH PROJECT
+
+Helper berikut hanya membaca timing browser dan menghitung angka.
+Tidak mengirim password, tidak membuat request, dan tidak mengubah data aplikasi.
+Baca dulu kode sebelum menjalankannya; jangan melewati peringatan keamanan
+DevTools untuk kode yang tidak kamu pahami.
+
+1. Buka tab Console pada website lokal ini.
+2. Salin kode ANTARA penanda BEGIN/END, tanpa kedua baris penandanya.
+3. Tekan Enter untuk memasang helper pada tab ini.
+
+BEGIN API SPEED HELPER
+(() => {
+  let started = null;
+  let label = '';
+  const round = value => Math.round(value * 10) / 10;
+  performance.setResourceTimingBufferSize(5000);
+
+  function report(since, name, includeAction) {
+    const calls = performance.getEntriesByType('resource').filter(entry => {
+      const url = new URL(entry.name, location.href);
+      return url.origin === location.origin && url.pathname.startsWith('/api/')
+        && entry.startTime >= since && entry.responseEnd >= entry.startTime;
+    });
+    if (!calls.length) {
+      console.warn('TIDAK ADA API SELESAI: cek Network; ini bukan hasil lulus 0 ms.');
+      return { scenario: name, count: 0, apiTotalMs: null };
+    }
+    const first = Math.min(...calls.map(entry => entry.startTime));
+    const last = Math.max(...calls.map(entry => entry.responseEnd));
+    const rows = calls.map((entry, index) => ({
+      no: index + 1,
+      endpoint: new URL(entry.name).pathname,
+      startMs: round(entry.startTime - first),
+      endMs: round(entry.responseEnd - first),
+      durationMs: round(entry.duration),
+      ttfbMs: entry.requestStart > 0 && entry.responseStart > 0
+        ? round(entry.responseStart - entry.requestStart) : null
+    }));
+    const result = {
+      scenario: name,
+      count: calls.length,
+      apiTotalMs: round(last - first),
+      markerToLastApiMs: includeAction ? round(last - since) : null,
+      sumRequestMs: round(calls.reduce((sum, entry) => sum + entry.duration, 0)),
+      speedOnlyUnder1s: last - first < 1000,
+      correctness: 'BELUM DINILAI: periksa status, response, dan UI di Network'
+    };
+    console.table(rows);
+    console.table([result]);
+    return result;
+  }
+
+  window.apiSpeed = {
+    start(name = 'satu tindakan') {
+      started = performance.now();
+      label = name;
+      console.log('Mulai. Lakukan satu tindakan; stop sesudah seluruh API selesai.');
+    },
+    stop() {
+      if (started === null) throw new Error('Jalankan apiSpeed.start terlebih dahulu.');
+      const result = report(started, label, true);
+      started = null;
+      return result;
+    },
+    page() { return report(0, 'request sejak navigasi dokumen ini', false); },
+    stats(samples) {
+      if (!Array.isArray(samples) || !samples.length ||
+          samples.some(value => !Number.isFinite(value) || value < 0)) {
+        throw new Error('Isi array angka ms valid, bukan null/error/pending.');
+      }
+      const sorted = [...samples].sort((a, b) => a - b);
+      const n = sorted.length;
+      const median = n % 2 ? sorted[(n - 1) / 2]
+        : (sorted[n / 2 - 1] + sorted[n / 2]) / 2;
+      const result = {
+        samples: n, minMs: sorted[0], medianMs: round(median),
+        p95Ms: sorted[Math.ceil(n * 0.95) - 1], maxMs: sorted[n - 1],
+        under1s: sorted.filter(value => value < 1000).length
+      };
+      console.table([result]);
+      return result;
+    }
+  };
+  console.log('Siap: apiSpeed.start, apiSpeed.stop, apiSpeed.page, apiSpeed.stats');
+})();
+END API SPEED HELPER
+
+Contoh untuk klik submenu tanpa reload:
+
+apiSpeed.start('seller buka arus dana');
+
+Klik submenu Finance -> Arus dana. Tunggu seluruh request selesai dan UI terisi.
+Lalu jalankan:
+
+apiSpeed.stop();
+
+Contoh untuk login -> dashboard:
+Isi email/password dulu, tanpa submit. Pasang helper, jalankan:
+
+apiSpeed.start('admin login sampai dashboard');
+
+Klik Masuk. Tunggu dashboard terisi. Jalankan apiSpeed.stop().
+Jika terjadi full reload, helper hilang; gunakan metode reload di bawah.
+
+Contoh hard reload / buka URL langsung:
+1. Buka halaman target dan tekan Ctrl+R dengan Network merekam.
+2. Tunggu seluruh data selesai, JANGAN klik fitur lain dulu.
+3. Pasang ulang helper di Console, lalu jalankan apiSpeed.page().
+   Hasilnya semua API sejak navigasi dokumen saat ini, termasuk bootstrap.
+   Jika ada polling/background call, tandai dan pisahkan skenario, jangan abaikan
+   diam-diam. page() tidak mengukur waktu klik sebelum navigasi.
+
+Arti hasil:
+- apiTotalMs: angka utama total alur API, termasuk jeda antar-request.
+- markerToLastApiMs: marker Console -> respons terakhir. Termasuk jeda tangan
+  sebelum klik; bukan pengukuran klik tepat maupun waktu render UI siap.
+- sumRequestMs: jumlah durasi, hanya diagnostik; bukan target total paralel.
+- speedOnlyUnder1s: hanya indikator waktu, BUKAN pernyataan fitur berhasil.
+
+PENTING: Resource Timing hanya berisi request yang telah selesai dan tercatat.
+Helper tidak memastikan request pending/gagal/abort semuanya tertangkap, tidak
+memvalidasi status HTTP, dan tidak otomatis tahu hasil UI benar atau belum.
+Cocokkan count dengan Network; jika berbeda, pending, abort, buffer penuh,
+atau ada request lintas origin, hasil belum lengkap. Ulangi skenario.
+Helper ini mengukur API same-origin /api/ saja; tile peta dan image eksternal
+dicatat terpisah pada bagian peta, jangan mengklaim semuanya ikut dihitung.
+Tidak menampilkan query string, body, cookie, atau password.
+
+
+4. CHECKLIST SEMUA ENDPOINT AKTUAL
+
+Sumber inventaris: backend/routes/operations.php.
+{awb}/{id} adalah placeholder. Ambil resi/ID yang valid dari UI/Network.
+Jangan mengetik {id} sebagai nilai literal atau menebak ID milik akun lain.
+Endpoint READ di bawah dapat diuji tanpa mengubah data; WRITE mengubah data.
+Browser membuka URL langsung hanya menghasilkan GET; uji WRITE melalui UI.
+Jika endpoint tidak muncul dari UI aktif, tandai BELUM DIUJI; jangan klaim tercakup.
+
+INFRASTRUKTUR / AUTENTIKASI
+[ ] GET    /api/health                     baca status server
+[ ] GET    /api/v1/bootstrap                reload setiap halaman utama/role
+[ ] GET    /api/v1/auth/me                  baca sesi, termasuk setelah logout
+[ ] POST   /api/v1/auth/login               login masing-masing tiga role
+[ ] POST   /api/v1/auth/logout              keluar, pastikan sesi hilang
+[ ] POST   /api/v1/auth/register            akun uji baru; jangan ulang massal
+[ ] POST   /api/v1/auth/activate-admin      hanya kode uji, dapat menghabiskan kode
+
+DATA HALAMAN — SATU TES UNTUK MASING-MASING AREA
+[ ] GET    /api/v1/view/consumer            /akun, akun Konsumen
+[ ] GET    /api/v1/view/seller              /seller, akun Seller
+[ ] GET    /api/v1/view/seller-shipments    /pengiriman, cari/filter/pagination
+[ ] GET    /api/v1/view/admin               /admin, akun Admin
+[ ] GET    /api/v1/view/admin-shipments     /admin/kiriman, cari/filter/pagination
+[ ] GET    /api/v1/view/tickets             /admin/tiket, list/filter
+[ ] GET    /api/v1/view/import              /import, akun Seller
+[ ] GET    /api/v1/view/seller/shipment/{id} detail Seller
+[ ] GET    /api/v1/view/admin/shipment/{id}  detail Admin
+
+TRACKING PUBLIK / PETA
+[ ] GET    /api/v1/tracking/{awb}           /lacak/{awb}?code=KODE_VALID
+[ ] GET    /api/v1/road-route               buka accordion peta
+[ ] POST   /api/v1/tracking/{awb}/resolution     instruksi penerima, WRITE
+[ ] POST   /api/v1/tracking/{awb}/notifications  preferensi notifikasi, WRITE
+[ ] POST   /api/v1/tracking/{awb}/escalate       tiket Konsumen, WRITE
+
+TIKET / ASISTEN ADMIN
+[ ] POST   /api/v1/seller/shipments/{awb}/tickets buat tiket Seller, WRITE
+[ ] GET    /api/v1/admin/tickets/{id}/proof      tiket yang punya bukti foto
+[ ] POST   /api/v1/admin/assistant               tanya asisten, memakai kuota
+[ ] POST   /api/v1/admin/assistant/action        aksi chat setelah konfirmasi,
+                                               dapat WRITE sesuai aksi
+
+FINANCE — AKUN SELLER
+[ ] GET    /api/v1/categories               daftar kategori
+[ ] POST   /api/v1/categories               kategori baru, WRITE
+[ ] PATCH  /api/v1/categories/{id}          edit/arsip kategori sesuai UI, WRITE
+[ ] DELETE /api/v1/categories/{id}          hapus kategori uji, WRITE
+[ ] GET    /api/v1/transactions             list transaksi + filter
+[ ] POST   /api/v1/transactions             transaksi baru, WRITE
+[ ] PATCH  /api/v1/transactions/{id}        ubah transaksi uji, WRITE
+[ ] DELETE /api/v1/transactions/{id}        hapus transaksi uji, WRITE
+
+IMPOR / REKONSILIASI — AKUN SELLER
+[ ] POST   /api/v1/imports/preview          preview payload CSV dari UI
+[ ] POST   /api/v1/imports/preview-file     preview upload file CSV
+[ ] GET    /api/v1/imports                  riwayat impor
+[ ] POST   /api/v1/imports                  simpan impor, WRITE
+[ ] POST   /api/v1/imports/{id}/cancel      pembatalan impor uji, WRITE
+
+FALLBACK
+[ ] GET /api/rute-yang-tidak-ada            404 JSON, bukan hasil sukses
+
+Saat bootstrap menggabungkan data awal, Network dapat menampilkan hanya
+/bootstrap. Itu menguji jalur gabungan, BUKAN bukti semua endpoint individual
+sudah dipanggil. Navigasi/filter setelah halaman terpasang dapat memanggil
+endpoint individual. Cocokkan Network dan checklist, tandai jalur mana yang diuji.
+
+Untuk READ yang belum muncul, kamu bisa membuka URL /api/... pada tab browser
+dengan sesi yang tepat. Ini hanya uji endpoint individual, bukan alur UI lengkap.
+Query mengikuti yang dikirim UI (lihat Network), misalnya kode tracking dan
+filter. Respons denied/validation tanpa query benar tidak membuktikan jalur
+database sukses cepat. Jangan replay POST/PATCH/DELETE dari Network berkali-kali.
+
+
+5. URUTAN SKENARIO MANUAL AGAR TIDAK ADA FITUR TERLEWAT
+
+A. PUBLIK
+1. Buka /lacak tanpa login; ukur initial API jika ada.
+2. Cari resi valid dengan kode valid -> hasil, timeline, ringkasan terisi.
+3. Uji resi tidak ada dan kode salah secara terpisah; catat error yang diharapkan.
+4. Buka peta: ukur road-route + request tile eksternal di Network All.
+   Bedakan API route selesai vs peta benar-benar terlihat. Cek cache hit/miss
+   dari log; Disable cache browser tidak menjamin cache server dingin.
+5. Pada shipment UJI yang memenuhi syarat, kirim instruksi, preferensi, dan tiket.
+   Ukur POST + refresh data sesudahnya sebagai SATU alur masing-masing.
+
+B. KONSUMEN
+1. Ukur login sampai /akun terisi.
+2. Buka paket sendiri -> detail -> tindak lanjut jika tersedia.
+3. Ukur logout; /auth/me harus menunjukkan tidak login.
+
+C. SELLER
+1. Ukur login sampai /seller terisi.
+2. Buka /pengiriman -> cari/filter/pindah halaman -> detail kiriman.
+3. Buat tiket uji; periksa tiket benar-benar masuk.
+4. Buka /transaksi, lalu ubah filter. Uji tambah/edit/hapus data UJI.
+5. Buka /kategori. Uji tambah/edit/hapus kategori UJI tanpa relasi penting.
+6. Buka /import -> preview -> simpan -> riwayat -> pembatalan impor UJI.
+   Catat preview JSON dan preview-file sebagai endpoint berbeda jika digunakan.
+7. Export CSV/JSON: cek hasil benar. Jika export hanya frontend dan tanpa request,
+   catat "tanpa API / N/A", bukan API lulus 0 ms.
+8. Logout dan pastikan data Seller tidak muncul pada akun berikutnya.
+
+D. ADMIN
+1. Ukur login sampai /admin terisi.
+2. Buka /admin/kiriman -> filter/cari/page -> detail.
+3. Buka /admin/tiket -> tiket dengan bukti -> lihat foto bukti.
+4. Tanya asisten data operasi; cek sumber jawabannya Gemini atau fallback.
+5. Tanya pertanyaan bebas yang membutuhkan Gemini; catat latensi secara terpisah.
+6. Jalankan aksi aman yang tersedia melalui opsi chat. Jika aksi mengubah data,
+   gunakan tiket/shipment UJI dan ikuti konfirmasi; jangan asal eksekusi.
+7. Uji akses Finance yang tidak diizinkan; expected denied, bukan sukses Finance.
+
+E. REGISTRASI / AKTIVASI / ERROR
+1. Uji register memakai email uji yang kamu kontrol (dapat perlu verifikasi email).
+2. Uji aktivasi Admin hanya pada lingkungan uji dan kode uji yang disiapkan.
+3. Uji input invalid, sesi habis/logout, 403 lintas role, 404, dan Offline browser.
+4. Kembalikan No throttling sesudah tes Offline/Slow network.
+5. Jangan sengaja menyerang rate limit layanan live. Catat 429 jika terjadi;
+   test limit terkontrol hanya di staging. Login dibatasi 20/menit;
+   register dan activate-admin masing-masing 10/menit oleh konfigurasi route.
+
+WRITE AMAN:
+Gunakan staging/salinan database atau record demo disposable yang disepakati.
+Jangan ulang instruksi shipment yang dibatasi harian, menghabiskan activation
+code, atau membatalkan impor asli untuk mengejar sepuluh sampel.
+Jika tidak ada data uji aman, catat "belum diuji: perlu fixture/staging".
+Jangan menyatakan coverage 100% sebelum endpoint itu benar-benar diuji.
+
+
+6. ULANGI DAN NILAI DENGAN BENAR
+
+Catat satu sampel awal (first observed/cold candidate) secara terpisah.
+Koneksi/backend cache mungkin sudah hangat, jadi jangan klaim cold total tanpa
+mengetahui kondisinya. Lalu ambil minimal 10 sampel hangat untuk READ aman.
+Untuk p95 lebih representatif, ambil 20+ sampel dengan jeda, bukan spam request.
+WRITE/auth dibatasi fixture, rate limit, dan keamanan; jangan diulang membabi buta.
+
+Di Console, hitung statistik dari angka apiTotalMs yang benar-benar kamu catat:
+
+apiSpeed.stats([720, 810, 940, 1050, 880, 900, 760, 970, 1100, 830]);
+
+Array itu CONTOH perhitungan, bukan hasil tes baru. Ganti dengan hasilmu.
+p95 memakai nearest-rank; dengan 10 sampel nilainya sama dengan maksimum.
+Jangan menghapus sampel lambat supaya hasil bagus. Catat error/timeout terpisah;
+jangan memasukkannya sebagai 0 ms, dan jangan menyembunyikannya dari laporan.
+
+Target ketat "semua percobaan <1 detik":
+- tiap sampel sukses total API <1.000 ms; 1.000 ms tepat tidak termasuk <1 detik;
+- tidak ada request relevan pending/timeout/gagal;
+- respons dan hasil UI benar, bukan fallback/error yang lebih cepat;
+- cakupan endpoint dan kondisi uji dinyatakan jelas.
+
+Target p95 <1 detik berbeda: masih mengizinkan sebagian sampel lebih lambat.
+Rata-rata <1 detik tidak berarti setiap percobaan <1 detik.
+Hasil lokal bukan jaminan SLA produksi atau saat banyak pengguna bersamaan.
+
+Format catatan untuk setiap alur:
+
+Tanggal/jam + zona:
+Build/commit + mode DEV/BUILD:
+URL host/port + koneksi + device/browser:
+Role (tanpa email/password):
+Skenario + data uji:
+Cache browser ON/OFF + server cache diketahui/tidak:
+Jumlah request API + daftar method/path:
+Expected status/hasil:
+Actual status/hasil:
+Sampel API total ms:
+Median / p95 / max:
+Waktu sampai UI siap (diukur terpisah):
+Error/timeout/abort/fallback:
+Screenshot/log request_id:
+Status PASS / FAIL / BELUM DIUJI / N/A:
+
+Fallback chatbot harus dilaporkan sebagai fallback, bukan "Gemini cepat".
+Pesan pertama atau job accepted belum berarti respons final selesai.
+Jika suatu saat ada job asynchronous, ukur accepted dan final result terpisah.
+
+
+7. TELUSURI LAMBATNYA DI LOG SERVER
+
+Browser tidak menampilkan seluruh call internal. Log operasional berada di
+.private\logs di root proyek. Jangan membagikan folder privat mentah.
+
+Terminal PowerShell di root, daftar file dulu:
+
+Get-ChildItem -LiteralPath .private\logs
+
+Pilih file log yang sedang dipakai, lalu (ganti placeholder dengan nama aktual):
+
+Get-Content -LiteralPath '.private\logs\NAMA-FILE-AKTUAL' -Tail 100 -Wait
+
+Command placeholder itu jangan dijalankan sebelum mengganti nama file.
+Tekan Ctrl+C untuk berhenti mengikuti log. Cocokkan request_id antar event
+request.started, upstream.completed, dan request.completed jika tersedia.
+Periksa duration_ms, provider, http_status, outcome, dan mode parallel.
+Gunakan HTTP status/sumber balasan untuk membedakan Gemini sukses dari fallback.
+Durasi call paralel tidak dijumlahkan untuk menentukan waktu total request.
+Request log server tidak mencakup seluruh antrean/network/render browser;
+gunakan keduanya, bukan menganggap durasinya selalu identik.
+
+Untuk trace lengkap browser, HAR/Copy as fetch/cURL dapat membawa cookie, body
+login, isi chat, data pelanggan, dan query kode akses. Bahkan HAR yang disebut
+sanitized belum tentu membersihkan semua body sensitif. Simpan hanya lokal,
+review/redact dulu, jangan commit/upload HAR mentah. Bagikan tabel timing dan
+screenshot yang sudah disamarkan, bukan credential.
+
+
+8. SCRIPT OTOMATIS YANG SUDAH TERSEDIA (CAKUPANNYA TERBATAS)
+
+Server build pada 3063 tetap berjalan. Terminal kedua di root proyek:
+
+$env:QA_BASE_URL='http://127.0.0.1:3063'; $env:QA_PHASE='after'; node tools/benchmark-page-flow.mjs
+
+Hasil: output\laravel-qa\page-flow-after.json.
+Mengukur initial dashboard Admin/Seller/Konsumen, tiga sampel per role.
+Login persiapan dilakukan sebelum timer dashboard, jadi angka ini TIDAK mencakup
+login + dashboard dan TIDAK mencakup seluruh endpoint pada bagian 4.
+apiSystemMilliseconds = rentang API; totalMilliseconds = navigasi sampai
+kondisi data halaman yang ditunggu script. Tetap cek correctness/Network.
+File hasil sebelumnya ditimpa; simpan salinan jika ingin membandingkan sesi.
+
+Pengukuran endpoint individual + beberapa pemeriksaan keamanan:
+
+$env:QA_BASE_URL='http://127.0.0.1:3063'; node tools/benchmark-laravel.mjs
+
+Hasil: output\laravel-qa\performance.json.
+Mencakup health, tracking/kode invalid, route peta, login/data tiga role,
+penolakan role dan logout. Ini BUKAN alat seluruh endpoint dan BUKAN load test.
+Script membaca roles_password.txt lokal tanpa mencetak password.
+Jalankan kedua script bergantian, bukan bersamaan dengan tes browser lain.
+
+
+9. KESIMPULAN YANG BOLEH DITULIS
+
+Benar: "Alur Seller membuka Arus Dana: 10 sampel, 2 request per sampel,
+median ... ms, p95 ... ms, max ... ms, semua data benar, build lokal ... ."
+Salah: "Health 50 ms, berarti seluruh API sudah <1 detik."
+Salah: "Satu bootstrap cepat, berarti semua mutasi/chatbot sudah diuji."
+Salah: "Fallback instan, berarti respons Gemini selesai <1 detik."
+
+Untuk menyatakan seluruh cakupan selesai, isi setiap kotak bagian 4 dengan hasil,
+termasuk expected error dan endpoint WRITE. Cantumkan pengecualian, data uji,
+jumlah sampel, metode pengukuran, dan kondisi cache secara jujur.
+
+Referensi teknis resmi untuk pengukuran browser:
+https://developer.chrome.com/docs/devtools/network/reference
+https://developer.mozilla.org/en-US/docs/Web/API/PerformanceResourceTiming
+
+Panduan ini mengikuti route dan tools yang ada pada proyek. Menambahkan panduan
+tidak mengubah kode aplikasi, database, atau hasil benchmark sebelumnya.

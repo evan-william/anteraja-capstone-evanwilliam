@@ -29,7 +29,7 @@ function current_user(): ?array
     $id = (string) $auth['data']['id'];
     $profile = supabase_table('users', ['select' => 'id,email,name', 'id' => 'eq.' . $id], $token);
     $role = supabase_table('account_roles', ['select' => 'role', 'user_id' => 'eq.' . $id], $token);
-    if ($profile['status'] >= 400 || $role['status'] >= 400) return null;
+    if ($profile['status'] !== 200 || $role['status'] !== 200 || !is_array($profile['data']) || !is_array($role['data'])) return null;
     $row = $profile['data'][0] ?? [];
     $roleRow = $role['data'][0] ?? [];
     $user = [

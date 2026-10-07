@@ -1,0 +1,146 @@
+{
+  "measuredAt": "2026-10-01T04:06:31.477Z",
+  "base": "http://127.0.0.1:3002",
+  "results": [
+    {
+      "label": "health",
+      "status": 200,
+      "milliseconds": 267
+    },
+    {
+      "label": "public tracking",
+      "status": 200,
+      "milliseconds": 528
+    },
+    {
+      "label": "public tracking",
+      "status": 200,
+      "milliseconds": 391
+    },
+    {
+      "label": "public tracking",
+      "status": 200,
+      "milliseconds": 404
+    },
+    {
+      "label": "invalid tracking code",
+      "status": 404,
+      "milliseconds": 395
+    },
+    {
+      "label": "road initial",
+      "status": 200,
+      "milliseconds": 131
+    },
+    {
+      "label": "road cached",
+      "status": 200,
+      "milliseconds": 117
+    },
+    {
+      "label": "admin login",
+      "status": 200,
+      "milliseconds": 701
+    },
+    {
+      "label": "admin data",
+      "status": 200,
+      "milliseconds": 544
+    },
+    {
+      "label": "admin data",
+      "status": 200,
+      "milliseconds": 453
+    },
+    {
+      "label": "admin data",
+      "status": 200,
+      "milliseconds": 479
+    },
+    {
+      "label": "admin denied finance",
+      "status": 403,
+      "milliseconds": 451
+    },
+    {
+      "label": "admin logout",
+      "status": 200,
+      "milliseconds": 404
+    },
+    {
+      "label": "admin logged out",
+      "status": 200,
+      "milliseconds": 161
+    },
+    {
+      "label": "seller login",
+      "status": 200,
+      "milliseconds": 527
+    },
+    {
+      "label": "seller data",
+      "status": 200,
+      "milliseconds": 488
+    },
+    {
+      "label": "seller data",
+      "status": 200,
+      "milliseconds": 491
+    },
+    {
+      "label": "seller data",
+      "status": 200,
+      "milliseconds": 507
+    },
+    {
+      "label": "seller denied admin",
+      "status": 403,
+      "milliseconds": 420
+    },
+    {
+      "label": "seller logout",
+      "status": 200,
+      "milliseconds": 377
+    },
+    {
+      "label": "seller logged out",
+      "status": 200,
+      "milliseconds": 158
+    },
+    {
+      "label": "consumer login",
+      "status": 200,
+      "milliseconds": 555
+    },
+    {
+      "label": "consumer data",
+      "status": 200,
+      "milliseconds": 471
+    },
+    {
+      "label": "consumer data",
+      "status": 200,
+      "milliseconds": 516
+    },
+    {
+      "label": "consumer data",
+      "status": 200,
+      "milliseconds": 431
+    },
+    {
+      "label": "consumer denied admin",
+      "status": 403,
+      "milliseconds": 395
+    },
+    {
+      "label": "consumer logout",
+      "status": 200,
+      "milliseconds": 350
+    },
+    {
+      "label": "consumer logged out",
+      "status": 200,
+      "milliseconds": 151
+    }
+  ]
+}

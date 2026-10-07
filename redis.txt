@@ -1,0 +1,526 @@
+CATATAN REDIS — ANTERAJA TRACKING & OPERATIONS
+Tanggal catatan: 5 Oktober 2026
+Proyek: Final Project Full - React + Laravel
+
+Catatan ini menjelaskan penambahan cache Redis, bukan seluruh perubahan
+optimasi yang pernah dilakukan sebelumnya. Bahasa dan contohnya dibuat
+untuk kamu yang baru belajar backend.
+
+
+1. APA YANG BARUSAN DITAMBAHKAN?
+-------------------------------
+Backend Laravel sekarang bisa menyimpan hasil pembacaan tertentu di Redis.
+Tujuannya: ketika data yang sama diminta lagi, backend tidak perlu selalu
+mengambil ulang seluruh data tersebut dari sumbernya.
+
+Yang memakai cache Redis saat ini:
+
+  - Daftar kategori milik Seller: berlaku selama 30 detik.
+  - Bentuk jalur jalan pada peta: berlaku selama 1 jam.
+
+Tambahan lainnya:
+
+  - Program cache lokal untuk Windows, tanpa Docker.
+  - Launcher yang ikut menjalankan cache saat aplikasi dijalankan.
+  - Perintah untuk mengecek koneksi Redis.
+  - Log untuk melihat cache ditemukan atau tidak.
+  - Test otomatis untuk memeriksa perilaku cache dan keamanan akses.
+  - Panduan teknis di docs/runtime/REDIS.md.
+
+Redis TIDAK menggantikan database Supabase. Data utama tetap di Supabase.
+Ini juga bukan penambahan chatbot atau perubahan tampilan aplikasi.
+
+
+2. CACHE ITU APA? BEDANYA DENGAN DATABASE?
+----------------------------------------
+Database menyimpan data utama. Cache menyimpan salinan sementara dari hasil
+yang sudah pernah diambil, supaya hasil yang sama bisa digunakan kembali.
+
+Contoh tanpa cache:
+Kamu membuka Kategori -> backend memeriksa login -> mengambil kategori
+dari Supabase -> mengirim hasil ke browser.
+Kamu membuka Kategori lagi -> proses mengambil kategori diulang.
+
+Contoh dengan cache:
+Kamu membuka Kategori -> backend memeriksa login -> cache belum ada ->
+mengambil kategori dari Supabase -> menyimpan salinannya di Redis ->
+mengirim hasil ke browser.
+
+Kamu membuka Kategori lagi dalam 30 detik -> backend tetap memeriksa login
+dan role -> cache tersedia -> memakai salinan kategori dari Redis.
+
+Yang berkurang adalah pembacaan DAFTAR KATEGORI ke database.
+Bukan berarti seluruh panggilan database hilang: pemeriksaan akun dan
+izin tetap dilakukan seperti sebelumnya.
+
+Jika cache hilang, backend bisa mengambil data dari sumber aslinya lagi.
+Hilangnya cache tidak sama dengan hilangnya data utama di Supabase.
+
+
+3. ISTILAH YANG AKAN KAMU TEMUI
+------------------------------
+Redis:
+Penyimpanan berbentuk pasangan key dan value, biasanya menggunakan RAM.
+RAM adalah memori kerja komputer. Pada proyek ini, Redis dipakai untuk
+salinan sementara, bukan sebagai satu-satunya tempat menyimpan data.
+
+Key:
+Nama atau identitas sebuah entri cache. Backend memakai key untuk
+menemukan hasil yang tepat, bukan memilih data secara sembarangan.
+
+Value:
+Isi yang disimpan pada key tersebut, misalnya hasil daftar kategori.
+
+TTL, atau Time To Live:
+Lama sebuah entri cache boleh digunakan. TTL kategori adalah 30 detik.
+Setelah habis, entri itu tidak digunakan lagi dan data perlu diambil ulang.
+
+Cache hit:
+Data yang dicari tersedia di cache.
+
+Cache miss:
+Data yang dicari belum tersedia atau sudah kedaluwarsa.
+
+Invalidasi:
+Membuat cache lama tidak digunakan setelah data utama berubah.
+Contoh: setelah nama kategori diedit, daftar lama tidak boleh terus dipakai.
+
+Fallback:
+Jalur pengganti ketika layanan utama untuk suatu langkah tidak tersedia.
+Contoh: Redis mati -> baca kategori langsung dari Supabase.
+
+Predis:
+Paket PHP yang membantu Laravel berkomunikasi dengan Redis.
+Predis adalah CLIENT, bukan program server Redis.
+
+Memurai:
+Program Windows yang mendukung protokol Redis. Backend dapat berbicara
+dengannya melalui Predis. Memurai digunakan agar pengujian lokal tidak
+memerlukan Docker atau instalasi Linux.
+
+
+4. ALUR KATEGORI SELLER SECARA LENGKAP
+-------------------------------------
+1) Browser meminta GET /api/v1/categories.
+2) Backend memastikan pengguna sudah login dan role-nya Seller.
+3) Backend menyiapkan query sesuai akun dan filter kategori.
+4) Backend membuat key dari akun, query, dan generasi cache.
+5) Jika Redis memiliki hasil yang sesuai, backend menggunakan hasil itu.
+6) Jika tidak, backend mengambil kategori dari Supabase.
+7) Hanya hasil berhasil dengan data berbentuk array yang disimpan di Redis.
+8) Backend mengirim hasil memakai bentuk respons API yang sudah ada.
+
+Mengapa akun dan query masuk ke key?
+Supaya cache Seller A tidak dipakai untuk Seller B. Filter kategori aktif
+juga tidak boleh mengambil hasil untuk kategori arsip.
+
+Mengapa menggunakan hash?
+Hash mengubah gabungan identitas menjadi kode untuk key. Ini bukan tempat
+menyimpan password. Password dan token login tidak dimasukkan ke key ini.
+
+Mengapa login diperiksa sebelum cache?
+Cache bukan jalan pintas untuk melewati izin. Orang yang belum login tetap
+ditolak, walaupun data kategori sedang tersedia di Redis.
+
+
+5. APA YANG TERJADI SETELAH KATEGORI DIUBAH?
+------------------------------------------
+Sesudah create, edit, archive, atau delete berhasil di database, backend
+mengganti generasi cache milik akun tersebut.
+
+Bayangkan generasi sebagai nomor versi catatan:
+
+  Sebelum edit -> backend mencari key dengan versi lama.
+  Sesudah edit -> backend mencari key dengan versi baru.
+
+Entri versi lama mungkin masih ada sebentar di Redis, tetapi tidak dicari
+lagi. Entri itu akan kedaluwarsa sesuai TTL-nya.
+
+Generasi disimpan pada cache file Laravel yang terpisah dari Redis.
+Tujuannya: ketika Redis sedang mati dan kategori berubah, backend tetap
+bisa mencatat bahwa versi lama sudah tidak berlaku saat Redis hidup lagi.
+
+Catatan penting:
+Jika kamu mengedit data langsung di SQL Editor Supabase, kamu tidak lewat
+alur invalidasi aplikasi. Daftar yang masih di-cache dapat menampilkan
+hasil lama selama sisa TTL, paling lama 30 detik pada konfigurasi ini.
+
+
+6. ALUR CACHE UNTUK PETA
+-----------------------
+Peta menampilkan jalur jalan yang diminta dari layanan routing OSRM.
+Geometri berarti kumpulan koordinat yang membentuk jalur pada peta.
+
+Untuk permintaan rute:
+
+  - Backend memeriksa titik asal dan tujuan.
+  - Backend mencari geometri di Redis terlebih dahulu.
+  - Jika tidak ada, backend memeriksa cache file yang sudah tersedia.
+  - Jika keduanya belum memiliki hasil, backend meminta jalur ke OSRM.
+  - Hasil geometri yang lolos pemeriksaan disimpan untuk digunakan lagi.
+
+TTL Redis untuk rute adalah 3600 detik, atau 1 jam.
+
+Cache ini hanya berisi geometri jalan publik. Bukan password, identitas
+penerima, isi tiket, atau posisi GPS langsung kurir.
+Pesan error dari penyedia rute tidak disimpan sebagai hasil cache berhasil.
+
+
+7. FILE YANG DITAMBAHKAN DAN KEGUNAANNYA
+--------------------------------------
+Semua path di bawah dihitung dari root proyek ini.
+
+A. backend/app/Support/OperationsCache.php
+   Pusat logika cache tambahan.
+   get()                  : membaca cache Redis.
+   put()                  : menyimpan hasil dengan TTL.
+   categories()           : mencari cache kategori atau memanggil sumber.
+   generation()           : membaca/membuat versi cache akun.
+   invalidateCategories() : mengganti versi setelah kategori berubah.
+   log()                  : mencatat kejadian tanpa mencetak isi data.
+
+   File ini juga menangani kegagalan Redis. Setelah Redis gagal pada satu
+   request, request itu tidak berulang kali mencoba koneksi yang sama.
+
+B. backend/config/operations_cache.php
+   Tempat pengaturan cache khusus operasi.
+   enabled          : mengaktifkan atau menonaktifkan cache Redis.
+   store            : store Redis yang digunakan.
+   generation_store : store file untuk versi cache kategori.
+   categories_ttl   : masa berlaku kategori, 30 detik.
+   road_ttl         : masa berlaku geometri rute, 3600 detik.
+
+C. backend/tests/Feature/OperationsCacheTest.php
+   Test otomatis untuk cache hit, pemisahan akun/filter, invalidasi,
+   kedaluwarsa, hasil error yang tidak disimpan, cache dinonaktifkan,
+   serta gangguan Redis dan penyimpanan generasi.
+   Test ini memakai penyimpanan uji; tidak mengedit kategori demo nyata.
+
+D. tools/redis-local.mjs
+   Menjalankan program cache lokal yang tersedia di folder privat.
+   Mendengarkan 127.0.0.1:6379, membatasi memori cache menjadi 64 MB,
+   dan tidak menulis snapshot maupun AOF.
+   Jika port sudah digunakan, tidak membuat server cache kedua.
+
+E. tools/setup-redis.ps1
+   Membantu menyiapkan runtime pada Windows lain.
+   Mengunduh paket resmi, memeriksa tanda tangan penerbit Janea Systems,
+   lalu mengekstraknya ke folder privat proyek.
+   Tidak memasang service Windows atau aturan firewall.
+
+F. tools/qa-redis-cache.mjs
+   Pengujian integrasi terhadap aplikasi yang sedang berjalan.
+   Login sebagai Seller menggunakan credential lokal, membaca kategori
+   dua kali, membandingkan hasil, lalu memeriksa log cache hit.
+   Juga memastikan request anonim tetap ditolak, kemudian logout.
+   Tidak mencetak credential dan tidak mengubah kategori.
+
+G. docs/runtime/REDIS.md
+   Panduan teknis: konfigurasi, menjalankan Redis, TTL, invalidasi,
+   fallback, batas deployment, dan hasil verifikasi.
+
+H. .private/redis/
+   Folder runtime lokal, bukan source code untuk GitHub.
+   runtime/Memurai/memurai.exe : program cache.
+   runtime/Memurai/            : file pendukung dan lisensi program.
+   data/                      : working directory proses lokal.
+   memurai.msi dan extract.log : paket dan catatan proses ekstraksi.
+   Folder privat ini diabaikan oleh Git.
+
+
+8. FILE YANG DIPERBARUI
+----------------------
+backend/app/Domain/Finance.php
+  Menghubungkan GET daftar kategori ke OperationsCache.
+  Memanggil invalidasi setelah perubahan kategori berhasil.
+  Validasi kategori untuk membuat transaksi tetap membaca database.
+
+backend/app/Domain/RoadRoute.php
+  Mencoba Redis untuk geometri rute dan menyimpan hasil berhasil di sana.
+  Cache file yang sudah ada tetap menjadi fallback.
+
+backend/app/Providers/AppServiceProvider.php
+  Mendaftarkan OperationsCache sebagai layanan scoped.
+  Artinya Laravel memakai objek cache untuk lingkup request yang sesuai,
+  bukan membawa tanda kegagalan satu request ke semua request berikutnya.
+
+backend/config/database.php
+  Menggunakan Predis sebagai client default Redis dan mengatur batas
+  waktu koneksi/baca cache 0,1 detik dengan retry PhpRedis dinonaktifkan.
+
+backend/composer.json dan backend/composer.lock
+  Menambahkan dependency predis/predis. Versi yang terpasang saat
+  implementasi ini adalah 3.6.1. Lock file mencatat versi dependency.
+
+backend/.env.example
+  Contoh pengaturan Redis yang boleh masuk repository.
+
+backend/.env
+  Konfigurasi privat lokal; REDIS_CLIENT diubah menjadi predis.
+  Jangan upload isi file ini atau credential ke GitHub.
+
+backend/routes/console.php
+  Menambahkan perintah artisan operations:cache-check.
+  Ini perintah terminal, bukan endpoint publik baru.
+
+tools/dev-laravel-react.mjs dan tools/serve-laravel-react.mjs
+  Menghubungkan launcher development/production dengan Redis lokal.
+  Jika launcher membuat proses Redis sendiri, proses itu ikut ditutup
+  saat launcher berhenti. Redis yang sudah berjalan dari proses lain
+  tidak dimatikan oleh launcher tersebut.
+
+how_to_run.txt
+  Menambahkan petunjuk singkat Redis dan perintah pemeriksaan.
+
+redis.txt
+  File yang sedang kamu baca: penjelasan perubahan untuk pemula.
+
+
+9. APA YANG TIDAK BERUBAH DAN TIDAK DI-CACHE?
+-------------------------------------------
+Schema database, relasi tabel, Supabase RLS, URL, bentuk respons API,
+serta frontend tidak diubah untuk penambahan cache ini.
+
+Password, token, sesi login, respons chatbot, dan hasil transaksi tidak
+disimpan di Redis oleh OperationsCache ini.
+Login, pengecekan role, transaksi, impor, rekonsiliasi, tiket, dan status
+paket tidak dipindahkan menjadi hasil cache Redis.
+
+Catatan: "store default tetap file" bukan berarti aplikasi hanya memakai
+file. OperationsCache memilih store Redis secara khusus untuk dua data
+yang dijelaskan di atas. Komponen lain tetap memakai pengaturan lamanya.
+
+
+10. CARA MENJALANKAN APLIKASI
+----------------------------
+Di terminal PowerShell VS Code, masuk ke root proyek:
+
+cd "D:\Work & Organization\Work\Maxy Academy\Modules\Final Project Full - React + Laravel"
+
+Lalu jalankan:
+
+npm run dev
+
+Alternatif: buka run.bat yang sudah tersedia di root proyek.
+Jika runtime tersedia dan port 6379 belum dipakai, launcher ikut
+menjalankan cache lokal. Lihat alamat aplikasi yang dicetak di terminal.
+
+Jika ingin menjalankan Redis terpisah dari launcher:
+
+node tools/redis-local.mjs
+
+Terminal tersebut harus tetap terbuka. Tekan Ctrl+C untuk menghentikannya.
+Jangan menjalankan dua server pada port yang sama.
+
+Pada komputer ini runtime sudah disiapkan.
+Untuk menyiapkan runtime di komputer Windows lain, dari root jalankan:
+
+powershell -File tools/setup-redis.ps1
+
+Download pertama memerlukan internet. Kalau runtime sudah ada, skrip
+tidak mengunduh ulang. Dependency PHP juga harus terpasang dari Composer
+seperti pada petunjuk instalasi proyek.
+
+
+11. CARA MENGECEK REDIS TANPA MENYENTUH DATA PELANGGAN
+----------------------------------------------------
+1) Jalankan Redis/aplikasi dengan langkah sebelumnya.
+2) Buka terminal kedua di root proyek.
+3) Masuk ke folder backend:
+
+cd backend
+
+4) Jalankan:
+
+C:\xampp\php\php.exe artisan operations:cache-check
+
+Perintah ini melakukan PING, menyimpan satu value uji, membacanya,
+kemudian menghapus key uji. Key uji memiliki TTL 10 detik.
+Jika berhasil, terminal menampilkan PASS dan waktu pemeriksaan.
+Angka waktunya bisa berbeda di setiap komputer dan setiap percobaan.
+
+Pemeriksaan ini bukan ukuran waktu seluruh API dan bukan bukti bahwa
+seluruh halaman selesai di bawah satu detik.
+Perintah tidak menjalankan FLUSHALL atau FLUSHDB; jangan memakai kedua
+perintah tersebut untuk tes karena dapat menghapus cache yang lain.
+
+
+12. CARA MEMBUKTIKAN CACHE DIPAKAI
+---------------------------------
+Cara lewat aplikasi:
+
+1) Login sebagai Seller.
+2) Buka halaman Kategori.
+3) Muat ulang halaman dalam 30 detik.
+4) Periksa log terbaru di .private/logs.
+5) Cari event cache.hit dengan target categories pada request terkait.
+
+Arti event:
+  cache.miss        : belum ada hasil cache yang cocok.
+  cache.stored      : hasil disimpan ke cache.
+  cache.hit         : hasil ditemukan dan digunakan dari cache.
+  cache.unavailable : koneksi/cache gagal; backend memakai jalur pengganti.
+
+Request ID membantu kamu menghubungkan beberapa baris log dengan satu
+request. Jangan menyimpulkan semua request memakai cache hanya karena
+ada satu event hit di file log yang panjang.
+
+Cara dengan skrip pengujian, dari ROOT proyek:
+
+node tools/qa-redis-cache.mjs
+
+Jika aplikasi berjalan pada port lain, contoh port pengujian 3064:
+
+$env:QA_BASE_URL='http://127.0.0.1:3064'
+node tools/qa-redis-cache.mjs
+
+Skrip memerlukan file credential demo lokal roles_password.txt.
+Jangan menyalin isi credential tersebut ke laporan atau repository.
+Skrip memeriksa bahwa request kedua memakai Redis dan tidak mengirim
+SELECT daftar kategori ke Supabase lagi.
+
+
+13. KONFIGURASI: APA ARTI BARIS-BARISNYA?
+----------------------------------------
+Lokasi konfigurasi privat: backend/.env.
+Contoh nilai berikut tidak mengandung password:
+
+CACHE_STORE=file
+  Store default Laravel tetap file; cache operasi memilih Redis sendiri.
+
+REDIS_CLIENT=predis
+  Laravel memakai paket PHP Predis untuk berkomunikasi dengan server.
+
+REDIS_HOST=127.0.0.1
+  Server cache berada di komputer yang sama dengan backend.
+  Angka ini dikenal sebagai alamat loopback.
+
+REDIS_PORT=6379
+  Nomor port tempat program cache menerima koneksi.
+
+REDIS_CACHE_DB=1
+  Nomor database LOGIS di Redis untuk cache.
+  Ini bukan nomor database PostgreSQL/Supabase.
+
+REDIS_CACHE_TIMEOUT=0.1
+  Batas waktu connect/read pada koneksi cache, dalam detik.
+  0,1 detik sama dengan 100 milidetik, bukan janji seluruh request 100 ms.
+
+OPERATIONS_REDIS_ENABLED=true
+  Mengizinkan OperationsCache mencoba Redis.
+  Ubah menjadi false untuk menonaktifkan pembacaan/penyimpanan Redis.
+
+TTL ditentukan di backend/config/operations_cache.php, bukan di database.
+Restart backend setelah mengubah konfigurasi.
+Jika Laravel pernah menyimpan config cache, dari backend jalankan:
+
+C:\xampp\php\php.exe artisan config:clear
+
+Menonaktifkan penggunaan cache dan menghentikan proses Redis adalah dua
+hal berbeda. Untuk mencegah launcher membuat Redis lokal, dari root:
+
+$env:LOCAL_REDIS='0'
+npm run dev
+
+Untuk menghapus pengaturan sementara itu dari terminal:
+
+Remove-Item Env:LOCAL_REDIS -ErrorAction SilentlyContinue
+
+
+14. KALAU REDIS MATI, APA APLIKASINYA IKUT MATI?
+----------------------------------------------
+Untuk cache tambahan ini, backend mempunyai jalur pengganti:
+
+  Kategori -> mengambil langsung dari Supabase.
+  Rute peta -> mencoba cache file, lalu penyedia geometri jika diperlukan.
+
+Setelah satu kegagalan Redis, request yang sama tidak terus mencoba
+Redis lagi. Request berikutnya boleh mencoba lagi, sehingga aplikasi
+bisa memakai cache kembali setelah layanan pulih.
+
+Login tidak bergantung pada Redis tambahan ini.
+Kalau Supabase atau internet juga bermasalah, fallback bukan jaminan
+data akan tersedia: fallback tetap memerlukan sumbernya bekerja.
+
+Untuk geometri peta, cache Redis/file yang belum tersedia juga tidak
+bisa menggantikan penyedia rute yang sedang gagal.
+
+
+15. BATASAN YANG PERLU KAMU TAHU
+--------------------------------
+- Redis membantu mengurangi pekerjaan tertentu, bukan menjamin SELURUH
+  API atau seluruh halaman selesai dalam satu detik.
+
+- Batas 64 MB adalah batas memori cache yang dikonfigurasi. Bukan janji
+  bahwa seluruh aplikasi/proses di Windows hanya memakai RAM 64 MB.
+
+- allkeys-lru berarti ketika batas memori tercapai, server boleh membuang
+  key cache yang paling lama tidak digunakan. Backend mengambil ulang
+  data jika key yang diperlukan sudah dibuang.
+
+- Memurai Developer hanya untuk development/testing, bukan produksi.
+  Edisi ini berhenti otomatis setelah 10 hari dan perlu dijalankan lagi.
+  Runtime lokal yang diunduh juga menampilkan informasi Release Candidate.
+
+- Generasi kategori memakai file lokal. Ini sesuai untuk satu backend.
+  Untuk beberapa instance/server, metadata invalidasi harus dibuat
+  bersama dan konsisten dulu; jangan memakai folder versi yang berbeda
+  di setiap server lalu menganggap cache sudah tersinkronisasi.
+
+- Folder storage Laravel harus dapat ditulis. Jika invalidasi generasi
+  gagal setelah penyimpanan database berhasil, request bisa menampilkan
+  error walaupun perubahan sudah tersimpan. Periksa data dulu sebelum
+  mengulang, kemudian perbaiki akses tulis storage. Ini berbeda dari
+  sekadar Redis mati, yang sudah memiliki fallback.
+
+- Program, log, dan konfigurasi privat tidak perlu masuk GitHub.
+  Source code, composer.lock, dan dokumentasi perlu tersedia agar orang
+  lain bisa menyiapkan dependency dan runtime pada komputernya sendiri.
+
+
+16. HASIL TEST YANG SUDAH DIJALANKAN
+-----------------------------------
+Hasil dari implementasi Redis pada 5 Oktober 2026:
+
+  - Koneksi Redis nyata: PING, simpan, baca, hapus -> lulus.
+  - Dua pembacaan kategori Seller menghasilkan data identik -> lulus.
+  - Pembacaan kedua benar-benar cache hit tanpa SELECT kategori -> lulus.
+  - Request anonim tetap ditolak saat cache sudah terisi -> lulus.
+  - Redis dimatikan sementara; login/kategori lewat Supabase -> lulus.
+  - Redis dinyalakan kembali; cache hit kembali bekerja -> lulus.
+  - Backend PHPUnit: 22 test, 88 assertion -> lulus.
+  - Unit test frontend: 59 test -> lulus.
+  - Lint, TypeScript check, production build -> lulus.
+  - Browser smoke test login tiga role dan alur utama -> lulus.
+
+Build memiliki dua peringatan annotation dari dependency Zod yang sudah
+ada sebelumnya; bukan error baru dari penambahan Redis.
+
+Test TTL/invalidasi memakai data dan store uji otomatis. Jangan mengartikan
+hasil itu sebagai perubahan massal kategori pada database demo nyata.
+Jumlah test ini adalah hasil saat implementasi, bukan angka yang dijamin
+tetap sama setelah source code proyek berubah di kemudian hari.
+
+
+17. PENJELASAN SINGKAT UNTUK PRESENTASI
+--------------------------------------
+"Saya menambahkan Redis sebagai cache pada backend Laravel, bukan sebagai
+pengganti database. Saat daftar kategori diminta lagi dalam 30 detik,
+backend bisa mengambil hasil dari cache sehingga tidak perlu mengulang
+SELECT kategori ke Supabase. Login dan role tetap diperiksa. Setelah
+kategori berubah, versi cache diganti supaya daftar lama tidak digunakan.
+Saya juga menyimpan geometri rute peta selama satu jam. Jika Redis mati,
+backend kembali ke sumber data atau cache file yang sudah tersedia."
+
+Jika ditanya "kenapa tidak semua data di-cache?":
+"Karena data seperti transaksi, izin, dan status paket harus tetap dicek
+sesuai sumbernya. Saya memilih data yang jelas masa berlaku dan cara
+invalidasinya, bukan menyimpan semua respons tanpa memikirkan risiko."
+
+Jika ditanya "tanpa Docker bagaimana?":
+"Untuk lokal Windows saya menggunakan Memurai, program yang mendukung
+protokol Redis. Laravel terhubung melalui client PHP Predis. Programnya
+dijalankan lokal tanpa service Windows dan tanpa membuka akses jaringan
+luar. Untuk produksi perlu layanan/runtime yang sesuai lisensi."
+
+Panduan teknis pendamping: docs/runtime/REDIS.md.

@@ -54,6 +54,10 @@ dev-server*.log
 /backend/public/auth/
 /backend/public/tracking-cities/
 /output/laravel-qa/*.png
+/output/laravel-qa/*.log
+/output/organization-qa/screens/
+/output/organization-qa/*.log
+/output/audit/graphify-out/
 
 # local MCP client configuration (may contain account/project metadata)
 /.vscode/mcp.json

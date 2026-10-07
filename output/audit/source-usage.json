@@ -1,0 +1,799 @@
+{
+  "entrypoints": [
+    "frontend/main.tsx",
+    "tests/unit/city-imagery.test.ts",
+    "tests/unit/date.test.ts",
+    "tests/unit/format.test.ts",
+    "tests/unit/journey.test.ts",
+    "tests/unit/laravel-auth.test.ts",
+    "tests/unit/page-bootstrap.test.ts",
+    "tests/unit/php-import.test.ts",
+    "tests/unit/php-logging.test.ts",
+    "tests/unit/php-road-route.test.ts",
+    "tests/unit/roles.test.ts",
+    "tests/unit/structured-data.test.ts",
+    "vite.config.ts",
+    "vitest.config.ts",
+    "eslint.config.mjs"
+  ],
+  "sourceFiles": 56,
+  "reachableSourceFiles": 56,
+  "unusedSourceFiles": [],
+  "unresolvedLocalImports": [],
+  "referencedAssets": [
+    "/auth/courier-city.webp",
+    "/auth/seller-handoff.webp",
+    "/auth/sorting-hub-bright.webp",
+    "/brand/anteraja-favicon.png",
+    "/brand/anteraja-mark-small.png",
+    "/brand/anteraja-mark.png",
+    "/fonts/open-sans-latin.woff2",
+    "/tracking-cities/bandung.webp",
+    "/tracking-cities/bekasi.webp",
+    "/tracking-cities/jakarta.webp",
+    "/tracking-cities/malang.webp",
+    "/tracking-cities/semarang.webp",
+    "/tracking-cities/surabaya.webp",
+    "/tracking-cities/tangerang-selatan.webp",
+    "/tracking-cities/tangerang.webp"
+  ],
+  "missingAssets": [],
+  "unusedPublicAssets": [],
+  "unexpectedScaffolding": [],
+  "importedPackages": {
+    "react": 31,
+    "react-dom": 1,
+    "react-router-dom": 8,
+    "lucide-react": 17,
+    "clsx": 1,
+    "tailwind-merge": 1,
+    "@radix-ui/react-slot": 1,
+    "class-variance-authority": 1,
+    "@radix-ui/react-label": 1,
+    "leaflet": 1,
+    "zod": 1,
+    "vitest": 12,
+    "vite": 1,
+    "@vitejs/plugin-react": 1,
+    "@tailwindcss/vite": 1,
+    "@eslint/js": 1,
+    "typescript-eslint": 1,
+    "eslint-plugin-react-hooks": 1,
+    "globals": 1
+  },
+  "edges": [
+    {
+      "from": "frontend\\main.tsx",
+      "to": "frontend\\App.tsx"
+    },
+    {
+      "from": "frontend\\App.tsx",
+      "to": "frontend\\api.tsx"
+    },
+    {
+      "from": "frontend\\api.tsx",
+      "to": "frontend\\http.ts"
+    },
+    {
+      "from": "frontend\\api.tsx",
+      "to": "frontend\\bootstrap.ts"
+    },
+    {
+      "from": "frontend\\api.tsx",
+      "to": "frontend\\shared-read.ts"
+    },
+    {
+      "from": "frontend\\App.tsx",
+      "to": "frontend\\components\\ui\\site-header.tsx"
+    },
+    {
+      "from": "frontend\\components\\ui\\site-header.tsx",
+      "to": "frontend\\compat\\actions.ts"
+    },
+    {
+      "from": "frontend\\compat\\actions.ts",
+      "to": "frontend\\http.ts"
+    },
+    {
+      "from": "frontend\\components\\ui\\site-header.tsx",
+      "to": "frontend\\components\\ui\\brand.tsx"
+    },
+    {
+      "from": "frontend\\components\\ui\\brand.tsx",
+      "to": "frontend\\compat\\Image.tsx"
+    },
+    {
+      "from": "frontend\\components\\ui\\brand.tsx",
+      "to": "frontend\\compat\\Link.tsx"
+    },
+    {
+      "from": "frontend\\components\\ui\\brand.tsx",
+      "to": "frontend\\lib\\utils.ts"
+    },
+    {
+      "from": "frontend\\components\\ui\\site-header.tsx",
+      "to": "frontend\\components\\ui\\button.tsx"
+    },
+    {
+      "from": "frontend\\components\\ui\\button.tsx",
+      "to": "frontend\\lib\\utils.ts"
+    },
+    {
+      "from": "frontend\\components\\ui\\site-header.tsx",
+      "to": "frontend\\components\\ui\\nav-links.tsx"
+    },
+    {
+      "from": "frontend\\components\\ui\\nav-links.tsx",
+      "to": "frontend\\compat\\Link.tsx"
+    },
+    {
+      "from": "frontend\\components\\ui\\nav-links.tsx",
+      "to": "frontend\\compat\\navigation.ts"
+    },
+    {
+      "from": "frontend\\components\\ui\\nav-links.tsx",
+      "to": "frontend\\lib\\database-types.ts"
+    },
+    {
+      "from": "frontend\\components\\ui\\nav-links.tsx",
+      "to": "frontend\\lib\\utils.ts"
+    },
+    {
+      "from": "frontend\\components\\ui\\site-header.tsx",
+      "to": "frontend\\lib\\database-types.ts"
+    },
+    {
+      "from": "frontend\\components\\ui\\site-header.tsx",
+      "to": "frontend\\lib\\roles.ts"
+    },
+    {
+      "from": "frontend\\lib\\roles.ts",
+      "to": "frontend\\lib\\database-types.ts"
+    },
+    {
+      "from": "frontend\\App.tsx",
+      "to": "frontend\\pages\\AuthPages.tsx"
+    },
+    {
+      "from": "frontend\\pages\\AuthPages.tsx",
+      "to": "frontend\\compat\\Link.tsx"
+    },
+    {
+      "from": "frontend\\pages\\AuthPages.tsx",
+      "to": "frontend\\components\\ui\\auth-carousel.tsx"
+    },
+    {
+      "from": "frontend\\components\\ui\\auth-carousel.tsx",
+      "to": "frontend\\compat\\Image.tsx"
+    },
+    {
+      "from": "frontend\\components\\ui\\auth-carousel.tsx",
+      "to": "frontend\\compat\\Link.tsx"
+    },
+    {
+      "from": "frontend\\components\\ui\\auth-carousel.tsx",
+      "to": "frontend\\lib\\utils.ts"
+    },
+    {
+      "from": "frontend\\pages\\AuthPages.tsx",
+      "to": "frontend\\components\\ui\\button.tsx"
+    },
+    {
+      "from": "frontend\\pages\\AuthPages.tsx",
+      "to": "frontend\\components\\ui\\input.tsx"
+    },
+    {
+      "from": "frontend\\components\\ui\\input.tsx",
+      "to": "frontend\\lib\\utils.ts"
+    },
+    {
+      "from": "frontend\\pages\\AuthPages.tsx",
+      "to": "frontend\\components\\ui\\label.tsx"
+    },
+    {
+      "from": "frontend\\components\\ui\\label.tsx",
+      "to": "frontend\\lib\\utils.ts"
+    },
+    {
+      "from": "frontend\\pages\\AuthPages.tsx",
+      "to": "frontend\\api.tsx"
+    },
+    {
+      "from": "frontend\\App.tsx",
+      "to": "frontend\\pages\\AuthPages.tsx"
+    },
+    {
+      "from": "frontend\\App.tsx",
+      "to": "frontend\\pages\\AuthPages.tsx"
+    },
+    {
+      "from": "frontend\\App.tsx",
+      "to": "frontend\\pages\\PublicPages.tsx"
+    },
+    {
+      "from": "frontend\\pages\\PublicPages.tsx",
+      "to": "frontend\\compat\\Image.tsx"
+    },
+    {
+      "from": "frontend\\pages\\PublicPages.tsx",
+      "to": "frontend\\components\\tracking\\public-header.tsx"
+    },
+    {
+      "from": "frontend\\components\\tracking\\public-header.tsx",
+      "to": "frontend\\compat\\Link.tsx"
+    },
+    {
+      "from": "frontend\\components\\tracking\\public-header.tsx",
+      "to": "frontend\\components\\ui\\brand.tsx"
+    },
+    {
+      "from": "frontend\\components\\tracking\\public-header.tsx",
+      "to": "frontend\\lib\\roles.ts"
+    },
+    {
+      "from": "frontend\\components\\tracking\\public-header.tsx",
+      "to": "frontend\\api.tsx"
+    },
+    {
+      "from": "frontend\\pages\\PublicPages.tsx",
+      "to": "frontend\\components\\tracking\\tracking-search-form.tsx"
+    },
+    {
+      "from": "frontend\\components\\tracking\\tracking-search-form.tsx",
+      "to": "frontend\\compat\\navigation.ts"
+    },
+    {
+      "from": "frontend\\components\\tracking\\tracking-search-form.tsx",
+      "to": "frontend\\components\\ui\\button.tsx"
+    },
+    {
+      "from": "frontend\\components\\tracking\\tracking-search-form.tsx",
+      "to": "frontend\\components\\ui\\input.tsx"
+    },
+    {
+      "from": "frontend\\pages\\PublicPages.tsx",
+      "to": "frontend\\components\\tracking\\tracking-experience.tsx"
+    },
+    {
+      "from": "frontend\\components\\tracking\\tracking-experience.tsx",
+      "to": "frontend\\http.ts"
+    },
+    {
+      "from": "frontend\\components\\tracking\\tracking-experience.tsx",
+      "to": "frontend\\compat\\Link.tsx"
+    },
+    {
+      "from": "frontend\\components\\tracking\\tracking-experience.tsx",
+      "to": "frontend\\compat\\Image.tsx"
+    },
+    {
+      "from": "frontend\\components\\tracking\\tracking-experience.tsx",
+      "to": "frontend\\components\\ui\\button.tsx"
+    },
+    {
+      "from": "frontend\\components\\tracking\\tracking-experience.tsx",
+      "to": "frontend\\components\\ui\\input.tsx"
+    },
+    {
+      "from": "frontend\\components\\tracking\\tracking-experience.tsx",
+      "to": "frontend\\components\\ui\\textarea.tsx"
+    },
+    {
+      "from": "frontend\\components\\ui\\textarea.tsx",
+      "to": "frontend\\lib\\utils.ts"
+    },
+    {
+      "from": "frontend\\components\\tracking\\tracking-experience.tsx",
+      "to": "frontend\\lib\\api.ts"
+    },
+    {
+      "from": "frontend\\components\\tracking\\tracking-experience.tsx",
+      "to": "frontend\\lib\\tracking\\types.ts"
+    },
+    {
+      "from": "frontend\\components\\tracking\\tracking-experience.tsx",
+      "to": "frontend\\lib\\database-types.ts"
+    },
+    {
+      "from": "frontend\\components\\tracking\\tracking-experience.tsx",
+      "to": "frontend\\lib\\tracking\\journey.ts"
+    },
+    {
+      "from": "frontend\\lib\\tracking\\journey.ts",
+      "to": "frontend\\lib\\tracking\\types.ts"
+    },
+    {
+      "from": "frontend\\components\\tracking\\tracking-experience.tsx",
+      "to": "frontend\\lib\\tracking\\city-imagery.ts"
+    },
+    {
+      "from": "frontend\\components\\tracking\\tracking-experience.tsx",
+      "to": "frontend\\components\\tracking\\journey-map-disclosure.tsx"
+    },
+    {
+      "from": "frontend\\components\\tracking\\journey-map-disclosure.tsx",
+      "to": "frontend\\lib\\tracking\\journey.ts"
+    },
+    {
+      "from": "frontend\\components\\tracking\\journey-map-disclosure.tsx",
+      "to": "frontend\\components\\tracking\\journey-map.tsx"
+    },
+    {
+      "from": "frontend\\components\\tracking\\journey-map.tsx",
+      "to": "frontend\\http.ts"
+    },
+    {
+      "from": "frontend\\components\\tracking\\journey-map.tsx",
+      "to": "frontend\\lib\\tracking\\journey.ts"
+    },
+    {
+      "from": "frontend\\components\\tracking\\tracking-experience.tsx",
+      "to": "frontend\\lib\\utils.ts"
+    },
+    {
+      "from": "frontend\\pages\\PublicPages.tsx",
+      "to": "frontend\\api.tsx"
+    },
+    {
+      "from": "frontend\\pages\\PublicPages.tsx",
+      "to": "frontend\\lib\\structured-data.ts"
+    },
+    {
+      "from": "frontend\\App.tsx",
+      "to": "frontend\\pages\\PublicPages.tsx"
+    },
+    {
+      "from": "frontend\\App.tsx",
+      "to": "frontend\\pages\\RolePages.tsx"
+    },
+    {
+      "from": "frontend\\pages\\RolePages.tsx",
+      "to": "frontend\\compat\\Link.tsx"
+    },
+    {
+      "from": "frontend\\pages\\RolePages.tsx",
+      "to": "frontend\\components\\ui\\site-header.tsx"
+    },
+    {
+      "from": "frontend\\pages\\RolePages.tsx",
+      "to": "frontend\\components\\ui\\page-header.tsx"
+    },
+    {
+      "from": "frontend\\pages\\RolePages.tsx",
+      "to": "frontend\\components\\tracking\\seller-dashboard.tsx"
+    },
+    {
+      "from": "frontend\\components\\tracking\\seller-dashboard.tsx",
+      "to": "frontend\\compat\\Link.tsx"
+    },
+    {
+      "from": "frontend\\components\\tracking\\seller-dashboard.tsx",
+      "to": "frontend\\components\\ui\\button.tsx"
+    },
+    {
+      "from": "frontend\\components\\tracking\\seller-dashboard.tsx",
+      "to": "frontend\\components\\ui\\input.tsx"
+    },
+    {
+      "from": "frontend\\components\\tracking\\seller-dashboard.tsx",
+      "to": "frontend\\lib\\tracking\\types.ts"
+    },
+    {
+      "from": "frontend\\components\\tracking\\seller-dashboard.tsx",
+      "to": "frontend\\lib\\utils.ts"
+    },
+    {
+      "from": "frontend\\pages\\RolePages.tsx",
+      "to": "frontend\\components\\tracking\\seller-ticket-form.tsx"
+    },
+    {
+      "from": "frontend\\components\\tracking\\seller-ticket-form.tsx",
+      "to": "frontend\\http.ts"
+    },
+    {
+      "from": "frontend\\components\\tracking\\seller-ticket-form.tsx",
+      "to": "frontend\\compat\\navigation.ts"
+    },
+    {
+      "from": "frontend\\components\\tracking\\seller-ticket-form.tsx",
+      "to": "frontend\\components\\ui\\button.tsx"
+    },
+    {
+      "from": "frontend\\components\\tracking\\seller-ticket-form.tsx",
+      "to": "frontend\\components\\ui\\textarea.tsx"
+    },
+    {
+      "from": "frontend\\components\\tracking\\seller-ticket-form.tsx",
+      "to": "frontend\\lib\\api.ts"
+    },
+    {
+      "from": "frontend\\pages\\RolePages.tsx",
+      "to": "frontend\\components\\tracking\\journey-map-disclosure.tsx"
+    },
+    {
+      "from": "frontend\\pages\\RolePages.tsx",
+      "to": "frontend\\lib\\tracking\\journey.ts"
+    },
+    {
+      "from": "frontend\\pages\\RolePages.tsx",
+      "to": "frontend\\lib\\tracking\\types.ts"
+    },
+    {
+      "from": "frontend\\pages\\RolePages.tsx",
+      "to": "frontend\\api.tsx"
+    },
+    {
+      "from": "frontend\\App.tsx",
+      "to": "frontend\\pages\\RolePages.tsx"
+    },
+    {
+      "from": "frontend\\App.tsx",
+      "to": "frontend\\pages\\RolePages.tsx"
+    },
+    {
+      "from": "frontend\\App.tsx",
+      "to": "frontend\\pages\\RolePages.tsx"
+    },
+    {
+      "from": "frontend\\App.tsx",
+      "to": "frontend\\pages\\RolePages.tsx"
+    },
+    {
+      "from": "frontend\\App.tsx",
+      "to": "frontend\\pages\\RolePages.tsx"
+    },
+    {
+      "from": "frontend\\App.tsx",
+      "to": "frontend\\pages\\RolePages.tsx"
+    },
+    {
+      "from": "frontend\\App.tsx",
+      "to": "frontend\\pages\\RolePages.tsx"
+    },
+    {
+      "from": "frontend\\App.tsx",
+      "to": "frontend\\pages\\FinancePages.tsx"
+    },
+    {
+      "from": "frontend\\pages\\FinancePages.tsx",
+      "to": "frontend\\components\\ui\\site-header.tsx"
+    },
+    {
+      "from": "frontend\\pages\\FinancePages.tsx",
+      "to": "frontend\\components\\ui\\page-header.tsx"
+    },
+    {
+      "from": "frontend\\pages\\FinancePages.tsx",
+      "to": "frontend\\components\\transaksi\\transaction-manager.tsx"
+    },
+    {
+      "from": "frontend\\components\\transaksi\\transaction-manager.tsx",
+      "to": "frontend\\http.ts"
+    },
+    {
+      "from": "frontend\\components\\transaksi\\transaction-manager.tsx",
+      "to": "frontend\\compat\\navigation.ts"
+    },
+    {
+      "from": "frontend\\components\\transaksi\\transaction-manager.tsx",
+      "to": "frontend\\components\\ui\\alert.tsx"
+    },
+    {
+      "from": "frontend\\components\\ui\\alert.tsx",
+      "to": "frontend\\lib\\utils.ts"
+    },
+    {
+      "from": "frontend\\components\\transaksi\\transaction-manager.tsx",
+      "to": "frontend\\components\\ui\\card.tsx"
+    },
+    {
+      "from": "frontend\\components\\ui\\card.tsx",
+      "to": "frontend\\lib\\utils.ts"
+    },
+    {
+      "from": "frontend\\components\\transaksi\\transaction-manager.tsx",
+      "to": "frontend\\lib\\api.ts"
+    },
+    {
+      "from": "frontend\\components\\transaksi\\transaction-manager.tsx",
+      "to": "frontend\\lib\\database-types.ts"
+    },
+    {
+      "from": "frontend\\components\\transaksi\\transaction-manager.tsx",
+      "to": "frontend\\components\\transaksi\\transaction-form.tsx"
+    },
+    {
+      "from": "frontend\\components\\transaksi\\transaction-form.tsx",
+      "to": "frontend\\http.ts"
+    },
+    {
+      "from": "frontend\\components\\transaksi\\transaction-form.tsx",
+      "to": "frontend\\components\\ui\\alert.tsx"
+    },
+    {
+      "from": "frontend\\components\\transaksi\\transaction-form.tsx",
+      "to": "frontend\\components\\ui\\button.tsx"
+    },
+    {
+      "from": "frontend\\components\\transaksi\\transaction-form.tsx",
+      "to": "frontend\\components\\ui\\input.tsx"
+    },
+    {
+      "from": "frontend\\components\\transaksi\\transaction-form.tsx",
+      "to": "frontend\\components\\ui\\label.tsx"
+    },
+    {
+      "from": "frontend\\components\\transaksi\\transaction-form.tsx",
+      "to": "frontend\\components\\ui\\select.tsx"
+    },
+    {
+      "from": "frontend\\components\\ui\\select.tsx",
+      "to": "frontend\\lib\\utils.ts"
+    },
+    {
+      "from": "frontend\\components\\transaksi\\transaction-form.tsx",
+      "to": "frontend\\lib\\date.ts"
+    },
+    {
+      "from": "frontend\\components\\transaksi\\transaction-form.tsx",
+      "to": "frontend\\lib\\format.ts"
+    },
+    {
+      "from": "frontend\\components\\transaksi\\transaction-form.tsx",
+      "to": "frontend\\lib\\api.ts"
+    },
+    {
+      "from": "frontend\\components\\transaksi\\transaction-form.tsx",
+      "to": "frontend\\lib\\database-types.ts"
+    },
+    {
+      "from": "frontend\\components\\transaksi\\transaction-form.tsx",
+      "to": "frontend\\lib\\validation.ts"
+    },
+    {
+      "from": "frontend\\lib\\validation.ts",
+      "to": "frontend\\lib\\date.ts"
+    },
+    {
+      "from": "frontend\\components\\transaksi\\transaction-manager.tsx",
+      "to": "frontend\\components\\transaksi\\transaction-list.tsx"
+    },
+    {
+      "from": "frontend\\components\\transaksi\\transaction-list.tsx",
+      "to": "frontend\\components\\ui\\button.tsx"
+    },
+    {
+      "from": "frontend\\components\\transaksi\\transaction-list.tsx",
+      "to": "frontend\\lib\\category-style.ts"
+    },
+    {
+      "from": "frontend\\lib\\category-style.ts",
+      "to": "frontend\\lib\\database-types.ts"
+    },
+    {
+      "from": "frontend\\components\\transaksi\\transaction-list.tsx",
+      "to": "frontend\\lib\\date.ts"
+    },
+    {
+      "from": "frontend\\components\\transaksi\\transaction-list.tsx",
+      "to": "frontend\\lib\\format.ts"
+    },
+    {
+      "from": "frontend\\components\\transaksi\\transaction-list.tsx",
+      "to": "frontend\\lib\\utils.ts"
+    },
+    {
+      "from": "frontend\\components\\transaksi\\transaction-list.tsx",
+      "to": "frontend\\components\\transaksi\\transaction-manager.tsx"
+    },
+    {
+      "from": "frontend\\pages\\FinancePages.tsx",
+      "to": "frontend\\components\\kategori\\category-manager.tsx"
+    },
+    {
+      "from": "frontend\\components\\kategori\\category-manager.tsx",
+      "to": "frontend\\compat\\navigation.ts"
+    },
+    {
+      "from": "frontend\\components\\kategori\\category-manager.tsx",
+      "to": "frontend\\components\\ui\\alert.tsx"
+    },
+    {
+      "from": "frontend\\components\\kategori\\category-manager.tsx",
+      "to": "frontend\\components\\ui\\card.tsx"
+    },
+    {
+      "from": "frontend\\components\\kategori\\category-manager.tsx",
+      "to": "frontend\\lib\\database-types.ts"
+    },
+    {
+      "from": "frontend\\components\\kategori\\category-manager.tsx",
+      "to": "frontend\\components\\kategori\\category-form.tsx"
+    },
+    {
+      "from": "frontend\\components\\kategori\\category-form.tsx",
+      "to": "frontend\\http.ts"
+    },
+    {
+      "from": "frontend\\components\\kategori\\category-form.tsx",
+      "to": "frontend\\components\\ui\\alert.tsx"
+    },
+    {
+      "from": "frontend\\components\\kategori\\category-form.tsx",
+      "to": "frontend\\components\\ui\\button.tsx"
+    },
+    {
+      "from": "frontend\\components\\kategori\\category-form.tsx",
+      "to": "frontend\\components\\ui\\input.tsx"
+    },
+    {
+      "from": "frontend\\components\\kategori\\category-form.tsx",
+      "to": "frontend\\components\\ui\\label.tsx"
+    },
+    {
+      "from": "frontend\\components\\kategori\\category-form.tsx",
+      "to": "frontend\\components\\ui\\select.tsx"
+    },
+    {
+      "from": "frontend\\components\\kategori\\category-form.tsx",
+      "to": "frontend\\lib\\api.ts"
+    },
+    {
+      "from": "frontend\\components\\kategori\\category-form.tsx",
+      "to": "frontend\\lib\\database-types.ts"
+    },
+    {
+      "from": "frontend\\components\\kategori\\category-form.tsx",
+      "to": "frontend\\lib\\validation.ts"
+    },
+    {
+      "from": "frontend\\components\\kategori\\category-manager.tsx",
+      "to": "frontend\\components\\kategori\\category-list.tsx"
+    },
+    {
+      "from": "frontend\\components\\kategori\\category-list.tsx",
+      "to": "frontend\\http.ts"
+    },
+    {
+      "from": "frontend\\components\\kategori\\category-list.tsx",
+      "to": "frontend\\components\\ui\\button.tsx"
+    },
+    {
+      "from": "frontend\\components\\kategori\\category-list.tsx",
+      "to": "frontend\\components\\ui\\input.tsx"
+    },
+    {
+      "from": "frontend\\components\\kategori\\category-list.tsx",
+      "to": "frontend\\lib\\api.ts"
+    },
+    {
+      "from": "frontend\\components\\kategori\\category-list.tsx",
+      "to": "frontend\\lib\\database-types.ts"
+    },
+    {
+      "from": "frontend\\pages\\FinancePages.tsx",
+      "to": "frontend\\components\\import\\import-manager.tsx"
+    },
+    {
+      "from": "frontend\\components\\import\\import-manager.tsx",
+      "to": "frontend\\http.ts"
+    },
+    {
+      "from": "frontend\\components\\import\\import-manager.tsx",
+      "to": "frontend\\components\\ui\\alert.tsx"
+    },
+    {
+      "from": "frontend\\components\\import\\import-manager.tsx",
+      "to": "frontend\\components\\ui\\button.tsx"
+    },
+    {
+      "from": "frontend\\components\\import\\import-manager.tsx",
+      "to": "frontend\\components\\ui\\card.tsx"
+    },
+    {
+      "from": "frontend\\components\\import\\import-manager.tsx",
+      "to": "frontend\\components\\ui\\input.tsx"
+    },
+    {
+      "from": "frontend\\components\\import\\import-manager.tsx",
+      "to": "frontend\\lib\\api.ts"
+    },
+    {
+      "from": "frontend\\components\\import\\import-manager.tsx",
+      "to": "frontend\\lib\\import\\types.ts"
+    },
+    {
+      "from": "frontend\\lib\\import\\types.ts",
+      "to": "frontend\\lib\\database-types.ts"
+    },
+    {
+      "from": "frontend\\pages\\FinancePages.tsx",
+      "to": "frontend\\lib\\database-types.ts"
+    },
+    {
+      "from": "frontend\\pages\\FinancePages.tsx",
+      "to": "frontend\\lib\\import\\types.ts"
+    },
+    {
+      "from": "frontend\\pages\\FinancePages.tsx",
+      "to": "frontend\\api.tsx"
+    },
+    {
+      "from": "frontend\\App.tsx",
+      "to": "frontend\\pages\\FinancePages.tsx"
+    },
+    {
+      "from": "frontend\\App.tsx",
+      "to": "frontend\\pages\\FinancePages.tsx"
+    },
+    {
+      "from": "frontend\\App.tsx",
+      "to": "frontend\\pages\\UiPreviewPage.tsx"
+    },
+    {
+      "from": "frontend\\pages\\UiPreviewPage.tsx",
+      "to": "frontend\\compat\\Image.tsx"
+    },
+    {
+      "from": "frontend\\App.tsx",
+      "to": "frontend\\components\\admin\\operations-assistant.tsx"
+    },
+    {
+      "from": "frontend\\components\\admin\\operations-assistant.tsx",
+      "to": "frontend\\http.ts"
+    },
+    {
+      "from": "frontend\\components\\admin\\operations-assistant.tsx",
+      "to": "frontend\\compat\\Link.tsx"
+    },
+    {
+      "from": "frontend\\components\\admin\\operations-assistant.tsx",
+      "to": "frontend\\compat\\Image.tsx"
+    },
+    {
+      "from": "frontend\\components\\admin\\operations-assistant.tsx",
+      "to": "frontend\\compat\\navigation.ts"
+    },
+    {
+      "from": "frontend\\components\\admin\\operations-assistant.tsx",
+      "to": "frontend\\lib\\api.ts"
+    },
+    {
+      "from": "frontend\\components\\admin\\operations-assistant.tsx",
+      "to": "frontend\\lib\\admin-assistant\\types.ts"
+    },
+    {
+      "from": "tests\\unit\\city-imagery.test.ts",
+      "to": "frontend\\lib\\tracking\\city-imagery.ts"
+    },
+    {
+      "from": "tests\\unit\\date.test.ts",
+      "to": "frontend\\lib\\date.ts"
+    },
+    {
+      "from": "tests\\unit\\format.test.ts",
+      "to": "frontend\\lib\\format.ts"
+    },
+    {
+      "from": "tests\\unit\\journey.test.ts",
+      "to": "frontend\\lib\\tracking\\journey.ts"
+    },
+    {
+      "from": "tests\\unit\\page-bootstrap.test.ts",
+      "to": "frontend\\bootstrap.ts"
+    },
+    {
+      "from": "tests\\unit\\page-bootstrap.test.ts",
+      "to": "frontend\\shared-read.ts"
+    },
+    {
+      "from": "tests\\unit\\roles.test.ts",
+      "to": "frontend\\lib\\roles.ts"
+    },
+    {
+      "from": "tests\\unit\\structured-data.test.ts",
+      "to": "frontend\\lib\\structured-data.ts"
+    }
+  ],
+  "caveat": "Static source reachability includes tests and lazy imports. Laravel conventions, SQL, assets, CLI scripts and documentation require separate review."
+}

@@ -1,0 +1,242 @@
+{
+  "base": "http://127.0.0.1:3107",
+  "results": [
+    {
+      "check": "layout, loaded images and favicon",
+      "route": "/masuk",
+      "width": 375,
+      "passed": true
+    },
+    {
+      "check": "layout, loaded images and favicon",
+      "route": "/masuk",
+      "width": 768,
+      "passed": true
+    },
+    {
+      "check": "layout, loaded images and favicon",
+      "route": "/masuk",
+      "width": 1440,
+      "passed": true
+    },
+    {
+      "check": "layout, loaded images and favicon",
+      "route": "/daftar",
+      "width": 375,
+      "passed": true
+    },
+    {
+      "check": "layout, loaded images and favicon",
+      "route": "/daftar",
+      "width": 768,
+      "passed": true
+    },
+    {
+      "check": "layout, loaded images and favicon",
+      "route": "/daftar",
+      "width": 1440,
+      "passed": true
+    },
+    {
+      "check": "layout, loaded images and favicon",
+      "route": "/lacak/ANT-100015?code=260926",
+      "width": 375,
+      "passed": true
+    },
+    {
+      "check": "layout, loaded images and favicon",
+      "route": "/lacak/ANT-100015?code=260926",
+      "width": 768,
+      "passed": true
+    },
+    {
+      "check": "layout, loaded images and favicon",
+      "route": "/lacak/ANT-100015?code=260926",
+      "width": 1440,
+      "passed": true
+    },
+    {
+      "check": "map mounts when accordion opens",
+      "passed": true
+    },
+    {
+      "check": "carousel manual control and reduced-motion auto pause",
+      "passed": true
+    },
+    {
+      "check": "layout, loaded images and favicon",
+      "route": "/admin",
+      "width": 375,
+      "passed": true
+    },
+    {
+      "check": "layout, loaded images and favicon",
+      "route": "/admin",
+      "width": 768,
+      "passed": true
+    },
+    {
+      "check": "layout, loaded images and favicon",
+      "route": "/admin",
+      "width": 1440,
+      "passed": true
+    },
+    {
+      "check": "layout, loaded images and favicon",
+      "route": "/admin/kiriman",
+      "width": 375,
+      "passed": true
+    },
+    {
+      "check": "layout, loaded images and favicon",
+      "route": "/admin/kiriman",
+      "width": 768,
+      "passed": true
+    },
+    {
+      "check": "layout, loaded images and favicon",
+      "route": "/admin/kiriman",
+      "width": 1440,
+      "passed": true
+    },
+    {
+      "check": "layout, loaded images and favicon",
+      "route": "/admin/tiket",
+      "width": 375,
+      "passed": true
+    },
+    {
+      "check": "layout, loaded images and favicon",
+      "route": "/admin/tiket",
+      "width": 768,
+      "passed": true
+    },
+    {
+      "check": "layout, loaded images and favicon",
+      "route": "/admin/tiket",
+      "width": 1440,
+      "passed": true
+    },
+    {
+      "check": "admin grouped navigation works with keyboard",
+      "passed": true
+    },
+    {
+      "check": "layout, loaded images and favicon",
+      "route": "/seller",
+      "width": 375,
+      "passed": true
+    },
+    {
+      "check": "layout, loaded images and favicon",
+      "route": "/seller",
+      "width": 768,
+      "passed": true
+    },
+    {
+      "check": "layout, loaded images and favicon",
+      "route": "/seller",
+      "width": 1440,
+      "passed": true
+    },
+    {
+      "check": "layout, loaded images and favicon",
+      "route": "/pengiriman",
+      "width": 375,
+      "passed": true
+    },
+    {
+      "check": "layout, loaded images and favicon",
+      "route": "/pengiriman",
+      "width": 768,
+      "passed": true
+    },
+    {
+      "check": "layout, loaded images and favicon",
+      "route": "/pengiriman",
+      "width": 1440,
+      "passed": true
+    },
+    {
+      "check": "layout, loaded images and favicon",
+      "route": "/transaksi",
+      "width": 375,
+      "passed": true
+    },
+    {
+      "check": "layout, loaded images and favicon",
+      "route": "/transaksi",
+      "width": 768,
+      "passed": true
+    },
+    {
+      "check": "layout, loaded images and favicon",
+      "route": "/transaksi",
+      "width": 1440,
+      "passed": true
+    },
+    {
+      "check": "layout, loaded images and favicon",
+      "route": "/import",
+      "width": 375,
+      "passed": true
+    },
+    {
+      "check": "layout, loaded images and favicon",
+      "route": "/import",
+      "width": 768,
+      "passed": true
+    },
+    {
+      "check": "layout, loaded images and favicon",
+      "route": "/import",
+      "width": 1440,
+      "passed": true
+    },
+    {
+      "check": "layout, loaded images and favicon",
+      "route": "/kategori",
+      "width": 375,
+      "passed": true
+    },
+    {
+      "check": "layout, loaded images and favicon",
+      "route": "/kategori",
+      "width": 768,
+      "passed": true
+    },
+    {
+      "check": "layout, loaded images and favicon",
+      "route": "/kategori",
+      "width": 1440,
+      "passed": true
+    },
+    {
+      "check": "seller grouped navigation works with keyboard",
+      "passed": true
+    },
+    {
+      "check": "seller search, JSON/CSV export follow current filter, empty state",
+      "passed": true
+    },
+    {
+      "check": "layout, loaded images and favicon",
+      "route": "/akun",
+      "width": 375,
+      "passed": true
+    },
+    {
+      "check": "layout, loaded images and favicon",
+      "route": "/akun",
+      "width": 768,
+      "passed": true
+    },
+    {
+      "check": "layout, loaded images and favicon",
+      "route": "/akun",
+      "width": 1440,
+      "passed": true
+    }
+  ],
+  "errors": []
+}

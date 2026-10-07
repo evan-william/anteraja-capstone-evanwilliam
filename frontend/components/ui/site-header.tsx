@@ -1,0 +1,31 @@
+import { LogOut } from 'lucide-react';
+
+import { signOut } from '@/compat/actions';
+import { Brand } from '@/components/ui/brand';
+import { Button } from '@/components/ui/button';
+import { NavLinks } from '@/components/ui/nav-links';
+import type { AccountRole } from '@/lib/database-types';
+import { roleHome } from '@/lib/roles';
+
+export function SiteHeader({ userName, role }: { userName: string; role: AccountRole }) {
+  return (
+    <header className="sticky top-0 z-40 border-b bg-white/90 backdrop-blur-xl">
+      <div className="app-container flex min-h-16 items-center justify-between gap-4 py-2">
+        <div className="flex min-w-0 items-center gap-7">
+          <Brand className="shrink-0" href={roleHome(role)} />
+          <div className="hidden lg:block"><NavLinks role={role} /></div>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <span className="hidden max-w-44 truncate text-sm text-muted-foreground lg:inline">{userName}</span>
+          <form onSubmit={(event) => { event.preventDefault(); void signOut(); }}>
+            <Button type="submit" variant="ghost" size="sm" className="gap-2">
+              <LogOut className="size-4" /> <span className="hidden sm:inline">Keluar</span>
+            </Button>
+          </form>
+        </div>
+      </div>
+      <div className="app-container border-t lg:hidden"><NavLinks role={role} mobile /></div>
+    </header>
+  );
+}

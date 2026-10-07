@@ -1,6 +1,6 @@
 # Foto kota pada ringkasan tracking
 
-Kartu ringkasan menggunakan foto kota **posisi terakhir** paket. Jika posisi terakhir tidak diketahui, foto kota tujuan boleh ditampilkan. Jika nama hub/kota tidak cocok dengan aset lokal, kartu tetap tampil dengan latar arang netral; aplikasi tidak menebak lokasi dari kota tujuan. Pemilihan kota berada di `lib/tracking/city-imagery.ts` dan tidak mengubah data tracking.
+Kartu ringkasan menggunakan foto kota **posisi terakhir** paket. Jika posisi terakhir tidak diketahui, foto kota tujuan boleh ditampilkan. Jika nama hub/kota tidak cocok dengan aset lokal, kartu tetap tampil dengan latar arang netral; aplikasi tidak menebak lokasi dari kota tujuan. Pemilihan kota berada di `frontend/lib/tracking/city-imagery.ts` dan tidak mengubah data tracking.
 
 Semua gambar disimpan lokal sebagai WebP agar halaman tidak bergantung pada koneksi ke situs foto. Gambar di bawah dioptimalkan dari foto asli (diubah ukuran dan format; tampilan halaman dapat memotong komposisinya sesuai ukuran layar). Versi WebP dari foto CC BY-SA tetap dibagikan dengan lisensi CC BY-SA yang sama. Tautan kredit juga tampil pada kartu saat foto digunakan.
 

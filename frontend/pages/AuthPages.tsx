@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import Link from '@/frontend/compat/Link';
+import Link from '@/compat/Link';
 import { useNavigate } from 'react-router-dom';
 import { AuthCarousel } from '@/components/ui/auth-carousel';
 import { Button } from '@/components/ui/button';
@@ -21,7 +21,7 @@ function AuthShell({ title, copy, children }: { title: string; copy: string; chi
 
 export function LoginPage() {
   const navigate = useNavigate();
-  const { reload } = useAuth();
+  const { acceptUser } = useAuth();
   const [error, setError] = useState('');
   const [pending, setPending] = useState(false);
   async function submit(event: FormEvent<HTMLFormElement>) {
@@ -29,7 +29,7 @@ export function LoginPage() {
     const fields = new FormData(event.currentTarget);
     try {
       const user = await post<User>('/api/v1/auth/login', { email: fields.get('email'), password: fields.get('password') });
-      await reload(); navigate(roleHome(user.role), { replace: true });
+      acceptUser(user); navigate(roleHome(user.role), { replace: true });
     } catch (caught) { setError(caught instanceof Error ? caught.message : 'Gagal masuk.'); }
     finally { setPending(false); }
   }

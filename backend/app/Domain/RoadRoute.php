@@ -13,8 +13,10 @@ function road_point(?string $value): ?array
 
 function road_route(): never
 {
-    $from = road_point(isset($_GET['from']) ? (string) $_GET['from'] : null);
-    $to = road_point(isset($_GET['to']) ? (string) $_GET['to'] : null);
+    $fromValue = request()->query('from');
+    $toValue = request()->query('to');
+    $from = road_point(is_string($fromValue) ? $fromValue : null);
+    $to = road_point(is_string($toValue) ? $toValue : null);
     if (!$from || !$to) {
         throw new \Illuminate\Http\Exceptions\HttpResponseException(response()->json(['error' => 'Titik rute tidak valid.'], 400));
     }
@@ -25,6 +27,20 @@ function road_route(): never
         throw new \Illuminate\Http\Exceptions\HttpResponseException(response()->json(['error' => 'Layanan rute belum dikonfigurasi.'], 503));
     }
     $coordinates = sprintf('%.6F,%.6F;%.6F,%.6F', $from[1], $from[0], $to[1], $to[0]);
+    // only public road geometry is cached; never cache tokens or shipment data.
+    $cacheKey = 'road-route:v1:' . hash('sha256', $base . ':' . $coordinates);
+    try {
+        $cachedPath = app(\App\Support\OperationsCache::class)->get($cacheKey)
+            ?? \Illuminate\Support\Facades\Cache::get($cacheKey);
+    } catch (Throwable) {
+        // cache availability must never decide whether the map can be loaded.
+        $cachedPath = null;
+        app_log('road.cache_unavailable', ['outcome' => 'read_failed'], 'warning');
+    }
+    if (is_array($cachedPath) && count($cachedPath) >= 2) {
+        app_log('road.cache_hit', ['provider' => 'osrm', 'outcome' => 'hit']);
+        throw new \Illuminate\Http\Exceptions\HttpResponseException(response()->json(['path' => $cachedPath])->header('Cache-Control', 'public, max-age=3600, stale-while-revalidate=86400'));
+    }
     $url = $base . '/route/v1/driving/' . $coordinates . '?overview=simplified&geometries=geojson&steps=false';
     $startedAt = hrtime(true);
     $handle = curl_init($url);
@@ -50,6 +66,12 @@ function road_route(): never
             throw new \Illuminate\Http\Exceptions\HttpResponseException(response()->json(['error' => 'Geometri rute tidak valid.'], 503));
         }
         $path[] = [(float) $point[1], (float) $point[0]];
+    }
+    try {
+        app(\App\Support\OperationsCache::class)->put($cacheKey, $path, config('operations_cache.road_ttl'));
+        \Illuminate\Support\Facades\Cache::put($cacheKey, $path, 3600);
+    } catch (Throwable) {
+        app_log('road.cache_unavailable', ['outcome' => 'write_failed'], 'warning');
     }
     throw new \Illuminate\Http\Exceptions\HttpResponseException(response()->json(['path' => $path])->header('Cache-Control', 'public, max-age=3600, stale-while-revalidate=86400'));
 }

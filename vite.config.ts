@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [react(), tailwind()],
   resolve: {
     alias: [
-      { find: '@', replacement: path.resolve('.') },
+      { find: '@', replacement: path.resolve('frontend') },
     ],
   },
   optimizeDeps: { include: ['leaflet'] },

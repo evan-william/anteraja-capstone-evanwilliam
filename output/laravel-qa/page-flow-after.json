@@ -1,0 +1,87 @@
+{
+  "measuredAt": "2026-10-01T08:27:19.752Z",
+  "base": "http://127.0.0.1:3063",
+  "results": [
+    {
+      "role": "admin",
+      "sample": 0,
+      "totalMilliseconds": 1746,
+      "apiSystemMilliseconds": 927,
+      "apiCalls": [
+        "/api/v1/bootstrap"
+      ]
+    },
+    {
+      "role": "admin",
+      "sample": 1,
+      "totalMilliseconds": 2110,
+      "apiSystemMilliseconds": 1266,
+      "apiCalls": [
+        "/api/v1/bootstrap"
+      ]
+    },
+    {
+      "role": "admin",
+      "sample": 2,
+      "totalMilliseconds": 1533,
+      "apiSystemMilliseconds": 769,
+      "apiCalls": [
+        "/api/v1/bootstrap"
+      ]
+    },
+    {
+      "role": "seller",
+      "sample": 0,
+      "totalMilliseconds": 1706,
+      "apiSystemMilliseconds": 967,
+      "apiCalls": [
+        "/api/v1/bootstrap"
+      ]
+    },
+    {
+      "role": "seller",
+      "sample": 1,
+      "totalMilliseconds": 1574,
+      "apiSystemMilliseconds": 720,
+      "apiCalls": [
+        "/api/v1/bootstrap"
+      ]
+    },
+    {
+      "role": "seller",
+      "sample": 2,
+      "totalMilliseconds": 1522,
+      "apiSystemMilliseconds": 736,
+      "apiCalls": [
+        "/api/v1/bootstrap"
+      ]
+    },
+    {
+      "role": "consumer",
+      "sample": 0,
+      "totalMilliseconds": 2110,
+      "apiSystemMilliseconds": 1056,
+      "apiCalls": [
+        "/api/v1/bootstrap"
+      ]
+    },
+    {
+      "role": "consumer",
+      "sample": 1,
+      "totalMilliseconds": 1516,
+      "apiSystemMilliseconds": 931,
+      "apiCalls": [
+        "/api/v1/bootstrap"
+      ]
+    },
+    {
+      "role": "consumer",
+      "sample": 2,
+      "totalMilliseconds": 1551,
+      "apiSystemMilliseconds": 1032,
+      "apiCalls": [
+        "/api/v1/bootstrap"
+      ]
+    }
+  ]
+}
