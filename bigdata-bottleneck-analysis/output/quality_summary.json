@@ -1,0 +1,16 @@
+{
+  "raw_events": 4598,
+  "deduplicated_events": 4574,
+  "duplicate_extra_events": 24,
+  "missing_key_events": 2,
+  "invalid_timestamp_events": 24,
+  "candidate_pairs": 2318,
+  "valid_pairs": 2182,
+  "missing_arrival_pairs": 40,
+  "missing_departure_pairs": 40,
+  "invalid_timestamp_pairs": 24,
+  "unknown_event_pairs": 8,
+  "ambiguous_pair_pairs": 8,
+  "departure_before_arrival_pairs": 16,
+  "excluded_pairs": 136
+}
