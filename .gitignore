@@ -58,6 +58,8 @@ dev-server*.log
 /output/organization-qa/screens/
 /output/organization-qa/*.log
 /output/audit/graphify-out/
+/exercises/geolocation-map/config.local.js
+/output/geolocation-map/
 
 # local MCP client configuration (may contain account/project metadata)
 /.vscode/mcp.json
