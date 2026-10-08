@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>Peta pengiriman · Anteraja</title>
+  <link rel="icon" href="/public/brand/anteraja-favicon.png">
+  <link rel="stylesheet" href="/exercises/geolocation-map/style.css">
+  <script src="/exercises/geolocation-map/config.local.js" defer></script>
+  <script type="module" src="/exercises/geolocation-map/app.mjs"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Lewati ke peta pengiriman</a>
+  <header class="site-header">
+    <a class="brand" href="/shipment-map.html" aria-label="Anteraja, peta pengiriman">
+      <img src="/public/brand/anteraja-mark-small.png" width="40" height="40" alt="">
+      <span>anteraja</span>
+    </a>
+    <p>Lokasi pengiriman <span class="muted">/ Jakarta</span></p>
+    <a href="https://developers.google.com/maps/documentation/javascript/overview" target="_blank" rel="noopener noreferrer">Panduan Google Maps ↗</a>
+  </header>
+  <main id="main">
+    <section class="intro" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">Operasional / Peta layanan</p>
+        <h1 id="page-title">Satu peta, semua titik.</h1>
+        <p class="description">Lihat lokasi kiriman dan kurir. Pilih titik untuk membaca detailnya.</p>
+      </div>
+      <dl class="metrics">
+        <div><dt>Kiriman contoh</dt><dd id="shipment-count">—</dd></div>
+        <div><dt>Kurir contoh</dt><dd id="courier-count">—</dd></div>
+        <div><dt>Titik terpetakan</dt><dd id="mapped-count">0</dd></div>
+      </dl>
+    </section>
+    <section class="workspace" aria-label="Peta dan daftar lokasi">
+      <aside class="sidebar" aria-labelledby="locations-title">
+        <div class="sidebar-heading"><h2 id="locations-title">Daftar lokasi</h2><p id="visible-count" class="muted"></p></div>
+        <form id="filters" role="search">
+          <label for="search">Cari resi, kurir, atau lokasi</label>
+          <input id="search" name="search" type="search" placeholder="Contoh: ANT-190001" autocomplete="off" maxlength="120">
+          <label for="kind">Jenis lokasi</label>
+          <select id="kind" name="kind"><option value="all">Semua lokasi</option><option value="shipment">Kiriman</option><option value="courier">Kurir</option></select>
+        </form>
+        <ul id="locations" role="list"></ul>
+        <p id="empty" hidden>Tidak ada lokasi yang cocok. Coba kata kunci lain.</p>
+        <p class="sidebar-note">Data simulasi, bukan posisi GPS langsung. Tidak terhubung ke data pelanggan.</p>
+      </aside>
+      <section class="map-panel" aria-labelledby="map-title">
+        <header class="map-heading">
+          <div><h2 id="map-title">Area layanan Jakarta</h2><p id="map-status" role="status" aria-live="polite">Menyiapkan peta…</p></div>
+          <button type="button" id="fit-map" disabled>Tampilkan semua titik</button>
+        </header>
+        <div class="map-stage">
+          <div id="map" aria-label="Peta Google Maps lokasi pengiriman dan kurir" aria-busy="true"></div>
+          <div id="map-message" class="map-message">
+            <div class="map-symbol" aria-hidden="true">◎</div>
+            <h3 id="message-title">Menyiapkan Google Maps</h3>
+            <p id="message-body">Peta akan tampil setelah koneksi dan konfigurasi siap.</p>
+            <a id="setup-link" href="https://console.cloud.google.com/google/maps-apis/start?demo=true" target="_blank" rel="noopener noreferrer" hidden>Buat key resmi Google ↗</a>
+            <button type="button" id="retry-map" hidden>Muat ulang peta</button>
+          </div>
+        </div>
+        <footer class="map-footer">
+          <ul class="legend" role="list"><li><i class="dot shipment" aria-hidden="true"></i>Kiriman</li><li><i class="dot courier" aria-hidden="true"></i>Kurir</li><li><i class="dot issue" aria-hidden="true"></i>Kendala</li></ul>
+          <p>Pilih marker atau nama lokasi untuk melihat detail.</p>
+        </footer>
+      </section>
+    </section>
+    <section class="geocoding" aria-labelledby="geocode-title">
+      <div><p class="eyebrow">Alamat → koordinat</p><h2 id="geocode-title">Satu kiriman hanya punya alamat.</h2><p>ANT-190009 · Monumen Nasional, Gambir, Jakarta Pusat, Indonesia.</p><p id="geocode-status" role="status" aria-live="polite">Menunggu peta siap. Geocoding akan dijalankan satu kali.</p></div>
+      <button type="button" id="retry-geocode" disabled>Cari koordinat alamat</button>
+    </section>
+  </main>
+  <footer class="site-footer"><p>Anteraja · Latihan geolokasi</p><p>Google Maps JavaScript API / Data contoh</p></footer>
+  <noscript><p class="no-script">Aktifkan JavaScript untuk menampilkan peta dan detail lokasi.</p></noscript>
+</body>
+</html>
