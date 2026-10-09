@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "source": "Approximate city-centre coordinates, curated for this exercise; not verified Anteraja hub addresses or GPS.",
+  "hubs": [
+    {
+      "hub_id": "HUB_REMOTE",
+      "lat": -2.2096,
+      "lng": 113.9213
+    },
+    {
+      "hub_id": "HUB_MKS",
+      "lat": -5.1477,
+      "lng": 119.4327
+    },
+    {
+      "hub_id": "HUB_DPS",
+      "lat": -8.65,
+      "lng": 115.2167
+    },
+    {
+      "hub_id": "HUB_SMG",
+      "lat": -6.9667,
+      "lng": 110.4167
+    },
+    {
+      "hub_id": "HUB_MED",
+      "lat": 3.5952,
+      "lng": 98.6722
+    },
+    {
+      "hub_id": "HUB_SBY",
+      "lat": -7.2575,
+      "lng": 112.7521
+    },
+    {
+      "hub_id": "HUB_BDG",
+      "lat": -6.9175,
+      "lng": 107.6191
+    },
+    {
+      "hub_id": "HUB_JKT",
+      "lat": -6.1754,
+      "lng": 106.8272
+    }
+  ]
+}
