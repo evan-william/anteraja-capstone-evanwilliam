@@ -25,6 +25,8 @@ export function validateData(metrics, locations) {
   for (const hub of metrics.hubs) {
     if (typeof hub.hub_id !== 'string' || !hub.hub_id || ids.has(hub.hub_id)) throw new Error('hub_id hilang atau duplikat.');
     ids.add(hub.hub_id);
+    if (typeof hub.hub_name !== 'string' || !hub.hub_name.trim() || typeof hub.city !== 'string') throw new Error('Nama hub atau kota tidak valid.');
+    if (!Number.isFinite(hub.valid_pair_pct) || hub.valid_pair_pct < 0 || hub.valid_pair_pct > 100 || !Number.isInteger(hub.excluded_pairs) || hub.excluded_pairs < 0) throw new Error('Metrics kualitas data tidak valid.');
     for (const name of ['completed_visits', 'open_visits', 'total_dwell_hours']) {
       if (!Number.isFinite(hub[name]) || hub[name] < 0) throw new Error(`Angka ${name} tidak valid.`);
     }
