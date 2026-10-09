@@ -1,5 +1,5 @@
 import { locations, STATUS, hasCoordinates, labelOf, filterLocations } from './data.mjs';
-import { loadGoogleMaps, geocodeAddress, readableError } from './maps-loader.mjs';
+import { loadGoogleMaps, geocodeAddress, geocodeAddressV4, readableError } from './maps-loader.mjs';
 
 const byId = id => document.getElementById(id);
 // salin data agar koordinat hasil geocoding tidak memutasi dataset asli.
@@ -71,7 +71,11 @@ function renderList() {
   byId('visible-count').textContent = `${filtered.length} lokasi`;
   byId('empty').hidden = filtered.length > 0;
   const ids = new Set(filtered.map(item => item.id));
-  for (const [id, marker] of markers) marker.map = ids.has(id) && !mapFailed ? map : null;
+  for (const [id, marker] of markers) {
+    const targetMap = ids.has(id) && !mapFailed ? map : null;
+    // jangan reset map yang sama saat mengetik/filter cepat; google merender async.
+    if (marker.map !== targetMap) marker.map = targetMap;
+  }
   if (selectedId && !ids.has(selectedId)) { selectedId = null; infoWindow?.close(); }
 }
 
@@ -122,14 +126,16 @@ function fitMap() {
 }
 
 async function resolveAddress() {
-  if (!geocoder || geocodingBusy || mapFailed) return;
+  if (!map || geocodingBusy || mapFailed) return;
   const item = items.find(entry => entry.address && !entry.geocoded);
   if (!item) return;
   geocodingBusy = true;
   byId('retry-geocode').disabled = true;
   byId('geocode-status').textContent = 'Mencari koordinat alamat melalui Google Geocoding…';
   try {
-    const position = await geocodeAddress(geocoder, item.address);
+    const position = window.SHIPMENT_MAP_CONFIG.geocodingMode === 'javascript'
+      ? await geocodeAddress(geocoder, item.address)
+      : await geocodeAddressV4(window.SHIPMENT_MAP_CONFIG.apiKey, item.address);
     if (mapFailed) return; // jangan menampilkan sukses jika key ditolak saat request berlangsung.
     Object.assign(item, position, { geocoded: true });
     addMarker(item);
@@ -151,15 +157,18 @@ async function start() {
   renderList();
   try {
     maps = await loadGoogleMaps(window.SHIPMENT_MAP_CONFIG, { onAuthFailure: () => mapError(new Error('AUTH_FAILURE')) });
-    const [mapLibrary, markerLibrary, geocodingLibrary] = await Promise.all([
-      maps.importLibrary('maps'), maps.importLibrary('marker'), maps.importLibrary('geocoding'),
+    const [mapLibrary, markerLibrary] = await Promise.all([
+      maps.importLibrary('maps'), maps.importLibrary('marker'),
     ]);
     if (mapFailed) return;
     markerClass = markerLibrary.AdvancedMarkerElement;
     pinClass = markerLibrary.PinElement;
     map = new mapLibrary.Map(byId('map'), { center: { lat: -6.2088, lng: 106.8456 }, zoom: 12, mapId: window.SHIPMENT_MAP_CONFIG.mapId || 'DEMO_MAP_ID', gestureHandling: 'cooperative', streetViewControl: false, mapTypeControl: false });
     infoWindow = new mapLibrary.InfoWindow();
-    geocoder = new geocodingLibrary.Geocoder();
+    if (window.SHIPMENT_MAP_CONFIG.geocodingMode === 'javascript') {
+      const geocodingLibrary = await maps.importLibrary('geocoding');
+      geocoder = new geocodingLibrary.Geocoder();
+    }
     // satu marker per data yang memiliki koordinat; alamat-only ditambahkan setelah geocoding.
     for (const item of items) addMarker(item);
     byId('map-message').hidden = true;

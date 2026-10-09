@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { locations, STATUS, hasCoordinates, filterLocations, labelOf } from './data.mjs';
-import { loadGoogleMaps, geocodeAddress, readableError } from './maps-loader.mjs';
+import { loadGoogleMaps, geocodeAddress, geocodeAddressV4, readableError } from './maps-loader.mjs';
 
 test('dataset: 9 kiriman, 3 kurir, 11 koordinat dan 1 alamat-only', () => {
   assert.equal(locations.length, 12);
@@ -94,4 +94,49 @@ test('pesan error aman dan jelas tanpa menampilkan key / stack trace', () => {
   assert.match(readableError(new Error('ZERO_RESULTS')), /tidak menemukan/);
   assert.match(readableError(new Error('NETWORK_ERROR')), /Koneksi/);
   assert.doesNotMatch(readableError(new Error('private-token')), /private-token/);
+});
+
+const v4Response = (result = { location: { latitude: -6.1754, longitude: 106.8272 }, formattedAddress: 'Monas, Jakarta' }) => ({ ok: true, json: async () => ({ results: [result] }) });
+
+test('v4: alamat di-encode, key di header, response field dibatasi', async () => {
+  let request;
+  const result = await geocodeAddressV4('test-key', ' Monas / Jakarta ', { fetchRef: async (url, options) => { request = { url, options }; return v4Response(); } });
+  assert.deepEqual(result, { lat: -6.1754, lng: 106.8272, formattedAddress: 'Monas, Jakarta' });
+  assert.equal(decodeURIComponent(request.url.pathname), '/v4/geocode/address/Monas / Jakarta');
+  assert.equal(request.url.searchParams.get('regionCode'), 'ID');
+  assert.equal(request.url.searchParams.has('key'), false);
+  assert.equal(request.options.headers['X-Goog-Api-Key'], 'test-key');
+  assert.equal(request.options.headers['X-Goog-FieldMask'], 'results.location,results.formattedAddress');
+});
+
+test('v4: input kosong/placeholder ditolak sebelum request', async () => {
+  let calls = 0;
+  const options = { fetchRef: async () => { calls++; } };
+  await assert.rejects(geocodeAddressV4('test', '', options), /EMPTY_ADDRESS/);
+  for (const key of ['', null, 'YOUR_DEMO_KEY']) await assert.rejects(geocodeAddressV4(key, 'Monas', options), /MISSING_KEY/);
+  assert.equal(calls, 0);
+});
+
+test('v4: status izin, kuota dan server dipetakan tanpa body provider', async () => {
+  for (const [status, code] of [[401, 'REQUEST_DENIED'], [403, 'REQUEST_DENIED'], [429, 'OVER_QUERY_LIMIT'], [503, 'SERVICE_UNAVAILABLE'], [400, 'INVALID_RESPONSE']]) {
+    await assert.rejects(geocodeAddressV4('test', 'Monas', { fetchRef: async () => ({ ok: false, status, json: () => { throw new Error('body must not be read'); } }) }), new RegExp(code));
+  }
+});
+
+test('v4: tidak ada hasil, JSON rusak, koordinat tidak valid', async () => {
+  await assert.rejects(geocodeAddressV4('test', 'Monas', { fetchRef: async () => ({ ok: true, json: async () => ({ results: [] }) }) }), /ZERO_RESULTS/);
+  await assert.rejects(geocodeAddressV4('test', 'Monas', { fetchRef: async () => ({ ok: true, json: async () => { throw new SyntaxError('bad JSON'); } }) }), /INVALID_RESPONSE/);
+  for (const location of [{ latitude: 200, longitude: 0 }, { latitude: '-6', longitude: 106 }, {}]) {
+    await assert.rejects(geocodeAddressV4('test', 'Monas', { fetchRef: async () => v4Response({ location }) }), /INVALID_COORDINATES/);
+  }
+});
+
+test('v4: timeout membatalkan request dan jaringan gagal tidak membocorkan key', async () => {
+  let signal;
+  await assert.rejects(geocodeAddressV4('test', 'Monas', { timeoutMs: 5, fetchRef: async (_, options) => {
+    signal = options.signal;
+    return new Promise((_, reject) => signal.addEventListener('abort', () => reject(new Error('abort')), { once: true }));
+  } }), /GEOCODE_TIMEOUT/);
+  assert.equal(signal.aborted, true);
+  await assert.rejects(geocodeAddressV4('private-key', 'Monas', { fetchRef: async () => { throw new Error('private-key'); } }), /NETWORK_ERROR/);
 });

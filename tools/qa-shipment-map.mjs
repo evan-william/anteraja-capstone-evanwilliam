@@ -9,13 +9,13 @@ const output = 'output/geolocation-map';
 fs.mkdirSync(output, { recursive: true });
 const checks = [];
 const pageErrors = [];
-const browser = await chromium.launch();
+const browser = await chromium.launch({ channel: process.env.PW_CHANNEL || 'chrome' });
 const check = (name, fn) => { fn(); checks.push({ name, passed: true }); };
 
 // fixture khusus test: tidak disajikan server, tidak dipakai aplikasi atau screenshot layanan asli.
 async function fixture(page, mode = 'success') {
   await page.addInitScript(({ mode }) => {
-    window.SHIPMENT_MAP_CONFIG = { apiKey: 'test-fixture', mapId: 'DEMO_MAP_ID' };
+    window.SHIPMENT_MAP_CONFIG = { apiKey: 'test-fixture', mapId: 'DEMO_MAP_ID', geocodingMode: 'javascript' };
     window.__fixture = { markers: [], geocodes: 0, info: null, mapOptions: null };
     class MapFixture {
       constructor(element, options) { this.zoom = options.zoom; window.__fixture.mapOptions = options; }
@@ -55,6 +55,8 @@ async function fixture(page, mode = 'success') {
 try {
   const page = await browser.newPage();
   page.on('pageerror', error => pageErrors.push(error.message));
+  // key pemilik bisa sudah terisi; skenario missing key harus tetap deterministik.
+  await page.route('**/config.local.js', route => route.fulfill({ contentType: 'text/javascript', body: 'window.SHIPMENT_MAP_CONFIG={apiKey:"",mapId:"DEMO_MAP_ID"};' }));
   await page.goto(`${base}/shipment-map.html`);
   await page.getByText('Google Maps menunggu key-mu.', { exact: true }).waitFor();
   check('missing key: explicit setup state, no pretend map', () => assert.ok(true));
@@ -133,6 +135,34 @@ try {
   await quota.getByText(/Kuota Google Maps tercapai/).waitFor();
   assert.equal(await quota.evaluate(() => window.__fixture.geocodes), 2);
   checks.push({ name: 'fixture: quota failure keeps 11 markers; retry is manual only', passed: true });
+
+  const v4 = await browser.newPage();
+  v4.on('pageerror', error => pageErrors.push(error.message));
+  await fixture(v4);
+  await v4.route('**/config.local.js', route => route.fulfill({ contentType: 'text/javascript', body: 'window.SHIPMENT_MAP_CONFIG.geocodingMode="v4";' }));
+  let v4Requests = 0;
+  await v4.route('https://geocode.googleapis.com/**', route => {
+    v4Requests++;
+    return route.fulfill({ json: { results: [{ location: { latitude: -6.1754, longitude: 106.8272 }, formattedAddress: 'Monumen Nasional, Jakarta' }] } });
+  });
+  await v4.goto(`${base}/shipment-map.html`);
+  await v4.getByText(/Berhasil: Monumen Nasional/).waitFor();
+  assert.equal(await v4.evaluate(() => window.__fixture.markers.length), 12);
+  assert.equal(v4Requests, 1);
+  checks.push({ name: 'fixture v4: one request creates the twelfth marker', passed: true });
+  assert.equal(await v4.evaluate(() => window.__fixture.geocodes), 0);
+  checks.push({ name: 'fixture v4: legacy Geocoder is not called', passed: true });
+
+  const denied = await browser.newPage();
+  denied.on('pageerror', error => pageErrors.push(error.message));
+  await fixture(denied);
+  await denied.route('**/config.local.js', route => route.fulfill({ contentType: 'text/javascript', body: 'window.SHIPMENT_MAP_CONFIG.geocodingMode="v4";' }));
+  await denied.route('https://geocode.googleapis.com/**', route => route.fulfill({ status: 403, json: { error: { message: 'test private provider detail' } } }));
+  await denied.goto(`${base}/shipment-map.html`);
+  await denied.getByText(/Google menolak akses/).waitFor();
+  assert.equal(await denied.evaluate(() => window.__fixture.markers.length), 11);
+  assert.doesNotMatch(await denied.locator('#geocode-status').textContent(), /private provider/);
+  checks.push({ name: 'fixture v4: permission error preserves markers and redacts upstream detail', passed: true });
 
   const network = await browser.newPage();
   network.on('pageerror', error => pageErrors.push(error.message));
