@@ -1,0 +1,16 @@
+{
+  "scenario": "no-priority",
+  "provider": "Gemini API (AI Studio model)",
+  "model": "gemini-3.5-flash-lite",
+  "tested_at": "2026-10-09T08:50:52.991Z",
+  "pass": true,
+  "expected_priority_hubs": [],
+  "output": {
+    "summary": "Simulasi mencatat total 2182 completed visits dengan global mean dwell 3 jam dari 8 total hubs. Perhatian: Hub Remote memiliki sampel kecil karena completed visits kurang dari 30.",
+    "priority_hubs": [],
+    "next_checks": [
+      "Periksa proses operasional Hub Remote karena memiliki sampel kecil.",
+      "Lakukan audit rutin pada hub dengan completed visits tinggi seperti Hub Jakarta dan Hub Surabaya."
+    ]
+  }
+}

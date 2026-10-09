@@ -1,0 +1,146 @@
+{
+  "base": "http://127.0.0.1:3020",
+  "results": [
+    {
+      "name": "1440: all eight list items",
+      "passed": true
+    },
+    {
+      "name": "1440: all eight markers",
+      "passed": true
+    },
+    {
+      "name": "1440: weighted global mean",
+      "passed": true
+    },
+    {
+      "name": "1440: no overflow",
+      "passed": true
+    },
+    {
+      "name": "1440: layout",
+      "passed": true
+    },
+    {
+      "name": "1440: real map tiles and attribution",
+      "passed": true
+    },
+    {
+      "name": "1440: shared priority list/map",
+      "passed": true
+    },
+    {
+      "name": "1440: combined search and priority",
+      "passed": true
+    },
+    {
+      "name": "1440: correct detail metrics",
+      "passed": true
+    },
+    {
+      "name": "1440: escape closes and restores focus",
+      "passed": true
+    },
+    {
+      "name": "1440: shared empty state",
+      "passed": true
+    },
+    {
+      "name": "1440: marker popup contains metrics",
+      "passed": true
+    },
+    {
+      "name": "1440: marker opens and closes detail",
+      "passed": true
+    },
+    {
+      "name": "390: all eight list items",
+      "passed": true
+    },
+    {
+      "name": "390: all eight markers",
+      "passed": true
+    },
+    {
+      "name": "390: weighted global mean",
+      "passed": true
+    },
+    {
+      "name": "390: no overflow",
+      "passed": true
+    },
+    {
+      "name": "390: layout",
+      "passed": true
+    },
+    {
+      "name": "390: real map tiles and attribution",
+      "passed": true
+    },
+    {
+      "name": "390: shared priority list/map",
+      "passed": true
+    },
+    {
+      "name": "390: combined search and priority",
+      "passed": true
+    },
+    {
+      "name": "390: correct detail metrics",
+      "passed": true
+    },
+    {
+      "name": "390: escape closes and restores focus",
+      "passed": true
+    },
+    {
+      "name": "390: shared empty state",
+      "passed": true
+    },
+    {
+      "name": "390: marker popup contains metrics",
+      "passed": true
+    },
+    {
+      "name": "390: marker opens and closes detail",
+      "passed": true
+    },
+    {
+      "name": "visible loading state",
+      "passed": true
+    },
+    {
+      "name": "network error state",
+      "passed": true
+    },
+    {
+      "name": "retry recovers data",
+      "passed": true
+    },
+    {
+      "name": "empty dataset without fake mean",
+      "passed": true
+    },
+    {
+      "name": "untrusted name rendered as inert text",
+      "passed": true
+    },
+    {
+      "name": "keyboard skip link",
+      "passed": true
+    },
+    {
+      "name": "keyboard input focus",
+      "passed": true
+    },
+    {
+      "name": "reduced motion preference respected",
+      "passed": true
+    },
+    {
+      "name": "no browser runtime errors",
+      "passed": true
+    }
+  ],
+  "runtime_errors": []
+}

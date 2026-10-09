@@ -1,0 +1,29 @@
+{
+  "scenario": "normal",
+  "provider": "Gemini API (AI Studio model)",
+  "model": "gemini-3.5-flash-lite",
+  "tested_at": "2026-10-09T08:50:51.888Z",
+  "pass": true,
+  "expected_priority_hubs": [
+    "HUB_DPS",
+    "HUB_MED",
+    "HUB_MKS",
+    "HUB_REMOTE",
+    "HUB_SMG"
+  ],
+  "output": {
+    "summary": "Simulasi Hub Dwell Monitor mencatat total 2182 completed visits dengan global mean dwell 6.12 jam dari 8 total hub. Perhatian: terdapat sampel kecil pada beberapa hub di mana completed visits kurang dari 30.",
+    "priority_hubs": [
+      "HUB_REMOTE",
+      "HUB_MKS",
+      "HUB_DPS",
+      "HUB_SMG",
+      "HUB_MED"
+    ],
+    "next_checks": [
+      "Periksa valid_pair_pct",
+      "Analisis excluded_pairs",
+      "Tinjau open_visits"
+    ]
+  }
+}

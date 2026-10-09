@@ -1,0 +1,11 @@
+{
+  "threshold_hours": 6,
+  "comparison": "strictly greater than",
+  "kpi": {
+    "total_hubs": 0,
+    "completed_visits": 0,
+    "mean_dwell_hours": null,
+    "priority_hubs": 0
+  },
+  "hubs": []
+}

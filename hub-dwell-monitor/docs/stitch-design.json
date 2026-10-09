@@ -1,0 +1,10 @@
+{
+  "status": "awaiting_authenticated_design_exports",
+  "project_url": null,
+  "v1_screen_id": null,
+  "v2_screen_id": null,
+  "desktop_width": 1440,
+  "mobile_width": 390,
+  "screenshots": { "v1": null, "v2": null },
+  "note": "Application screenshots are not substituted for Stitch design evidence. Stitch was opened in the requested existing Chrome profile."
+}
