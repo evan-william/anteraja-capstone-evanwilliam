@@ -1,5 +1,12 @@
 # Anteraja Tracking & Operations
 
+## Day 19 - Google Maps geolocation
+
+Latihan terbaru: [shipment-map.html](shipment-map.html). Jalankan
+`node tools/serve-shipment-map.mjs`, lalu buka http://localhost:3019/shipment-map.html.
+[Setup key dan demo](exercises/geolocation-map/README.md) · [Status verifikasi](docs/geolocation-map.md).
+Dataset latihan terpisah; fitur/database capstone tidak diubah.
+
 Salinan ini memakai React + Vite untuk antarmuka dan Laravel 12 untuk API, sesi, autentikasi, validasi, impor bank, tracking, dan asisten Admin. Database tetap PostgreSQL/Supabase yang sama; skema dan RLS tidak diubah. Versi React + PHP tetap terpisah dan tidak ditimpa. Panduan runtime saat ini: [LARAVEL_RUN.md](LARAVEL_RUN.md).
 
 Capstone ini mengubah tracking dari daftar status pasif menjadi alur yang memberi kepastian dan jalan keluar. Penerima dapat memahami risiko, memperbarui petunjuk alamat, mengatur jadwal atau safe drop, membuat tiket CS berkonteks, dan memilih notifikasi. Seller mendapat control tower; Finance/Rekonsiliasi FRD-06 tetap tersedia sebagai modul pendukung yang menghubungkan resi, COD, settlement, dan mutasi bank.
