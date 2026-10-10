@@ -22,11 +22,18 @@ Rata-rata global bukan rata-rata sederhana dari delapan mean hub. Ranking memaka
 
 ## 3. Stitch Design
 
-**Belum lengkap.** Stitch meminta login di browser pemeriksaan; browser tersebut tidak berbagi login Chrome pribadi. Sesuai permintaan, Stitch kemudian dibuka pada profil Chrome Evan (`Profile 1`). Belum ada hasil export/screen ID yang dapat diverifikasi. `screenshots/desktop.png` dan `mobile.png` adalah screenshot aplikasi nyata, **bukan** Stitch v1/v2.
+**Export asli tersedia.** Desain dibuat di akun Stitch melalui API terautentikasi pada 10 Oktober 2026. [Project Stitch](https://stitch.withgoogle.com/projects/2269158067789535241) memuat baseline v1, iterasi antara, serta revisi akhir v2. Key disimpan di folder privat di luar repository; tidak dimasukkan ke browser atau ZIP.
 
-Prompt v1/v2 desktop/mobile tersedia di `docs/stitch-prompts.txt`. `docs/stitch-design.json` mencatat status pending tanpa ID buatan. Lengkapi dengan screen ID, URL project dan export asli `screenshots/stitch-v1.png`, `stitch-v2.png` sebelum menyatakan seluruh Definition of Done terpenuhi.
+| Desain | Screen ID | Screenshot |
+|---|---|---|
+| Desktop v1 | 9f8193fa276a4320b84403ee9e23f23b | [v1](../screenshots/stitch-v1.png) |
+| Desktop v2 final | b0ee195e8f9d4200a2edc78669344e30 | [v2](../screenshots/stitch-v2.png) |
+| Mobile v1 | 14f65f8e233d48f1833a28d4c80890de | [mobile v1](../screenshots/stitch-mobile-v1.png) |
+| Mobile v2 final | 3b07cb5dfcd3466ebf33ce8477a759c4 | [mobile v2](../screenshots/stitch-mobile-v2.png) |
 
-Arah implementasi: magenta pada aksi/prioritas, neutral hangat, Open Sans lokal, KPI tanpa kartu berlebihan, ranking compact, serta list/map berdampingan di desktop dan bertumpuk di mobile. Implementasi ini belum diklaim sebagai konversi dari export Stitch.
+Prompt awal tersedia di `docs/stitch-prompts.txt`; HTML asli ada di `docs/stitch-exports/`. QA desain menemukan angka contoh, baris tambahan dan menu yang tidak didukung pada v1/iterasi antara. Revisi akhir mengoreksi delapan hub, lima prioritas, serta menghapus kontrol tambahan. Bukti iterasi antara tetap disimpan sebagai `stitch-v2-interim.png`, bukan diam-diam dihapus.
+
+Arah implementasi: magenta pada aksi/prioritas, neutral hangat, Open Sans lokal, KPI tanpa kartu berlebihan, ranking compact, serta list/map berdampingan di desktop dan bertumpuk di mobile. React mengadaptasi komposisi desain dan memakai metrics tervalidasi, tidak menyalin JavaScript/data contoh dari export. Screenshot aplikasi `desktop.png` dan `mobile.png` terpisah dari bukti desain Stitch.
 
 ## 4. AI Testing
 
@@ -75,7 +82,7 @@ Hub Makassar menjadi prioritas pemeriksaan operasional karena mean 11,17 jam did
 
 Branch wajib: `feature/hub-dwell-monitor`. Implementasi dipisah ke commit setup/data, UI/map/filter, lalu testing/dokumentasi. Link branch: https://github.com/evan-william/anteraja-capstone-evanwilliam/tree/feature/hub-dwell-monitor.
 
-Stitch v1/v2 + screen ID, pengoperasian tes pada antarmuka AI Studio, dan partner review/merge belum boleh diklaim selesai. Tidak ada review partner buatan atau merge tanpa persetujuan. Lihat `docs/submission-status.json` untuk status bukti dan PR aktual.
+Stitch desktop/mobile v1/v2 dan screen ID telah diekspor. [PR #5](https://github.com/evan-william/anteraja-capstone-evanwilliam/pull/5) terbuka sebagai draft. Empat tes Gemini API lulus; bukti pengoperasian UI AI Studio belum tersedia. Partner review/merge menunggu persetujuan nyata. Lihat `docs/submission-status.json` dan `docs/acceptance-checklist.md` untuk memeriksa bukti setiap kebutuhan.
 
 ## Referensi teknis
 

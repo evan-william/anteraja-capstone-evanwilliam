@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Anteraja Hub Dwell Monitor</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Open Sans Font -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration verbatim -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary-fixed-dim": "#ffb1c8",
+            "surface": "#fff8f9",
+            "on-primary-container": "#fffbff",
+            "primary-container": "#e20079",
+            "secondary-fixed": "#93f9a2",
+            "primary": "#b50060",
+            "inverse-primary": "#ffb1c8",
+            "on-secondary-fixed-variant": "#005321",
+            "surface-container-high": "#f1e5e9",
+            "surface-bright": "#fff8f9",
+            "error-container": "#ffdad6",
+            "tertiary-fixed": "#ffddb8",
+            "surface-variant": "#ebdfe3",
+            "surface-container-highest": "#ebdfe3",
+            "tertiary-container": "#a36700",
+            "surface-container-lowest": "#ffffff",
+            "on-surface": "#201a1d",
+            "secondary": "#006e2e",
+            "on-surface-variant": "#5b3f47",
+            "error": "#ba1a1a",
+            "tertiary": "#825100",
+            "surface-tint": "#b90062",
+            "on-secondary-fixed": "#002109",
+            "on-secondary": "#ffffff",
+            "surface-container": "#f7ebef",
+            "on-background": "#201a1d",
+            "outline": "#8f6e77",
+            "secondary-fixed-dim": "#77dc89",
+            "on-tertiary": "#ffffff",
+            "on-primary": "#ffffff",
+            "outline-variant": "#e3bdc6",
+            "on-error": "#ffffff",
+            "background": "#fff8f9",
+            "on-tertiary-container": "#fffbff",
+            "surface-dim": "#e3d7db",
+            "primary-fixed": "#ffd9e2",
+            "on-tertiary-fixed-variant": "#653e00",
+            "secondary-container": "#93f9a2",
+            "on-secondary-container": "#007431",
+            "on-tertiary-fixed": "#2a1700",
+            "on-primary-fixed-variant": "#8e004a",
+            "inverse-on-surface": "#faeef2",
+            "on-error-container": "#93000a",
+            "tertiary-fixed-dim": "#ffb95f",
+            "surface-container-low": "#fdf1f4",
+            "on-primary-fixed": "#3e001d",
+            "inverse-surface": "#352f32"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-2xl": "2rem",
+            "gutter": "1rem",
+            "space-xl": "1.5rem",
+            "gutter-dense": "0.5rem",
+            "space-lg": "1rem",
+            "margin-sm": "1rem",
+            "space-2xs": "0.125rem",
+            "space-md": "0.75rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "margin": "1.5rem"
+          },
+          "fontFamily": {
+            "data-metric-lg": ["Open Sans"],
+            "body-sm-medium": ["Open Sans"],
+            "label-uppercase": ["Open Sans"],
+            "body-md-medium": ["Open Sans"],
+            "headline-sm": ["Open Sans"],
+            "body-md": ["Open Sans"],
+            "data-metric-md": ["Open Sans"],
+            "display-md": ["Open Sans"],
+            "display-lg": ["Open Sans"],
+            "body-lg": ["Open Sans"],
+            "body-sm": ["Open Sans"]
+          },
+          "fontSize": {
+            "data-metric-lg": ["28px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-sm-medium": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "label-uppercase": ["11px", { "lineHeight": "14px", "letterSpacing": "0.06em", "fontWeight": "700" }],
+            "body-md-medium": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "headline-sm": ["18px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "data-metric-md": ["20px", { "lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "display-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background-color: #fbf9f7;
+      color: #201a1d;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .map-grid-pattern {
+      background-size: 24px 24px;
+      background-image: 
+        radial-gradient(circle, #e3bdc6 1px, transparent 1px);
+    }
+    /* Hide scrollbars for dense utility views */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface antialiased flex justify-center selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- Mobile View Container fixed to 390px viewport width simulation -->
+<div class="w-full max-w-[390px] min-h-screen bg-surface-container-lowest flex flex-col border-x border-outline-variant relative pb-space-2xl">
+<!-- 1. COMPACT MOBILE HEADER (Level 1 Elevation) -->
+<header class="w-full flex flex-col bg-surface-container-lowest border-b border-outline-variant sticky top-0 z-30"><div class="flex items-center justify-between px-space-md py-space-sm bg-surface-container-lowest"><div class="flex items-center gap-space-xs"><div class="w-7 h-7 bg-primary flex items-center justify-center rounded"><span class="text-on-primary font-headline-sm text-headline-sm font-bold leading-none">A</span></div><div class="flex flex-col"><div class="flex items-center gap-space-2xs"><span class="font-headline-sm text-headline-sm font-bold text-primary tracking-tight">Anteraja</span><span class="text-outline font-body-sm text-body-sm">|</span><span class="font-body-md-medium text-body-md-medium text-on-surface tracking-tight">Hub Dwell Monitor</span></div><span class="font-body-sm text-body-sm text-on-surface-variant -mt-1">Monitor waktu di hub</span></div></div><div class="flex items-center gap-space-xs"><div class="flex items-center gap-space-2xs bg-surface-container px-space-xs py-space-2xs rounded border border-outline-variant"><span class="material-symbols-outlined text-[15px] text-primary">badge</span><span class="font-label-uppercase text-label-uppercase text-on-surface">Supervisor Workspace</span></div></div></div></header><section class="w-full bg-surface-container-high px-space-md py-space-xs border-b border-outline-variant flex flex-col gap-1"><div class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-[16px] text-tertiary shrink-0">info</span><span class="font-label-uppercase text-label-uppercase text-tertiary font-bold">Periode Data Simulasi: September 2026 UTC — Bukan Real Time</span></div><p class="font-body-sm text-[11px] text-on-surface-variant leading-tight">Ambang batas prioritas &gt;6 jam adalah simulasi analitik internal, BUKAN SLA resmi Anteraja. Rata-rata dwell dihitung tertimbang dari kunjungan selesai.</p></section>
+<!-- 2. SIMULATOR STATE SWITCHER (Utility controls for testing UI states) -->
+<!-- MAIN BODY CONTAINER -->
+<main class="w-full flex flex-col px-space-md py-space-md gap-space-lg">
+<!-- STATE 1: ERROR CONTAINER (Hidden by default) -->
+<!-- STATE 2: LOADING SKELETON (Hidden by default) -->
+<!-- NORMAL CONTENT CONTAINER (KPIs, Top 3, List, Map) -->
+<div class="flex flex-col gap-space-lg w-full" id="state-normal-view">
+<!-- 3. STRIP KPI CARDS (2-Columns Grid on Mobile) -->
+<section class="flex flex-col gap-space-xs"><div class="flex items-center justify-between"><span class="font-label-uppercase text-label-uppercase text-on-surface-variant font-bold">RINGKASAN TELEMETRI OPERASIONAL</span><span class="font-body-sm text-body-sm text-outline">Simulasi September 2026</span></div><div class="grid grid-cols-2 gap-space-xs"><div class="bg-surface-container-lowest p-space-sm border border-outline-variant rounded flex flex-col justify-between"><span class="font-label-uppercase text-label-uppercase text-on-surface-variant truncate">TOTAL HUB</span><div class="flex items-baseline gap-space-2xs mt-space-2xs"><span class="font-data-metric-lg text-data-metric-lg text-on-surface">8</span><span class="font-body-sm-medium text-body-sm-medium text-on-surface-variant">Hub</span></div><span class="font-body-sm text-body-sm text-secondary mt-space-2xs">8 titik operasional</span></div><div class="bg-surface-container-lowest p-space-sm border border-outline-variant rounded flex flex-col justify-between"><span class="font-label-uppercase text-label-uppercase text-on-surface-variant truncate">KUNJUNGAN SELESAI</span><div class="flex items-baseline gap-space-2xs mt-space-2xs"><span class="font-data-metric-lg text-data-metric-lg text-on-surface">2.182</span></div><span class="font-body-sm text-body-sm text-on-surface-variant mt-space-2xs truncate">+40 open trips total</span></div><div class="bg-surface-container-lowest p-space-sm border border-outline-variant rounded flex flex-col justify-between"><span class="font-label-uppercase text-label-uppercase text-on-surface-variant truncate">GLOBAL MEAN DWELL</span><div class="flex items-baseline gap-space-2xs mt-space-2xs"><span class="font-data-metric-lg text-data-metric-lg text-on-surface">6,12</span><span class="font-body-sm-medium text-body-sm-medium text-on-surface">jam</span></div><span class="font-body-sm text-body-sm text-outline mt-space-2xs">Tertimbang selesai</span></div><div class="bg-surface-container-lowest p-space-sm border border-outline-variant rounded flex flex-col justify-between"><span class="font-label-uppercase text-label-uppercase text-on-surface-variant truncate">HUB PRIORITAS (&gt;6 JAM)</span><div class="flex items-baseline gap-space-2xs mt-space-2xs"><span class="font-data-metric-lg text-data-metric-lg text-primary">5</span><span class="font-body-sm-medium text-body-sm-medium text-primary">Hub</span></div><span class="font-body-sm text-body-sm text-primary mt-space-2xs">62,5% dari 8 hub</span></div></div></section>
+<!-- 4. TOP 3 HUB BERDASARKAN RAW MEAN DWELL TIME (1 Column on Mobile) -->
+<section class="flex flex-col gap-space-xs"><div class="flex flex-col"><h2 class="font-headline-sm text-headline-sm text-on-surface">Top 3 Raw Mean Dwell Time</h2><span class="font-body-sm text-body-sm text-on-surface-variant">Urutan Murni Numerik Terlama</span></div><div class="flex flex-col gap-space-xs mt-space-2xs"><div class="bg-surface-container-lowest border border-outline-variant border-l-4 border-l-primary rounded p-space-sm flex flex-col gap-space-2xs"><div class="flex items-start justify-between"><div class="flex flex-col"><div class="flex items-center gap-space-2xs"><span class="w-4 h-4 bg-primary text-on-primary font-label-uppercase text-label-uppercase flex items-center justify-center rounded">1</span><span class="font-body-md-medium text-body-md-medium text-on-surface">Hub Remote (Palangka Raya)</span></div><span class="font-label-uppercase text-label-uppercase text-outline mt-0.5">HUB_REMOTE • Palangka Raya (lokasi simulasi)</span></div><div class="flex flex-col items-end"><span class="font-data-metric-md text-data-metric-md text-primary">30,00 jam</span><span class="font-label-uppercase text-label-uppercase px-1.5 py-0.5 bg-primary-fixed text-on-primary-fixed border border-outline-variant rounded">Prioritas (&gt;6h)</span></div></div><div class="bg-surface-container px-space-xs py-space-2xs rounded border border-outline-variant flex items-center justify-between text-on-surface-variant font-body-sm text-body-sm"><span>2 visits terverifikasi, audit sampel kecil</span><span class="text-tertiary font-body-sm-medium">10,5% validitas</span></div></div><div class="bg-surface-container-lowest border border-outline-variant border-l-4 border-l-primary rounded p-space-sm flex flex-col gap-space-2xs"><div class="flex items-start justify-between"><div class="flex flex-col"><div class="flex items-center gap-space-2xs"><span class="w-4 h-4 bg-outline text-surface-container-lowest font-label-uppercase text-label-uppercase flex items-center justify-center rounded">2</span><span class="font-body-md-medium text-body-md-medium text-on-surface">Hub Makassar</span></div><span class="font-label-uppercase text-label-uppercase text-outline mt-0.5">HUB_MKS • Makassar</span></div><div class="flex flex-col items-end"><span class="font-data-metric-md text-data-metric-md text-primary">11,17 jam</span><span class="font-label-uppercase text-label-uppercase px-1.5 py-0.5 bg-primary-fixed text-on-primary-fixed border border-outline-variant rounded">Prioritas (&gt;6h)</span></div></div><div class="bg-surface-container px-space-xs py-space-2xs rounded border border-outline-variant flex items-center justify-between text-on-surface-variant font-body-sm text-body-sm"><span>350 visits terverifikasi • 5 open</span><span class="text-secondary font-body-sm-medium">95,4% validitas</span></div></div><div class="bg-surface-container-lowest border border-outline-variant border-l-4 border-l-primary rounded p-space-sm flex flex-col gap-space-2xs"><div class="flex items-start justify-between"><div class="flex flex-col"><div class="flex items-center gap-space-2xs"><span class="w-4 h-4 bg-outline text-surface-container-lowest font-label-uppercase text-label-uppercase flex items-center justify-center rounded">3</span><span class="font-body-md-medium text-body-md-medium text-on-surface">Hub Denpasar</span></div><span class="font-label-uppercase text-label-uppercase text-outline mt-0.5">HUB_DPS • Denpasar</span></div><div class="flex flex-col items-end"><span class="font-data-metric-md text-data-metric-md text-primary">8,96 jam</span><span class="font-label-uppercase text-label-uppercase px-1.5 py-0.5 bg-primary-fixed text-on-primary-fixed border border-outline-variant rounded">Prioritas (&gt;6h)</span></div></div><div class="bg-surface-container px-space-xs py-space-2xs rounded border border-outline-variant flex items-center justify-between text-on-surface-variant font-body-sm text-body-sm"><span>200 visits terverifikasi • 5 open</span><span class="text-secondary font-body-sm-medium">92,2% validitas</span></div></div></div></section>
+<!-- 5. UNIFIED FILTER CONTROLS (Tailored for 390px, no overflow) -->
+<section class="bg-surface-container-low border border-outline-variant rounded p-space-sm flex flex-col gap-space-sm"><div class="flex items-center justify-between"><span class="font-label-uppercase text-label-uppercase text-on-surface font-bold flex items-center gap-1"><span class="material-symbols-outlined text-[15px] text-primary">filter_alt</span> KONTROL FILTER DATA</span><button class="text-primary hover:text-on-primary-fixed-variant font-body-sm-medium text-body-sm-medium flex items-center gap-1" onclick="resetFilters()"><span class="material-symbols-outlined text-[14px]">restart_alt</span> Reset Filter</button></div><div class="relative w-full"><span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-[18px] text-outline">search</span><input class="w-full h-8 pl-8 pr-space-sm bg-surface-container-lowest border border-outline-variant rounded text-on-surface font-body-sm text-body-sm placeholder:text-outline focus:border-on-surface focus:ring-0 transition-colors" id="hub-search-input" oninput="handleSearch(this.value)" placeholder="Cari nama hub, kota, atau ID..." type="text"/></div><div class="flex flex-col gap-space-2xs"><div class="grid grid-cols-2 gap-space-xs"><label class="flex items-center gap-space-xs p-space-xs bg-surface-container-lowest border border-outline-variant rounded cursor-pointer select-none"><input checked="" class="text-primary focus:ring-primary h-3.5 w-3.5 border-outline" name="hub-filter" onchange="handleFilterMode('all')" type="radio" value="all"/><span class="font-body-sm-medium text-body-sm-medium text-on-surface">Semua Hub (8)</span></label><label class="flex items-center gap-space-xs p-space-xs bg-surface-container-lowest border border-outline-variant rounded cursor-pointer select-none"><input class="text-primary focus:ring-primary h-3.5 w-3.5 border-outline" name="hub-filter" onchange="handleFilterMode('priority')" type="radio" value="priority"/><span class="font-body-sm-medium text-body-sm-medium text-primary">Hanya Prioritas &gt;6 jam (5)</span></label></div></div><div class="flex items-center justify-between text-outline border-t border-outline-variant pt-space-2xs font-body-sm text-body-sm"><span id="filter-result-counter">Menampilkan: 8 dari 8 Hub</span><span class="font-label-uppercase text-label-uppercase">Threshold Simulasi &gt; 6,00 jam</span></div></section>
+<!-- STATE 3: SEARCH EMPTY CONTAINER (Toggled when 0 items match) -->
+<div class="hidden flex-col items-center justify-center p-space-lg bg-surface-container-lowest border border-outline-variant rounded text-center" id="state-empty-view">
+<span class="material-symbols-outlined text-[36px] text-outline mb-space-xs">search_off</span>
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Hasil Cari Kosong</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1 mb-space-md">Tidak ada hub transit yang cocok dengan kriteria pencarian.</p>
+<button class="px-space-md py-1 bg-surface-container-high border border-outline-variant rounded text-on-surface font-body-sm-medium text-body-sm-medium" onclick="resetFilters()">
+            Pulihkan Semua Hub
+          </button>
+</div>
+<!-- 6. ANTREAN HUB TELEMETRI (Mobile List of 8 hubs) -->
+<section class="flex flex-col gap-space-xs" id="hub-list-section">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Antrean Hub Telemetri</h2>
+<span class="font-label-uppercase text-label-uppercase text-outline">DURASI LENGKAP</span>
+</div>
+<div class="flex flex-col gap-space-xs" id="hub-cards-container">
+<!-- Hubs injected via JavaScript & initial markup -->
+</div>
+</section>
+<!-- 7. VISUALISASI SPASIAL HUB NASIONAL (Stacked Map View below list) -->
+<section class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Peta Spasial Hub Nasional</h2>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Distribusi kepatuhan dwell 8 hub kepulauan</span>
+</div>
+<button class="px-space-xs py-1 bg-surface-container border border-outline-variant rounded text-on-surface font-body-sm text-body-sm hover:bg-surface-container-high" onclick="resetMapView()" title="Fokus Ulang Peta">
+              Reset Fokus
+            </button>
+</div>
+<!-- Map Container with height exactly 360px -->
+<div class="w-full h-[360px] bg-surface-container-highest border border-outline-variant rounded relative overflow-hidden flex flex-col justify-between">
+<!-- Simulated GIS Map Tile Texture with stylized Indonesia Vector layout -->
+<div class="absolute inset-0 bg-[#f4ebe6] map-grid-pattern transition-transform duration-300" id="map-canvas-container"><svg class="w-full h-full opacity-40" preserveaspectratio="xMidYMid slice" viewbox="0 0 800 400" xmlns="http://www.w3.org/2000/svg"><path d="M70,80 Q130,120 180,210 Q160,230 130,200 Q90,140 60,100 Z" fill="#ebdfe3" stroke="#8f6e77" stroke-width="1.5"></path><path d="M190,260 Q280,260 360,265 Q350,285 270,280 Q190,280 190,260 Z" fill="#ebdfe3" stroke="#8f6e77" stroke-width="1.5"></path><path d="M260,110 Q340,90 370,160 Q340,220 280,210 Q240,170 260,110 Z" fill="#ebdfe3" stroke="#8f6e77" stroke-width="1.5"></path><path d="M410,120 Q440,120 440,160 Q460,180 430,220 Q410,180 395,160 Z" fill="#ebdfe3" stroke="#8f6e77" stroke-width="1.5"></path><path d="M375,270 Q450,275 480,270 Q470,285 390,285 Z" fill="#ebdfe3" stroke="#8f6e77" stroke-width="1.5"></path><path d="M570,160 Q660,150 710,180 Q690,240 600,230 Z" fill="#ebdfe3" stroke="#8f6e77" stroke-width="1.5"></path></svg><div class="absolute top-[28%] left-[16%] cursor-pointer -translate-x-1/2 -translate-y-full group z-10" onclick="openModal('HUB_MED')" title="Hub Medan (6,14 jam)"><div class="flex flex-col items-center"><span class="bg-primary text-on-primary text-[10px] font-bold px-1 rounded shadow-sm border border-white">6,14h</span><div class="w-3 h-3 bg-primary rounded-full border-2 border-white mt-0.5 animate-pulse"></div><span class="text-[9px] font-semibold text-on-surface bg-white/90 px-0.5 rounded -mt-0.5">Medan</span></div></div><div class="absolute top-[68%] left-[26%] cursor-pointer -translate-x-1/2 -translate-y-full group z-10" onclick="openModal('HUB_JKT')" title="Hub Jakarta (3,01 jam)"><div class="flex flex-col items-center"><span class="bg-secondary text-on-secondary text-[10px] font-bold px-1 rounded shadow-sm border border-white">3,01h</span><div class="w-3 h-3 bg-secondary rounded-full border-2 border-white mt-0.5"></div><span class="text-[9px] font-semibold text-on-surface bg-white/90 px-0.5 rounded -mt-0.5">Jakarta</span></div></div><div class="absolute top-[73%] left-[30%] cursor-pointer -translate-x-1/2 -translate-y-full group z-10" onclick="openModal('HUB_BDG')" title="Hub Bandung (3,99 jam)"><div class="flex flex-col items-center"><span class="bg-secondary text-on-secondary text-[10px] font-bold px-1 rounded shadow-sm border border-white">3,99h</span><div class="w-3 h-3 bg-secondary rounded-full border-2 border-white mt-0.5"></div><span class="text-[9px] font-semibold text-on-surface bg-white/90 px-0.5 rounded -mt-0.5">Bandung</span></div></div><div class="absolute top-[69%] left-[37%] cursor-pointer -translate-x-1/2 -translate-y-full group z-10" onclick="openModal('HUB_SMG')" title="Hub Semarang (7,08 jam)"><div class="flex flex-col items-center"><span class="bg-primary text-on-primary text-[10px] font-bold px-1 rounded shadow-sm border border-white">7,08h</span><div class="w-3 h-3 bg-primary rounded-full border-2 border-white mt-0.5 animate-pulse"></div><span class="text-[9px] font-semibold text-on-surface bg-white/90 px-0.5 rounded -mt-0.5">Semarang</span></div></div><div class="absolute top-[71%] left-[44%] cursor-pointer -translate-x-1/2 -translate-y-full group z-10" onclick="openModal('HUB_SBY')" title="Hub Surabaya (5,04 jam)"><div class="flex flex-col items-center"><span class="bg-secondary text-on-secondary text-[10px] font-bold px-1 rounded shadow-sm border border-white">5,04h</span><div class="w-3 h-3 bg-secondary rounded-full border-2 border-white mt-0.5"></div><span class="text-[9px] font-semibold text-on-surface bg-white/90 px-0.5 rounded -mt-0.5">Surabaya</span></div></div><div class="absolute top-[75%] left-[51%] cursor-pointer -translate-x-1/2 -translate-y-full group z-10" onclick="openModal('HUB_DPS')" title="Hub Denpasar (8,96 jam)"><div class="flex flex-col items-center"><span class="bg-primary text-on-primary text-[10px] font-bold px-1 rounded shadow-sm border border-white">8,96h</span><div class="w-3 h-3 bg-primary rounded-full border-2 border-white mt-0.5 animate-pulse"></div><span class="text-[9px] font-semibold text-on-surface bg-white/90 px-0.5 rounded -mt-0.5">Denpasar</span></div></div><div class="absolute top-[42%] left-[40%] cursor-pointer -translate-x-1/2 -translate-y-full group z-20" onclick="openModal('HUB_REMOTE')" title="Hub Remote (30,00 jam)"><div class="flex flex-col items-center"><span class="bg-primary text-on-primary text-[10px] font-bold px-1 rounded shadow-sm border border-white ring-2 ring-primary">30,00h</span><div class="w-3.5 h-3.5 bg-primary rounded-full border-2 border-white mt-0.5 animate-ping opacity-75"></div><span class="text-[9px] font-bold text-primary bg-white/95 px-1 rounded -mt-1 border border-primary">Remote</span></div></div><div class="absolute top-[52%] left-[58%] cursor-pointer -translate-x-1/2 -translate-y-full group z-10" onclick="openModal('HUB_MKS')" title="Hub Makassar (11,17 jam)"><div class="flex flex-col items-center"><span class="bg-primary text-on-primary text-[10px] font-bold px-1 rounded shadow-sm border border-white">11,17h</span><div class="w-3 h-3 bg-primary rounded-full border-2 border-white mt-0.5 animate-pulse"></div><span class="text-[9px] font-semibold text-on-surface bg-white/90 px-0.5 rounded -mt-0.5">Makassar</span></div></div></div>
+<!-- Map Floating Controls & Legend Overlay -->
+<div class="relative z-20 p-space-xs flex justify-between items-start pointer-events-none">
+<!-- Legend Box -->
+<div class="bg-surface-container-lowest/95 backdrop-blur-none border border-outline-variant p-space-xs rounded shadow-none flex flex-col gap-1 pointer-events-auto">
+<span class="font-label-uppercase text-[10px] text-on-surface">LEGENDA STATUS HUB</span>
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 bg-primary rounded-full border border-white"></span>
+<span class="font-body-sm text-[11px] text-on-surface">Prioritas Dwell (&gt;6 jam)</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 bg-secondary rounded-full border border-white"></span>
+<span class="font-body-sm text-[11px] text-on-surface">Rutin Sesuai Target (≤6 jam)</span>
+</div>
+</div>
+<!-- Zoom Buttons -->
+<div class="flex flex-col gap-1 pointer-events-auto">
+<button class="w-7 h-7 bg-surface-container-lowest border border-outline-variant text-on-surface font-bold rounded flex items-center justify-center hover:bg-surface-container active:scale-95" onclick="zoomMap(1.15)" title="Perbesar">
+<span class="material-symbols-outlined text-[16px]">add</span>
+</button>
+<button class="w-7 h-7 bg-surface-container-lowest border border-outline-variant text-on-surface font-bold rounded flex items-center justify-center hover:bg-surface-container active:scale-95" onclick="zoomMap(0.85)" title="Perkecil">
+<span class="material-symbols-outlined text-[16px]">remove</span>
+</button>
+</div>
+</div>
+<!-- Bottom Hint & OpenStreetMap Attribution Requirement -->
+<div class="relative z-20 bg-surface-container-lowest/90 px-space-xs py-1 border-t border-outline-variant flex items-center justify-between font-body-sm text-[10px] text-outline">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-primary">touch_app</span> Ketuk pin untuk detail audit
+              </span>
+<span>Map data © OpenStreetMap contributors</span>
+</div>
+</div>
+</section>
+</div> <!-- /state-normal-view -->
+</main>
+<!-- 10. FOOTER WITH SOCKET TELEMETRY -->
+<footer class="mt-auto w-full bg-surface-container-low border-t border-outline-variant px-space-md py-space-sm flex flex-col gap-1 text-center"><div class="flex items-center justify-center gap-2"><span class="font-body-sm-medium text-body-sm-medium text-on-surface">Periode Dataset: September 2026 UTC</span></div><span class="font-label-uppercase text-label-uppercase text-outline">ANTERAJA ENTERPRISE LOGISTICS • SIMULASI DWELL MONITOR</span><span class="font-body-sm text-[11px] text-on-surface-variant">Ambang Batas &gt;6 jam adalah Simulasi Analitik Internal, Bukan SLA Resmi Anteraja</span></footer>
+<!-- 8. DETAIL HUB MODAL / BOTTOM SHEET (Interactive) -->
+<div class="fixed inset-0 bg-[#292326]/60 z-50 hidden flex-col justify-end transition-opacity duration-200" id="hub-detail-modal">
+<div class="w-full max-w-[390px] mx-auto bg-surface-container-lowest rounded-t-xl border-t border-x border-outline p-space-md flex flex-col gap-space-md shadow-2xl max-h-[795px] overflow-y-auto">
+<!-- Modal Header -->
+<div class="flex items-start justify-between border-b border-outline-variant pb-space-xs">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-sm text-headline-sm text-on-surface" id="modal-hub-title">Hub Name</span>
+<span class="font-label-uppercase text-label-uppercase px-1.5 py-0.5 rounded border" id="modal-hub-status">Status</span>
+</div>
+<span class="font-label-uppercase text-label-uppercase text-outline mt-0.5" id="modal-hub-id">HUB-ID</span>
+</div>
+<button aria-label="Tutup Detail" class="w-7 h-7 flex items-center justify-center rounded border border-outline-variant text-on-surface hover:bg-surface-container active:scale-95" onclick="closeModal()">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<!-- Telemetry Details Grid -->
+<div class="grid grid-cols-3 gap-space-xs text-center">
+<div class="bg-surface-container p-space-xs rounded border border-outline-variant">
+<span class="font-label-uppercase text-label-uppercase text-outline block">MEAN DWELL</span>
+<span class="font-data-metric-md text-data-metric-md text-primary font-bold" id="modal-dwell-mean">0,00 jam</span>
+</div>
+<div class="bg-surface-container p-space-xs rounded border border-outline-variant">
+<span class="font-label-uppercase text-label-uppercase text-outline block">MIN DWELL</span>
+<span class="font-data-metric-md text-data-metric-md text-on-surface font-bold" id="modal-dwell-min">0,00 jam</span>
+</div>
+<div class="bg-surface-container p-space-xs rounded border border-outline-variant">
+<span class="font-label-uppercase text-label-uppercase text-outline block">MAX DWELL</span>
+<span class="font-data-metric-md text-data-metric-md text-on-surface font-bold" id="modal-dwell-max">0,00 jam</span>
+</div>
+</div>
+<!-- Operational Counts -->
+<div class="bg-surface-container-low p-space-sm rounded border border-outline-variant flex flex-col gap-space-xs">
+<span class="font-label-uppercase text-label-uppercase text-on-surface font-bold">STATISTIK KUNJUNGAN TRANSIT</span>
+<div class="flex justify-between items-center text-body-sm font-body-sm">
+<span class="text-on-surface-variant">Completed Visits (Selesai):</span>
+<strong class="text-on-surface" id="modal-completed">0 visits</strong>
+</div>
+<div class="flex justify-between items-center text-body-sm font-body-sm">
+<span class="text-on-surface-variant">Open Trips (Sedang Dwell):</span>
+<strong class="text-on-surface" id="modal-open">0 trips</strong>
+</div>
+<div class="flex justify-between items-center text-body-sm font-body-sm border-t border-outline-variant pt-space-2xs">
+<span class="text-on-surface-variant">Validitas Pasangan Sensor:</span>
+<strong class="text-secondary font-bold" id="modal-validity">0.0%</strong>
+</div>
+<div class="flex justify-between items-center text-body-sm font-body-sm">
+<span class="text-on-surface-variant">Excluded Incomplete Pairs:</span>
+<strong class="text-outline" id="modal-excluded">0 record</strong>
+</div>
+</div>
+<!-- Diagnostic Note -->
+<div class="p-space-xs bg-surface-container border border-outline-variant rounded">
+<span class="font-label-uppercase text-[10px] text-on-surface-variant block mb-1">CATATAN OPERASIONAL HUB:</span>
+<p class="font-body-sm text-body-sm text-on-surface" id="modal-notes">Tidak ada anomali terdeteksi.</p>
+</div>
+<!-- Modal Actions -->
+<div class="flex flex-col gap-space-xs mt-space-2xs">
+<button class="w-full py-2 bg-primary text-on-primary font-body-md-medium text-body-md-medium rounded hover:bg-on-primary-fixed-variant active:scale-95 transition-all text-center" onclick="alert('Instruksi eskalasi triage dispatch telah dikirimkan ke supervisor hub terkait.')">
+            Kirim Notifikasi Triage Dispatch
+          </button>
+<button class="w-full py-2 bg-surface-container border border-outline text-on-surface font-body-md-medium text-body-md-medium rounded hover:bg-surface-container-high active:scale-95 transition-all text-center" onclick="closeModal()">
+            Tutup Detail
+          </button>
+</div>
+</div>
+</div>
+</div> <!-- /max-w-[390px] -->
+<!-- INTERACTIVE LOGIC (Vanilla JavaScript) -->
+<script>
+    // Master Telemetry Dataset for all 8 Hubs
+    const HUB_DATA = [
+      {
+        id: "HUB-RMT-08",
+        name: "Hub Remote (Palangka Raya)",
+        city: "Palangka Raya",
+        meanDwell: 30.00,
+        minDwell: 24.50,
+        maxDwell: 35.50,
+        completed: 2,
+        open: 1,
+        validity: 66.7,
+        excluded: 1,
+        isPriority: true,
+        notes: "Sampel sangat kecil (2 valid, 1 sensor gate error). Terindikasi kegagalan transmisi RFID gate saat cuaca ekstrem."
+      },
+      {
+        id: "HUB-MKS-07",
+        name: "Hub Makassar",
+        city: "Makassar",
+        meanDwell: 11.17,
+        minDwell: 2.10,
+        maxDwell: 22.40,
+        completed: 350,
+        open: 28,
+        validity: 92.6,
+        excluded: 28,
+        isPriority: true,
+        notes: "Kepadatan antrean staging dock kontainer antar-pulau. Perlu penambahan forklift shift pagi."
+      },
+      {
+        id: "HUB-DPS-06",
+        name: "Hub Denpasar",
+        city: "Denpasar",
+        meanDwell: 8.96,
+        minDwell: 1.80,
+        maxDwell: 16.20,
+        completed: 200,
+        open: 14,
+        validity: 93.5,
+        excluded: 14,
+        isPriority: true,
+        notes: "Batas cut-off shift malam terlampaui karena keterlambatan armada feeder dari transit Banyuwangi."
+      },
+      {
+        id: "HUB-MDN-05",
+        name: "Hub Medan",
+        city: "Medan",
+        meanDwell: 7.45,
+        minDwell: 1.50,
+        maxDwell: 14.10,
+        completed: 280,
+        open: 19,
+        validity: 93.6,
+        excluded: 19,
+        isPriority: true,
+        notes: "Fluktuasi lonjakan paket sortasi lintas provinsi Sumatra Utara."
+      },
+      {
+        id: "HUB-SUB-03",
+        name: "Hub Surabaya",
+        city: "Surabaya",
+        meanDwell: 6.80,
+        minDwell: 1.20,
+        maxDwell: 12.80,
+        completed: 420,
+        open: 25,
+        validity: 94.4,
+        excluded: 25,
+        isPriority: true,
+        notes: "Volume tinggi cross-docking Jawa Timur; mendekati kapasitas optimal line belt conveyor."
+      },
+      {
+        id: "HUB-SRG-04",
+        name: "Hub Semarang",
+        city: "Semarang",
+        meanDwell: 5.40,
+        minDwell: 0.90,
+        maxDwell: 9.60,
+        completed: 230,
+        open: 12,
+        validity: 95.0,
+        excluded: 12,
+        isPriority: false,
+        notes: "Operasional normal sesuai SLA transit rute Pantura."
+      },
+      {
+        id: "HUB-BDO-02",
+        name: "Hub Bandung",
+        city: "Bandung",
+        meanDwell: 4.90,
+        minDwell: 0.80,
+        maxDwell: 8.20,
+        completed: 310,
+        open: 15,
+        validity: 95.4,
+        excluded: 15,
+        isPriority: false,
+        notes: "Kepatuhan dwell time stabil, transfer cepat menuju micro-hub kota."
+      },
+      {
+        id: "HUB-JKT-01",
+        name: "Hub Jakarta",
+        city: "Jakarta",
+        meanDwell: 4.20,
+        minDwell: 0.50,
+        maxDwell: 7.40,
+        completed: 590,
+        open: 27,
+        validity: 95.6,
+        excluded: 27,
+        isPriority: false,
+        notes: "Throughput paling efisien dengan automated sorting belt 3-tier."
+      }
+    ];
+
+    let currentSearchTerm = "";
+    let currentFilterMode = "all"; // 'all' or 'priority'
+    let currentMapZoom = 1;
+
+    // Render Hub Telemetry Cards
+    function renderHubList() {
+      const container = document.getElementById('hub-cards-container');
+      const counterLabel = document.getElementById('filter-result-counter');
+      const emptyView = document.getElementById('state-empty-view');
+      const listSection = document.getElementById('hub-list-section');
+
+      if (!container) return;
+
+      const filtered = HUB_DATA.filter(hub => {
+        const matchesSearch = 
+          hub.name.toLowerCase().includes(currentSearchTerm.toLowerCase()) ||
+          hub.city.toLowerCase().includes(currentSearchTerm.toLowerCase()) ||
+          hub.id.toLowerCase().includes(currentSearchTerm.toLowerCase());
+        
+        const matchesFilter = currentFilterMode === "all" ? true : hub.isPriority;
+        return matchesSearch && matchesFilter;
+      });
+
+      counterLabel.innerText = `Menampilkan: ${filtered.length} dari ${HUB_DATA.length} Hub`;
+
+      if (filtered.length === 0) {
+        container.innerHTML = "";
+        emptyView.classList.remove('hidden');
+        emptyView.classList.add('flex');
+        return;
+      } else {
+        emptyView.classList.add('hidden');
+        emptyView.classList.remove('flex');
+      }
+
+      container.innerHTML = filtered.map(hub => {
+        const isPrior = hub.isPriority;
+        const statusBadge = isPrior 
+          ? `<span class="font-label-uppercase text-label-uppercase px-1.5 py-0.5 bg-primary-fixed text-on-primary-fixed border border-outline-variant rounded">PRIORITAS (&gt;6h)</span>`
+          : `<span class="font-label-uppercase text-label-uppercase px-1.5 py-0.5 bg-secondary-fixed text-on-secondary-fixed-variant border border-outline-variant rounded">RUTIN (≤6h)</span>`;
+
+        const borderAccent = isPrior ? 'border-l-4 border-l-primary' : 'border-l-4 border-l-secondary';
+        const dwellTextColor = isPrior ? 'text-primary' : 'text-on-surface';
+
+        return `
+          <div class="bg-surface-container-lowest border border-outline-variant ${borderAccent} rounded p-space-sm flex flex-col gap-space-xs transition-shadow hover:bg-surface-container-low">
+            <div class="flex items-start justify-between">
+              <div class="flex flex-col">
+                <div class="flex items-center gap-space-2xs">
+                  <span class="font-body-md-medium text-body-md-medium text-on-surface">${hub.name}</span>
+                </div>
+                <span class="font-label-uppercase text-label-uppercase text-outline mt-0.5">${hub.id} • ${hub.city}</span>
+              </div>
+              <div class="flex flex-col items-end">
+                <span class="font-data-metric-md text-data-metric-md ${dwellTextColor}">${hub.meanDwell.toFixed(2).replace('.', ',')} jam</span>
+                ${statusBadge}
+              </div>
+            </div>
+
+            <!-- Micro Metrics Grid -->
+            <div class="grid grid-cols-2 gap-space-2xs bg-surface-container p-space-2xs rounded border border-outline-variant text-[11px] font-body-sm">
+              <div class="flex justify-between px-1">
+                <span class="text-on-surface-variant">Min / Max Dwell:</span>
+                <span class="font-body-sm-medium text-on-surface">${hub.minDwell.toFixed(1)}h / ${hub.maxDwell.toFixed(1)}h</span>
+              </div>
+              <div class="flex justify-between px-1">
+                <span class="text-on-surface-variant">Visits Selesai:</span>
+                <span class="font-body-sm-medium text-on-surface">${hub.completed} (${hub.open} open)</span>
+              </div>
+              <div class="flex justify-between px-1">
+                <span class="text-on-surface-variant">Validitas Sensor:</span>
+                <span class="font-body-sm-medium text-secondary">${hub.validity}%</span>
+              </div>
+              <div class="flex justify-between px-1">
+                <span class="text-on-surface-variant">Excluded Pair:</span>
+                <span class="font-body-sm-medium text-outline">${hub.excluded} data</span>
+              </div>
+            </div>
+
+            <!-- Card Actions -->
+            <div class="flex items-center gap-space-xs pt-space-2xs">
+              <button onclick="openModal('${hub.id}')" class="flex-1 py-1 bg-surface-container-high border border-outline-variant rounded font-body-sm-medium text-body-sm-medium text-on-surface hover:bg-surface-container active:scale-95 transition-all flex items-center justify-center gap-1">
+                <span class="material-symbols-outlined text-[15px]">description</span> Buka Detail Audit
+              </button>
+              <button onclick="focusHubOnMap('${hub.id}')" class="px-space-sm py-1 bg-surface-container border border-outline-variant rounded font-body-sm-medium text-body-sm-medium text-on-surface hover:bg-surface-container-high active:scale-95 transition-all flex items-center gap-1" title="Lihat Lokasi di Peta">
+                <span class="material-symbols-outlined text-[15px]">location_on</span> Peta
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Modal Operations
+    function openModal(hubId) {
+      const hub = HUB_DATA.find(h => h.id === hubId);
+      if (!hub) return;
+
+      document.getElementById('modal-hub-title').innerText = hub.name;
+      document.getElementById('modal-hub-id').innerText = `${hub.id} • Wilayah ${hub.city}`;
+      
+      const statusBadge = document.getElementById('modal-hub-status');
+      if (hub.isPriority) {
+        statusBadge.className = 'font-label-uppercase text-label-uppercase px-1.5 py-0.5 rounded border bg-primary-fixed text-on-primary-fixed border-outline-variant';
+        statusBadge.innerText = 'Prioritas Kritis (>6h)';
+      } else {
+        statusBadge.className = 'font-label-uppercase text-label-uppercase px-1.5 py-0.5 rounded border bg-secondary-fixed text-on-secondary-fixed-variant border-outline-variant';
+        statusBadge.innerText = 'Rutin Terkendali (≤6h)';
+      }
+
+      document.getElementById('modal-dwell-mean').innerText = `${hub.meanDwell.toFixed(2).replace('.', ',')}h`;
+      document.getElementById('modal-dwell-min').innerText = `${hub.minDwell.toFixed(2).replace('.', ',')}h`;
+      document.getElementById('modal-dwell-max').innerText = `${hub.maxDwell.toFixed(2).replace('.', ',')}h`;
+      
+      document.getElementById('modal-completed').innerText = `${hub.completed} kunjungan`;
+      document.getElementById('modal-open').innerText = `${hub.open} truk aktif`;
+      document.getElementById('modal-validity').innerText = `${hub.validity}% pasangan valid`;
+      document.getElementById('modal-excluded').innerText = `${hub.excluded} anomali`;
+      document.getElementById('modal-notes').innerText = hub.notes;
+
+      const modal = document.getElementById('hub-detail-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('hub-detail-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    // Filter Handlers
+    function handleSearch(term) {
+      currentSearchTerm = term.trim();
+      renderHubList();
+    }
+
+    function handleFilterMode(mode) {
+      currentFilterMode = mode;
+      renderHubList();
+    }
+
+    function resetFilters() {
+      currentSearchTerm = "";
+      currentFilterMode = "all";
+      const input = document.getElementById('hub-search-input');
+      if (input) input.value = "";
+      const radios = document.getElementsByName('hub-filter');
+      radios.forEach(r => { if (r.value === 'all') r.checked = true; });
+      renderHubList();
+    }
+
+    // UI Simulator State Switcher (Normal, Loading, Empty, Error)
+    function setUiState(state) {
+      const normalView = document.getElementById('state-normal-view');
+      const loadingView = document.getElementById('state-loading-view');
+      const errorView = document.getElementById('state-error-view');
+      const emptyView = document.getElementById('state-empty-view');
+      const tag = document.getElementById('active-state-tag');
+
+      // Reset button styles
+      ['normal', 'loading', 'empty', 'error'].forEach(s => {
+        const btn = document.getElementById(`btn-state-${s}`);
+        if (btn) {
+          btn.className = "px-space-xs py-space-2xs bg-surface-container-lowest text-on-surface font-body-sm-medium text-body-sm-medium rounded border border-outline-variant shrink-0 hover:bg-surface-container transition-colors";
+        }
+      });
+      const activeBtn = document.getElementById(`btn-state-${state}`);
+      if (activeBtn) {
+        activeBtn.className = "px-space-xs py-space-2xs bg-primary text-on-primary font-body-sm-medium text-body-sm-medium rounded border border-primary shrink-0 transition-colors";
+      }
+
+      tag.innerText = state.toUpperCase();
+
+      normalView.classList.add('hidden');
+      loadingView.classList.add('hidden');
+      errorView.classList.add('hidden');
+      emptyView.classList.add('hidden');
+
+      if (state === 'normal') {
+        normalView.classList.remove('hidden');
+        resetFilters();
+      } else if (state === 'loading') {
+        loadingView.classList.remove('hidden');
+      } else if (state === 'empty') {
+        normalView.classList.remove('hidden');
+        const input = document.getElementById('hub-search-input');
+        if (input) input.value = "Kota Tidak Ditemukan 999";
+        handleSearch("Kota Tidak Ditemukan 999");
+      } else if (state === 'error') {
+        errorView.classList.remove('hidden');
+        errorView.classList.add('flex');
+      }
+    }
+
+    // Map Interactivity
+    function zoomMap(factor) {
+      currentMapZoom *= factor;
+      if (currentMapZoom < 0.8) currentMapZoom = 0.8;
+      if (currentMapZoom > 1.8) currentMapZoom = 1.8;
+      const mapCanvas = document.getElementById('map-canvas-container');
+      if (mapCanvas) {
+        mapCanvas.style.transform = `scale(${currentMapZoom})`;
+      }
+    }
+
+    function resetMapView() {
+      currentMapZoom = 1;
+      const mapCanvas = document.getElementById('map-canvas-container');
+      if (mapCanvas) {
+        mapCanvas.style.transform = `scale(1)`;
+      }
+    }
+
+    function focusHubOnMap(hubId) {
+      const mapEl = document.getElementById('map-canvas-container');
+      if (mapEl) {
+        mapEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Pulse effect or flash
+        mapEl.classList.add('ring-2', 'ring-primary');
+        setTimeout(() => mapEl.classList.remove('ring-2', 'ring-primary'), 1000);
+      }
+    }
+
+    function triggerRefreshAnimation() {
+      const btn = document.getElementById('btn-refresh-top');
+      if (!btn) return;
+      btn.classList.add('rotate-180');
+      setTimeout(() => btn.classList.remove('rotate-180'), 400);
+      renderHubList();
+    }
+
+    // Close modal on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    // Close modal when clicking background
+    document.getElementById('hub-detail-modal')?.addEventListener('click', (e) => {
+      if (e.target.id === 'hub-detail-modal') closeModal();
+    });
+
+    // Initial render
+    window.addEventListener('DOMContentLoaded', () => {
+      renderHubList();
+    });
+  </script>
+</body></html>

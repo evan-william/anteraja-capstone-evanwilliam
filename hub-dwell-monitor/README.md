@@ -55,7 +55,9 @@ Dashboard membaca ringkasan JSON yang sudah diuji, bukan memanggil model dari br
 - [Laporan tugas](docs/hub-dwell-monitor.md)
 - [Screenshot desktop](screenshots/desktop.png) dan [mobile](screenshots/mobile.png)
 - [Hasil empat tes terstruktur](docs/ai-testing/results.json)
-- [Status Stitch](docs/stitch-design.json): v1/v2 dan screen ID belum tersedia; bukan diganti screenshot aplikasi.
+- [Desain Stitch dan screen ID](docs/stitch-design.json): export asli v1/v2 desktop dan mobile tersedia.
+- [Checklist kebutuhan dan bukti](docs/acceptance-checklist.md)
+- [Pull Request #5](https://github.com/evan-william/anteraja-capstone-evanwilliam/pull/5): review/merge menunggu persetujuan partner.
 - Branch: https://github.com/evan-william/anteraja-capstone-evanwilliam/tree/feature/hub-dwell-monitor
 
 ## Lisensi
