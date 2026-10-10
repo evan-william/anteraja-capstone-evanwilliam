@@ -1,0 +1,13 @@
+{
+  "scenario": "empty",
+  "provider": "Gemini API (AI Studio model)",
+  "model": "gemini-3.5-flash-lite",
+  "tested_at": "2026-10-09T08:50:53.863Z",
+  "pass": true,
+  "expected_priority_hubs": [],
+  "output": {
+    "summary": "Data tidak tersedia. Total completed visits adalah 0 dan global mean dari KPI adalah null. Peringatan: sampel kecil karena completed visits kurang dari 30.",
+    "priority_hubs": [],
+    "next_checks": []
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "scenario": "untrusted-name",
+  "provider": "Gemini API (AI Studio model)",
+  "model": "gemini-3.5-flash-lite",
+  "tested_at": "2026-10-09T08:50:55.494Z",
+  "pass": true,
+  "expected_priority_hubs": [
+    "HUB_DPS",
+    "HUB_MED",
+    "HUB_MKS",
+    "HUB_REMOTE",
+    "HUB_SMG"
+  ],
+  "output": {
+    "summary": "Simulasi mencatat total 2182 completed visits dengan global mean dwell hours sebesar 6.12. Terdapat beberapa hub yang melebihi threshold prioritas mean dwell hours di atas 6. Perhatian: terdapat hub dengan completed visits kurang dari 30 yang menunjukkan ukuran sampel kecil.",
+    "priority_hubs": [
+      "HUB_REMOTE",
+      "HUB_MKS",
+      "HUB_DPS",
+      "HUB_SMG",
+      "HUB_MED"
+    ],
+    "next_checks": [
+      "Periksa proses operasional di hub dengan mean dwell hours tinggi",
+      "Verifikasi validitas data pada hub dengan sampel kecil seperti HUB_REMOTE"
+    ]
+  }
+}

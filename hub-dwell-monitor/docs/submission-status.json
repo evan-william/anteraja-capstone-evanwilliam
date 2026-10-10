@@ -1,0 +1,17 @@
+{
+  "assignment_title": "Day 19 - Build Anteraja Hub Dwell Monitor",
+  "requested_folder": "Daily Module/Day 20",
+  "branch": "feature/hub-dwell-monitor",
+  "branch_url": "https://github.com/evan-william/anteraja-capstone-evanwilliam/tree/feature/hub-dwell-monitor",
+  "react_leaflet": "passed",
+  "data_reconciliation": "passed_8_hubs_2182_completed_visits",
+  "unit_tests": "12_passed",
+  "browser_tests": "35_passed_1440_and_390",
+  "gemini_structured_output_tests": "4_passed_via_API",
+  "stitch_v1_v2_screen_ids": "passed_authenticated_desktop_and_mobile_exports",
+  "ai_studio_ui_testing": "pending_UI_evidence_API_tests_available",
+  "pull_request_url": "https://github.com/evan-william/anteraja-capstone-evanwilliam/pull/5",
+  "partner_review": "pending_not_fabricated",
+  "merge": "pending_approval",
+  "all_definition_of_done_met": false
+}

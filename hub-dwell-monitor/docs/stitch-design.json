@@ -1,0 +1,22 @@
+{
+  "status": "exported_from_authenticated_stitch",
+  "project_url": "https://stitch.withgoogle.com/projects/2269158067789535241",
+  "v1_screen_id": "9f8193fa276a4320b84403ee9e23f23b",
+  "v2_screen_id": "b0ee195e8f9d4200a2edc78669344e30",
+  "interim_v2_screen_id": "31b7b53508b54850aa866c1746bc04b8",
+  "desktop_width": 1440,
+  "mobile_width": 390,
+  "screenshots": {
+    "v1": "screenshots/stitch-v1.png",
+    "v2": "screenshots/stitch-v2.png",
+    "mobile-v1": "screenshots/stitch-mobile-v1.png",
+    "mobile-v2": "screenshots/stitch-mobile-v2.png"
+  },
+  "note": "Authentic Stitch API exports. V1/interim contain prototype values; final v2 corrects eight hub metrics and removes unsupported controls. Production React uses validated source data, not prototype JavaScript.",
+  "project_id": "2269158067789535241",
+  "mobile_v1_screen_id": "14f65f8e233d48f1833a28d4c80890de",
+  "mobile_v2_screen_id": "3b07cb5dfcd3466ebf33ce8477a759c4",
+  "mobile_interim_v2_screen_id": "01b5d4c8cb36439ba7ca8693a085ed29",
+  "export_method": "Stitch MCP via authenticated SDK; native PNG and HTML exports",
+  "exported_at": "2026-10-10"
+}

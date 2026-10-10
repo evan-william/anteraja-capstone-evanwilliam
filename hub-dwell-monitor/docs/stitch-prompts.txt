@@ -1,0 +1,17 @@
+STITCH V1 - BASELINE DESKTOP 1440 PX DAN MOBILE 390 PX
+
+Buat dashboard operasional Anteraja Hub Dwell Monitor berbahasa Indonesia untuk supervisor. Gunakan magenta Anteraja #ed007f, neutral gelap hangat #292326, warm off-white #fbf9f7, Open Sans. Bukan landing page marketing. Hindari gradient generik, glassmorphism, border warna dekoratif dan badge berlebihan.
+
+Header logo Anteraja dan nama Hub Dwell Monitor. Judul Monitor waktu di hub. Cantumkan periode data simulasi September 2026 UTC, bukan data realtime. Strip KPI: Total Hub 8, Completed Visits 2182, Global Mean Dwell Time 6.12 jam, Priority Hub Count 5. Jelaskan mean berbobot completed visits; open visits tidak masuk mean. Threshold prioritas >6 jam hanya simulasi, bukan SLA resmi Anteraja.
+
+Top 3 berdasarkan raw mean: Hub Remote 30.00 jam (2 visits, sampel kecil), Hub Makassar11.17 jam (350 visits), Hub Denpasar8.96 jam (200 visits). Nama hub bisa diklik. Di bawahnya satu pencarian hub/kota/id dan radio All Hubs / Priority Only, serta Reset filter. Daftar hub dan Leaflet/OpenStreetMap di sampingnya pada desktop. Delapan marker: Jakarta, Bandung, Surabaya, Semarang, Medan, Denpasar, Makassar dan Remote pada Palangka Raya simulasi. Prioritas magenta dan rutin hijau, dengan label teks juga. Di mobile390px tampilkan KPI2kolom, ranking1kolom, list dan map bertumpuk; peta tetap tinggi360px dan attribution terlihat.
+
+Detail hub berupa modal: hub_name, hub_id, mean/min/max jam, completed visit count, open visits, investigation priority, valid_pair_pct, excluded_pairs. Close button serta state fokus keyboard. Siapkan loading, empty search, network error + retry. Ringkasan terstruktur tampil sebagai teks biasa. Buat dan simpan screen ID serta screenshot untuk desktop dan mobile v1.
+
+STITCH V2 - ITERASI BERDASARKAN V1
+
+Pertahankan seluruh kebutuhan dan angka v1. Rapikan hierarchy: metrics besar namun proporsional, heading20px, body14desktop/16mobile, 4px spacing grid. Buat working surface list/map dominan. Kurangi kartu dekoratif dan garis tepi warna. Pastikan filter tunggal tampak mengontrol kedua panel, jumlah hasil terlihat, dropdown/radio tidak terpotong pada390px. Detail hub memperjelas sampel kecil Remote dan memperlihatkan satuan jam pada semua dwell metrics. Top3 numeric descending tanpa memformat sebelum sort. Jaga kontras teks dan fokus. Simpan sebagai revisi v2 terpisah, catat screen ID baru; jangan menimpa bukti v1.
+
+EKSPOR BUKTI
+
+Simpan screenshot asli Stitch v1 ke screenshots/stitch-v1.png dan v2 ke screenshots/stitch-v2.png. Catat URL project, screen ID v1/v2 serta ID desktop/mobile jika tersedia ke docs/stitch-design.json. Screenshot aplikasi desktop.png/mobile.png bukan bukti Stitch.

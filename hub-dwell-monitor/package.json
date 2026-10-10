@@ -1,0 +1,25 @@
+{
+  "name": "anteraja-hub-dwell-monitor",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node node_modules/vite/bin/vite.js --host 127.0.0.1 --port 3020 --strictPort",
+    "build": "node node_modules/vite/bin/vite.js build",
+    "preview": "node node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 3021",
+    "data": "node tools/prepare-data.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "qa": "node tools/browser-qa.mjs",
+    "test:ai": "node tools/test-ai-summary.mjs"
+  },
+  "dependencies": {
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "leaflet": "1.9.4"
+  },
+  "devDependencies": {
+    "vite": "7.3.6",
+    "@vitejs/plugin-react": "5.0.4",
+    "@playwright/test": "1.56.1"
+  }
+}
