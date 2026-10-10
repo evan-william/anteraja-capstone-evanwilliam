@@ -27,6 +27,10 @@ try {
     await page.locator('.leaflet-tile-loaded').first().waitFor({ timeout: 30000 });
     check(`${width}: real map tiles and attribution`, await page.locator('.leaflet-tile-loaded').count() > 0 && await page.getByText('OpenStreetMap', { exact: false }).count() > 0);
     await page.screenshot({ path: `screenshots/${width === 1440 ? 'desktop' : 'mobile'}.png`, fullPage: true });
+    if (width === 390) {
+      await page.screenshot({ path: 'screenshots/mobile-viewport.png' });
+      await page.locator('.map-region').screenshot({ path: 'screenshots/mobile-map.png' });
+    }
     await page.getByLabel('Priority Only', { exact: true }).check();
     check(`${width}: shared priority list/map`, await page.locator('.hub-row').count() === 5 && await page.locator('.leaflet-marker-icon').count() === 5);
     await page.getByLabel('Cari hub atau kota').fill('Makassar');
@@ -34,6 +38,7 @@ try {
     await page.getByRole('button', { name: 'Detail Hub Makassar', exact: true }).click();
     check(`${width}: correct detail metrics`, await page.getByRole('dialog').getByText('350', { exact: true }).count() === 1 && await page.getByRole('dialog').getByText('11,17 jam', { exact: true }).count() === 2);
     await page.screenshot({ path: `screenshots/detail-${width}.png`, fullPage: true });
+    if (width === 390) await page.getByRole('dialog').screenshot({ path: 'screenshots/mobile-detail.png' });
     await page.keyboard.press('Escape');
     check(`${width}: escape closes and restores focus`, await page.getByRole('dialog').count() === 0 && await page.getByRole('button', { name: 'Detail Hub Makassar', exact: true }).evaluate(element => element === document.activeElement));
     await page.getByLabel('Cari hub atau kota').fill('not-a-real-hub');
