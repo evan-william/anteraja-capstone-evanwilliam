@@ -2,4 +2,6 @@ node_modules/
 .private-sessions/
 docs/runner-checks/
 docs/pdf-preview/
+output/
+tools/__pycache__/
 *.log

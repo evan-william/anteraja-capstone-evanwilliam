@@ -53,6 +53,7 @@ Edit `tests/shipment-test-data.json`. Gunakan ID unik dan isi tracking/weight/di
 - `tests/verification.test.js`: tes assertion, termasuk perlindungan terhadap false PASS.
 - `tools/server.js`: menjalankan PHP serta memeriksa kesiapan dengan HTTP polling terbatas.
 - `tools/write-report.js`: membuat laporan Markdown dari hasil nyata.
+- `tools/create_submission.py`: membuat PDF dari JSON/screenshot; memerlukan Python, ReportLab, dan Pillow hanya untuk regenerasi PDF, bukan menjalankan tes.
 - [Baseline interaktif](docs/manual-baseline.md), [laporan regresi](docs/puppeteer-regression.md).
 
 Perubahan app hanya hook DOM: `#tracking-number`, `#shipment-request-form`, dan penanda tabel riwayat. Browser tools menjalankan baseline sebelum runner dibuat; baseline bukan klaim klik manual oleh Evan. Riwayat tersimpan dalam PHP session, bukan database permanen atau paket logistik sungguhan.
