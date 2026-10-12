@@ -1,0 +1,5 @@
+node_modules/
+.private-sessions/
+docs/runner-checks/
+docs/pdf-preview/
+*.log
