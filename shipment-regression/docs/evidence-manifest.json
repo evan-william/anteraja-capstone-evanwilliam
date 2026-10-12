@@ -1,0 +1,102 @@
+[
+  {
+    "file": "docs/automation-run/normal-shipment-form.png",
+    "bytes": 60975,
+    "sha256": "90003ffc23a9f67bab0ac8d2386164f24b8b48aafc034dde3c803a8b93273215"
+  },
+  {
+    "file": "docs/automation-run/normal-shipment-result.png",
+    "bytes": 38600,
+    "sha256": "0f2ce8c8e427585647e965662ff180e0fd5a8262fe2f26ee1bf5ef933518d9e0"
+  },
+  {
+    "file": "docs/automation-run/missing-tracking-form.png",
+    "bytes": 61247,
+    "sha256": "e9e7bb171d48420467bead2352500733ad2b2b3657710d1bbb8c8907a7253b56"
+  },
+  {
+    "file": "docs/automation-run/missing-tracking-result.png",
+    "bytes": 62917,
+    "sha256": "99d786fe5659479626b06199cf788b1184d1daa8fec172ebd931334ed932a16c"
+  },
+  {
+    "file": "docs/automation-run/invalid-weight-form.png",
+    "bytes": 61191,
+    "sha256": "db1fc770da87eb1f9c38f1ee7ffd6ee0248fce3aadc5d56e8f932bf892e5b70b"
+  },
+  {
+    "file": "docs/automation-run/invalid-weight-result.png",
+    "bytes": 62687,
+    "sha256": "a97c328f0180b32917298717b2b2dd5894fb0a05cfe8b99ed310f86c2161ac37"
+  },
+  {
+    "file": "docs/automation-run/long-distance-form.png",
+    "bytes": 61153,
+    "sha256": "3e22477367d22ef6e9a4c6c3c2115365b6a297dcf50fbc4dc8d0ada43e9eb30b"
+  },
+  {
+    "file": "docs/automation-run/long-distance-result.png",
+    "bytes": 38568,
+    "sha256": "fee0fa33756dcc4073d4af41a3cf487173f4939d4629304e2a78f552545dcdce"
+  },
+  {
+    "file": "docs/automation-run/decimal-boundary-form.png",
+    "bytes": 61208,
+    "sha256": "d86e437fa3a0d7004ae6ae6bc834828eb555ec95e019b18434c8748c4620cd95"
+  },
+  {
+    "file": "docs/automation-run/decimal-boundary-result.png",
+    "bytes": 38575,
+    "sha256": "965f8d3ff7d84ac828668aed0be4945bfb1c213b24121730b9a1f2fa45d9c529"
+  },
+  {
+    "file": "docs/automation-run/zero-weight-form.png",
+    "bytes": 61139,
+    "sha256": "604322f4da0f7f8e4b9f57da7097c1767239275155b5168e2a87372aec8156ac"
+  },
+  {
+    "file": "docs/automation-run/zero-weight-result.png",
+    "bytes": 63390,
+    "sha256": "edb3d6d902ca503616725f7c1aea35cab141738eaccbb27c1657bcbb394d57fc"
+  },
+  {
+    "file": "docs/automation-run/zero-distance-form.png",
+    "bytes": 60926,
+    "sha256": "6a8977a4ab24a7ecf9e2954887914bdd264ab947e2f0a0b94377d64f299c0501"
+  },
+  {
+    "file": "docs/automation-run/zero-distance-result.png",
+    "bytes": 62605,
+    "sha256": "d2337a9638cec68628ab3372aff5aa9dbb6e0e43fbe0020fb102d3e53e666939"
+  },
+  {
+    "file": "docs/automation-run/blank-tracking-server-form.png",
+    "bytes": 60228,
+    "sha256": "20477c37cc31317e07d378afcb11c3aa86aaa692c79fab56451b2d2e7ca1cb6b"
+  },
+  {
+    "file": "docs/automation-run/blank-tracking-server-result.png",
+    "bytes": 24968,
+    "sha256": "593d8ceb6a94dd67dc441b28c8636a66940a0904b31d6a1113a101b8a701be24"
+  },
+  {
+    "file": "docs/automation-run/weight-over-limit-form.png",
+    "bytes": 61640,
+    "sha256": "2697e5cab5a37b764fac371da22717299cc5f56ebe0236e096a7ad5807b6e89f"
+  },
+  {
+    "file": "docs/automation-run/weight-over-limit-result.png",
+    "bytes": 63901,
+    "sha256": "26b468920827282e4eebff091bb292f7c1ac96987b7c4f954f941ba87615c765"
+  },
+  {
+    "file": "docs/automation-run/weight-at-limit-form.png",
+    "bytes": 61351,
+    "sha256": "32740edac6f7430c136fc9a8227d6b6da49d6ede55e42b4e0d4cc2e7076bf00c"
+  },
+  {
+    "file": "docs/automation-run/weight-at-limit-result.png",
+    "bytes": 38613,
+    "sha256": "6b70440699ecd95895fb5a28e51f9691ef706680b3a2187473cf05157ac9efb5"
+  }
+]

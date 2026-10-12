@@ -1,0 +1,34 @@
+{
+  "repository": "https://github.com/evan-william/anteraja-capstone-evanwilliam",
+  "branch": "feature/puppeteer-regression",
+  "branchUrl": "https://github.com/evan-william/anteraja-capstone-evanwilliam/tree/feature/puppeteer-regression",
+  "capturedAt": "2026-10-12T08:05:52.208Z",
+  "pr": {
+    "number": 6,
+    "url": "https://github.com/evan-william/anteraja-capstone-evanwilliam/pull/6",
+    "base": "8-react-and-laravel",
+    "head": "feature/puppeteer-regression",
+    "state": "open",
+    "merged": false,
+    "mergedAt": null,
+    "mergeCommitSha": null
+  },
+  "review": {
+    "performed": false,
+    "reason": "Partner review waived by project owner in chat."
+  },
+  "commits": [
+    {
+      "sha": "c1999fb4b1d27fca49b7685aa2dcc9af1e4273ac",
+      "subject": "Record executed regression results and browser evidence"
+    },
+    {
+      "sha": "1ecbd4c9c8a11e0cff4587ec63fcebf59628ed76",
+      "subject": "Add data-driven shipment regression and failure assertions"
+    },
+    {
+      "sha": "0e8751063bfe344ae93f5bd5db8901b95fcaf18c",
+      "subject": "Set up isolated shipment app and Puppeteer runtime"
+    }
+  ]
+}

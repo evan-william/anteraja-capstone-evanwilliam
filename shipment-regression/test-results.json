@@ -1,0 +1,366 @@
+[
+  {
+    "id": "normal-shipment",
+    "scenario": "Normal Shipment",
+    "input": {
+      "tracking": "ANT-001",
+      "weight": 5,
+      "distance": 25
+    },
+    "expected": "SUCCESS",
+    "actual": "SUCCESS",
+    "status": "PASS",
+    "expectedCost": 43750,
+    "actualCost": 43750,
+    "verification": {
+      "kind": "SUCCESS",
+      "statusCode": 200,
+      "notice": "Permintaan ANT-001 berhasil disimpan.",
+      "postCount": 1
+    },
+    "historyBefore": [],
+    "historyAfter": [
+      {
+        "tracking": "ANT-001",
+        "weight": 5,
+        "distance": 25,
+        "cost": 43750
+      }
+    ],
+    "runtimeErrors": [],
+    "error": null,
+    "durationMs": 481,
+    "evidence": {
+      "form": "docs/automation-run/normal-shipment-form.png",
+      "result": "docs/automation-run/normal-shipment-result.png"
+    }
+  },
+  {
+    "id": "missing-tracking",
+    "scenario": "Missing Tracking",
+    "input": {
+      "tracking": "",
+      "weight": 5,
+      "distance": 25
+    },
+    "expected": "VALIDATION_ERROR",
+    "actual": "VALIDATION_ERROR",
+    "status": "PASS",
+    "expectedCost": null,
+    "actualCost": null,
+    "verification": {
+      "kind": "VALIDATION_ERROR",
+      "layer": "browser",
+      "postCount": 0,
+      "invalidField": "tracking-number",
+      "message": "Please fill out this field.",
+      "validity": {
+        "valueMissing": true,
+        "rangeUnderflow": false,
+        "rangeOverflow": false,
+        "badInput": false,
+        "stepMismatch": false,
+        "tooLong": false
+      }
+    },
+    "historyBefore": [],
+    "historyAfter": [],
+    "runtimeErrors": [],
+    "error": null,
+    "durationMs": 351,
+    "evidence": {
+      "form": "docs/automation-run/missing-tracking-form.png",
+      "result": "docs/automation-run/missing-tracking-result.png"
+    }
+  },
+  {
+    "id": "invalid-weight",
+    "scenario": "Invalid Weight",
+    "input": {
+      "tracking": "ANT-003",
+      "weight": -10,
+      "distance": 25
+    },
+    "expected": "VALIDATION_ERROR",
+    "actual": "VALIDATION_ERROR",
+    "status": "PASS",
+    "expectedCost": null,
+    "actualCost": null,
+    "verification": {
+      "kind": "VALIDATION_ERROR",
+      "layer": "browser",
+      "postCount": 0,
+      "invalidField": "weight",
+      "message": "Value must be greater than or equal to 0.001.",
+      "validity": {
+        "valueMissing": false,
+        "rangeUnderflow": true,
+        "rangeOverflow": false,
+        "badInput": false,
+        "stepMismatch": false,
+        "tooLong": false
+      }
+    },
+    "historyBefore": [],
+    "historyAfter": [],
+    "runtimeErrors": [],
+    "error": null,
+    "durationMs": 326,
+    "evidence": {
+      "form": "docs/automation-run/invalid-weight-form.png",
+      "result": "docs/automation-run/invalid-weight-result.png"
+    }
+  },
+  {
+    "id": "long-distance",
+    "scenario": "Long Distance Shipment",
+    "input": {
+      "tracking": "ANT-004",
+      "weight": 8,
+      "distance": 150
+    },
+    "expected": "SUCCESS",
+    "actual": "SUCCESS",
+    "status": "PASS",
+    "expectedCost": 215000,
+    "actualCost": 215000,
+    "verification": {
+      "kind": "SUCCESS",
+      "statusCode": 200,
+      "notice": "Permintaan ANT-004 berhasil disimpan.",
+      "postCount": 1
+    },
+    "historyBefore": [],
+    "historyAfter": [
+      {
+        "tracking": "ANT-004",
+        "weight": 8,
+        "distance": 150,
+        "cost": 215000
+      }
+    ],
+    "runtimeErrors": [],
+    "error": null,
+    "durationMs": 373,
+    "evidence": {
+      "form": "docs/automation-run/long-distance-form.png",
+      "result": "docs/automation-run/long-distance-result.png"
+    }
+  },
+  {
+    "id": "decimal-boundary",
+    "scenario": "Decimal Weight and Distance",
+    "input": {
+      "tracking": "ANT-005",
+      "weight": 1.5,
+      "distance": 10.2
+    },
+    "expected": "SUCCESS",
+    "actual": "SUCCESS",
+    "status": "PASS",
+    "expectedCost": 18250,
+    "actualCost": 18250,
+    "verification": {
+      "kind": "SUCCESS",
+      "statusCode": 200,
+      "notice": "Permintaan ANT-005 berhasil disimpan.",
+      "postCount": 1
+    },
+    "historyBefore": [],
+    "historyAfter": [
+      {
+        "tracking": "ANT-005",
+        "weight": 1.5,
+        "distance": 10.2,
+        "cost": 18250
+      }
+    ],
+    "runtimeErrors": [],
+    "error": null,
+    "durationMs": 365,
+    "evidence": {
+      "form": "docs/automation-run/decimal-boundary-form.png",
+      "result": "docs/automation-run/decimal-boundary-result.png"
+    }
+  },
+  {
+    "id": "zero-weight",
+    "scenario": "Zero Weight",
+    "input": {
+      "tracking": "ANT-006",
+      "weight": 0,
+      "distance": 25
+    },
+    "expected": "VALIDATION_ERROR",
+    "actual": "VALIDATION_ERROR",
+    "status": "PASS",
+    "expectedCost": null,
+    "actualCost": null,
+    "verification": {
+      "kind": "VALIDATION_ERROR",
+      "layer": "browser",
+      "postCount": 0,
+      "invalidField": "weight",
+      "message": "Value must be greater than or equal to 0.001.",
+      "validity": {
+        "valueMissing": false,
+        "rangeUnderflow": true,
+        "rangeOverflow": false,
+        "badInput": false,
+        "stepMismatch": false,
+        "tooLong": false
+      }
+    },
+    "historyBefore": [],
+    "historyAfter": [],
+    "runtimeErrors": [],
+    "error": null,
+    "durationMs": 777,
+    "evidence": {
+      "form": "docs/automation-run/zero-weight-form.png",
+      "result": "docs/automation-run/zero-weight-result.png"
+    }
+  },
+  {
+    "id": "zero-distance",
+    "scenario": "Zero Distance",
+    "input": {
+      "tracking": "ANT-007",
+      "weight": 5,
+      "distance": 0
+    },
+    "expected": "VALIDATION_ERROR",
+    "actual": "VALIDATION_ERROR",
+    "status": "PASS",
+    "expectedCost": null,
+    "actualCost": null,
+    "verification": {
+      "kind": "VALIDATION_ERROR",
+      "layer": "browser",
+      "postCount": 0,
+      "invalidField": "distance",
+      "message": "Value must be greater than or equal to 0.001.",
+      "validity": {
+        "valueMissing": false,
+        "rangeUnderflow": true,
+        "rangeOverflow": false,
+        "badInput": false,
+        "stepMismatch": false,
+        "tooLong": false
+      }
+    },
+    "historyBefore": [],
+    "historyAfter": [],
+    "runtimeErrors": [],
+    "error": null,
+    "durationMs": 797,
+    "evidence": {
+      "form": "docs/automation-run/zero-distance-form.png",
+      "result": "docs/automation-run/zero-distance-result.png"
+    }
+  },
+  {
+    "id": "blank-tracking-server",
+    "scenario": "Whitespace Tracking Rejected by PHP",
+    "input": {
+      "tracking": "   ",
+      "weight": 5,
+      "distance": 25
+    },
+    "expected": "VALIDATION_ERROR",
+    "actual": "VALIDATION_ERROR",
+    "status": "PASS",
+    "expectedCost": null,
+    "actualCost": null,
+    "verification": {
+      "kind": "VALIDATION_ERROR",
+      "layer": "server",
+      "statusCode": 422,
+      "message": "Nomor resi wajib diisi.Kembali dan perbaiki data",
+      "postCount": 1
+    },
+    "historyBefore": [],
+    "historyAfter": [],
+    "runtimeErrors": [],
+    "error": null,
+    "durationMs": 655,
+    "evidence": {
+      "form": "docs/automation-run/blank-tracking-server-form.png",
+      "result": "docs/automation-run/blank-tracking-server-result.png"
+    }
+  },
+  {
+    "id": "weight-over-limit",
+    "scenario": "Weight Above Maximum",
+    "input": {
+      "tracking": "ANT-009",
+      "weight": 1000001,
+      "distance": 25
+    },
+    "expected": "VALIDATION_ERROR",
+    "actual": "VALIDATION_ERROR",
+    "status": "PASS",
+    "expectedCost": null,
+    "actualCost": null,
+    "verification": {
+      "kind": "VALIDATION_ERROR",
+      "layer": "browser",
+      "postCount": 0,
+      "invalidField": "weight",
+      "message": "Value must be less than or equal to 1000000.",
+      "validity": {
+        "valueMissing": false,
+        "rangeUnderflow": false,
+        "rangeOverflow": true,
+        "badInput": false,
+        "stepMismatch": false,
+        "tooLong": false
+      }
+    },
+    "historyBefore": [],
+    "historyAfter": [],
+    "runtimeErrors": [],
+    "error": null,
+    "durationMs": 863,
+    "evidence": {
+      "form": "docs/automation-run/weight-over-limit-form.png",
+      "result": "docs/automation-run/weight-over-limit-result.png"
+    }
+  },
+  {
+    "id": "weight-at-limit",
+    "scenario": "Weight at Maximum",
+    "input": {
+      "tracking": "ANT-010",
+      "weight": 1000000,
+      "distance": 1
+    },
+    "expected": "SUCCESS",
+    "actual": "SUCCESS",
+    "status": "PASS",
+    "expectedCost": 5000000000,
+    "actualCost": 5000000000,
+    "verification": {
+      "kind": "SUCCESS",
+      "statusCode": 200,
+      "notice": "Permintaan ANT-010 berhasil disimpan.",
+      "postCount": 1
+    },
+    "historyBefore": [],
+    "historyAfter": [
+      {
+        "tracking": "ANT-010",
+        "weight": 1000000,
+        "distance": 1,
+        "cost": 5000000000
+      }
+    ],
+    "runtimeErrors": [],
+    "error": null,
+    "durationMs": 779,
+    "evidence": {
+      "form": "docs/automation-run/weight-at-limit-form.png",
+      "result": "docs/automation-run/weight-at-limit-result.png"
+    }
+  }
+]

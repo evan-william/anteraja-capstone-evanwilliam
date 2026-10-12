@@ -1,0 +1,12 @@
+[
+  { "id": "normal-shipment", "scenario": "Normal Shipment", "tracking": "ANT-001", "weight": 5, "distance": 25, "expected": "SUCCESS", "expectedCost": 43750 },
+  { "id": "missing-tracking", "scenario": "Missing Tracking", "tracking": "", "weight": 5, "distance": 25, "expected": "VALIDATION_ERROR", "validation": { "layer": "browser", "field": "tracking-number", "reason": "valueMissing" } },
+  { "id": "invalid-weight", "scenario": "Invalid Weight", "tracking": "ANT-003", "weight": -10, "distance": 25, "expected": "VALIDATION_ERROR", "validation": { "layer": "browser", "field": "weight", "reason": "rangeUnderflow" } },
+  { "id": "long-distance", "scenario": "Long Distance Shipment", "tracking": "ANT-004", "weight": 8, "distance": 150, "expected": "SUCCESS", "expectedCost": 215000 },
+  { "id": "decimal-boundary", "scenario": "Decimal Weight and Distance", "tracking": "ANT-005", "weight": 1.5, "distance": 10.2, "expected": "SUCCESS", "expectedCost": 18250 },
+  { "id": "zero-weight", "scenario": "Zero Weight", "tracking": "ANT-006", "weight": 0, "distance": 25, "expected": "VALIDATION_ERROR", "validation": { "layer": "browser", "field": "weight", "reason": "rangeUnderflow" } },
+  { "id": "zero-distance", "scenario": "Zero Distance", "tracking": "ANT-007", "weight": 5, "distance": 0, "expected": "VALIDATION_ERROR", "validation": { "layer": "browser", "field": "distance", "reason": "rangeUnderflow" } },
+  { "id": "blank-tracking-server", "scenario": "Whitespace Tracking Rejected by PHP", "tracking": "   ", "weight": 5, "distance": 25, "expected": "VALIDATION_ERROR", "validation": { "layer": "server", "message": "Nomor resi wajib diisi." } },
+  { "id": "weight-over-limit", "scenario": "Weight Above Maximum", "tracking": "ANT-009", "weight": 1000001, "distance": 25, "expected": "VALIDATION_ERROR", "validation": { "layer": "browser", "field": "weight", "reason": "rangeOverflow" } },
+  { "id": "weight-at-limit", "scenario": "Weight at Maximum", "tracking": "ANT-010", "weight": 1000000, "distance": 1, "expected": "SUCCESS", "expectedCost": 5000000000 }
+]

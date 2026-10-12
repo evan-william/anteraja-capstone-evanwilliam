@@ -1,0 +1,9 @@
+{
+  "startedAt": "2026-10-12T07:49:30.043Z",
+  "finishedAt": "2026-10-12T07:49:38.635Z",
+  "node": "v22.14.0",
+  "dataset": "tests\\shipment-test-data.json",
+  "total": 10,
+  "pass": 10,
+  "fail": 0
+}
